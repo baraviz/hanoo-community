@@ -8,14 +8,10 @@ export default function Splash() {
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      try {
-        const user = await base44.auth.me();
-        if (user) {
-          navigate(createPageUrl("Home"));
-        } else {
-          base44.auth.redirectToLogin(createPageUrl("Home"));
-        }
-      } catch {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (isAuth) {
+        navigate(createPageUrl("Home"));
+      } else {
         base44.auth.redirectToLogin(createPageUrl("Home"));
       }
     }, 2500);
