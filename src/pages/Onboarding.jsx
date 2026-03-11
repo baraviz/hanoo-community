@@ -33,18 +33,27 @@ export default function Onboarding() {
     base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin(createPageUrl("Home")));
   }, []);
 
-  async function joinBuilding() {
+  async function handleJoinBuilding() {
     if (!inviteCode.trim()) { setError("נא להזין קוד הצטרפות"); return; }
     setLoading(true); setError("");
     const buildings = await base44.entities.Building.filter({ invite_code: inviteCode.trim().toUpperCase() });
     if (buildings.length === 0) { setError("קוד שגוי, נסה שוב"); setLoading(false); return; }
     const building = buildings[0];
+    setJoinBuildingData(building);
+    setLoading(false);
+    setStep("join2");
+  }
+
+  async function completeJoin() {
+    if (!joinBuilding) return;
+    setLoading(true);
     await base44.entities.Resident.create({
       user_email: user.email,
       user_name: user.full_name,
-      building_id: building.id,
+      building_id: joinBuilding.id,
       apartment_number: apartment,
       parking_spot: parkingSpot,
+      parking_floor: joinBuilding.underground_parking ? joinFloor : "",
       credits: 0,
       status: "pending",
     });
