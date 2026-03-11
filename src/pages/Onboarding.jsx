@@ -27,7 +27,7 @@ export default function Onboarding() {
 
   // Join form - floor
   const [joinFloor, setJoinFloor] = useState("");
-  const [joinBuilding, setJoinBuildingData] = useState(null);
+  const [foundBuilding, setJoinBuildingData] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin(createPageUrl("Home")));
