@@ -135,7 +135,10 @@ export default function Home() {
         {/* Bonus credits alert */}
         {resident && !resident.bonus_credits_received && (
           <div className="rounded-2xl p-4" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
-            <p className="font-bold text-amber-800 mb-1">🎁 קבל 200 קרדיטים!</p>
+            <div className="flex items-center gap-2 mb-1">
+              <Gift size={16} className="text-amber-700" />
+              <p className="font-bold text-amber-800">קבל 200 קרדיטים!</p>
+            </div>
             <p className="text-amber-700 text-sm">פרסם זמינות של לפחות שעתיים השבוע וקבל 200 קרדיטים מתנה</p>
             <button
               onClick={() => navigate(createPageUrl("PublishParking"))}
