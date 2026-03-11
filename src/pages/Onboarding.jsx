@@ -243,7 +243,7 @@ export default function Onboarding() {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <BackButton onClick={() => setStep("choose")} />
-        <StepDots current={0} total={2} />
+        <StepDots current={0} total={3} />
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EBF4FF" }}>
             <Building2 size={30} style={{ color: "#007AFF" }} />
@@ -266,6 +266,39 @@ export default function Onboarding() {
             <input value={buildingCity} onChange={e => setBuildingCity(e.target.value)} placeholder="לדוגמה: תל אביב" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
 
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <button
+            onClick={handleCreateBuilding}
+            className="w-full py-4 rounded-2xl font-bold text-white text-base"
+            style={{ background: "#007AFF" }}
+          >
+            המשך ←
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── CREATE 2: פרטי הדייר הבעלים + underground toggle ──
+  if (step === "create2") {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <BackButton onClick={() => setStep("create")} />
+        <StepDots current={1} total={3} />
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
+        <p className="text-gray-500 text-sm mb-6">מספר דירה, חניה וסוג החניון</p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
+            <input value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
+            <input value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+          </div>
+
           <div className="rounded-2xl p-4 flex items-center justify-between" style={{ background: "white", border: "1px solid #E5E7EB" }}>
             <div>
               <p className="font-medium text-gray-800 text-sm">חניון תת קרקעי 🏗️</p>
@@ -284,9 +317,16 @@ export default function Onboarding() {
             </button>
           </div>
 
+          {undergroundParking && (
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי 🏗️</label>
+              <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            </div>
+          )}
+
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
-            onClick={handleCreateBuilding}
+            onClick={() => setStep("create3")}
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF" }}
           >
@@ -297,50 +337,45 @@ export default function Onboarding() {
     );
   }
 
-  // ── CREATE 2: פרטי הדייר הבעלים ──
-  if (step === "create2") {
+  // ── CREATE 3: סיכום ואישור ──
+  if (step === "create3") {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <BackButton onClick={() => setStep("create")} />
-        <StepDots current={1} total={2} />
+        <BackButton onClick={() => setStep("create2")} />
+        <StepDots current={2} total={3} />
 
-        <div className="bg-white rounded-2xl p-4 mb-6 flex items-center gap-3" style={{ border: "2px solid #EBF4FF" }}>
-          <CheckCircle2 size={22} style={{ color: "#007AFF" }} />
-          <div>
-            <p className="text-xs text-gray-400">הבניין ✓</p>
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EBF4FF" }}>
+            <CheckCircle2 size={30} style={{ color: "#007AFF" }} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-1">סיכום</h2>
+          <p className="text-gray-500 text-sm">בדוק שהכל נכון לפני יצירה</p>
+        </div>
+
+        <div className="space-y-3 mb-8">
+          <div className="bg-white rounded-2xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+            <p className="text-xs text-gray-400 mb-2">🏢 הבניין</p>
             <p className="font-bold text-gray-800">{buildingName}</p>
-            <p className="text-gray-500 text-xs">{buildingAddress}, {buildingCity}</p>
+            <p className="text-gray-500 text-sm">{buildingAddress}, {buildingCity}</p>
+            {undergroundParking && <p className="text-blue-500 text-xs mt-1">✓ חניון תת קרקעי</p>}
+          </div>
+          <div className="bg-white rounded-2xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+            <p className="text-xs text-gray-400 mb-2">👤 הפרטים שלך</p>
+            {ownerApartment && <p className="text-gray-700 text-sm">דירה: <span className="font-medium">{ownerApartment}</span></p>}
+            {ownerParking && <p className="text-gray-700 text-sm">חניה: <span className="font-medium">{ownerParking}</span></p>}
+            {undergroundParking && ownerFloor && <p className="text-gray-700 text-sm">קומה: <span className="font-medium">{ownerFloor}</span></p>}
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
-        <p className="text-gray-500 text-sm mb-6">מספר דירה ומספר החניה שלך</p>
-
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
-            <input value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
-            <input value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
-          </div>
-          {undergroundParking && (
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי 🏗️</label>
-              <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
-            </div>
-          )}
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          <button
-            onClick={completeCreateBuilding}
-            disabled={loading}
-            className="w-full py-4 rounded-2xl font-bold text-white text-base"
-            style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
-          >
-            {loading ? "יוצר בניין..." : "צור בניין 🏢"}
-          </button>
-        </div>
+        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+        <button
+          onClick={completeCreateBuilding}
+          disabled={loading}
+          className="w-full py-4 rounded-2xl font-bold text-white text-base"
+          style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
+        >
+          {loading ? "יוצר בניין..." : "צור בניין 🏢"}
+        </button>
       </div>
     );
   }
