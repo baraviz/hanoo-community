@@ -189,7 +189,7 @@ export default function Onboarding() {
           <span>חזרה</span>
         </button>
         <h2 className="text-2xl font-bold text-gray-800 mb-1">פרטי החניה</h2>
-        <p className="text-gray-500 text-sm mb-6">בניין: <span className="font-medium text-gray-700">{joinBuilding?.name}</span></p>
+        <p className="text-gray-500 text-sm mb-6">בניין: <span className="font-medium text-gray-700">{foundBuilding?.name}</span></p>
 
         <div className="space-y-4">
           <div>
