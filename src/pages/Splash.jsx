@@ -12,7 +12,7 @@ export default function Splash() {
       if (isAuth) {
         navigate(createPageUrl("Home"));
       } else {
-        base44.auth.redirectToLogin(createPageUrl("Home"));
+        navigate(createPageUrl("Onboarding"));
       }
     }, 2500);
     return () => clearTimeout(timer);
