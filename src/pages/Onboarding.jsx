@@ -274,6 +274,12 @@ export default function Onboarding() {
             <label className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
             <input value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
+          {undergroundParking && (
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי</label>
+              <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            </div>
+          )}
 
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
