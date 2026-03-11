@@ -71,6 +71,7 @@ export default function Onboarding() {
       city: buildingCity,
       owner_email: user.email,
       invite_code: code,
+      underground_parking: undergroundParking,
     });
     await base44.entities.Resident.create({
       user_email: user.email,
@@ -78,6 +79,7 @@ export default function Onboarding() {
       building_id: building.id,
       apartment_number: ownerApartment,
       parking_spot: ownerParking,
+      parking_floor: undergroundParking ? ownerFloor : "",
       credits: 0,
       status: "approved",
     });
