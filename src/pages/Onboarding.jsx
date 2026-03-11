@@ -76,7 +76,7 @@ export default function Onboarding() {
   const [ownerFloor, setOwnerFloor] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin(createPageUrl("Home")));
+    base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
   async function handleCheckCode() {
