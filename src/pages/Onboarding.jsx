@@ -246,6 +246,26 @@ export default function Onboarding() {
             <label className="text-sm font-medium text-gray-700 block mb-1">עיר *</label>
             <input value={buildingCity} onChange={e => setBuildingCity(e.target.value)} placeholder="לדוגמה: תל אביב" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
+
+          {/* Underground parking toggle */}
+          <div className="rounded-2xl p-4 flex items-center justify-between" style={{ background: "white", border: "1px solid #E5E7EB" }}>
+            <div>
+              <p className="font-medium text-gray-800 text-sm">חניון תת קרקעי 🏗️</p>
+              <p className="text-gray-400 text-xs">דיירים יצטרכו לציין קומת חניה</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setUndergroundParking(!undergroundParking)}
+              className="relative w-12 h-6 rounded-full transition-colors"
+              style={{ background: undergroundParking ? "#007AFF" : "#D1D5DB" }}
+            >
+              <span
+                className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform"
+                style={{ transform: undergroundParking ? "translateX(26px)" : "translateX(2px)" }}
+              />
+            </button>
+          </div>
+
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
             <input value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
