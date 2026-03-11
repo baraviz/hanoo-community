@@ -153,22 +153,35 @@ export default function Onboarding() {
           <p className="text-blue-200 text-center text-sm">שיתוף חניות בין שכנים בצורה חכמה</p>
         </div>
         <div className="bg-white rounded-t-3xl p-6 space-y-3">
-          <button
-            onClick={() => setStep("join")}
-            className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
-            style={{ background: "#007AFF" }}
-          >
-            <Key size={20} />
-            הצטרף לבניין קיים
-          </button>
-          <button
-            onClick={() => setStep("create")}
-            className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2"
-            style={{ background: "#EBF4FF", color: "#007AFF" }}
-          >
-            <Building2 size={20} />
-            רשום בניין חדש
-          </button>
+          {!user ? (
+            <button
+              onClick={() => base44.auth.redirectToLogin(createPageUrl("Onboarding"))}
+              className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
+              style={{ background: "#007AFF" }}
+            >
+              <User size={20} />
+              התחבר / הירשם
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={() => setStep("join")}
+                className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
+                style={{ background: "#007AFF" }}
+              >
+                <Key size={20} />
+                הצטרף לבניין קיים
+              </button>
+              <button
+                onClick={() => setStep("create")}
+                className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2"
+                style={{ background: "#EBF4FF", color: "#007AFF" }}
+              >
+                <Building2 size={20} />
+                רשום בניין חדש
+              </button>
+            </>
+          )}
         </div>
       </div>
     );
