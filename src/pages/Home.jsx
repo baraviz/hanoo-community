@@ -113,7 +113,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-blue-200 text-sm">שלום,</p>
-            <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"} 👋</h1>
+            <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"}</h1>
           </div>
           <span className="pacifico text-white text-2xl" style={{ fontFamily: "Pacifico, cursive" }}>Hanoo</span>
         </div>

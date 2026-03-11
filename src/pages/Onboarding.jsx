@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Building2, Key, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Building2, Key, ChevronRight, CheckCircle2, Pencil, Car, Layers, MapPin, User } from "lucide-react";
 
 function StepDots({ current, total }) {
   return (
@@ -27,6 +27,28 @@ function BackButton({ onClick }) {
       <ChevronRight size={20} />
       <span>חזרה</span>
     </button>
+  );
+}
+
+function SummaryCard({ icon: Icon, title, onEdit, children }) {
+  return (
+    <div className="bg-white rounded-2xl p-4" style={{ border: "1px solid #E5E7EB" }}>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Icon size={16} style={{ color: "#007AFF" }} />
+          <p className="text-sm font-semibold text-gray-700">{title}</p>
+        </div>
+        <button
+          onClick={onEdit}
+          className="flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-xl"
+          style={{ background: "#EBF4FF", color: "#007AFF" }}
+        >
+          <Pencil size={12} />
+          ערוך
+        </button>
+      </div>
+      {children}
+    </div>
   );
 }
 
@@ -127,7 +149,7 @@ export default function Onboarding() {
             className="w-40 h-40 object-contain mb-10"
             alt="Hanoo"
           />
-          <p className="text-white text-xl font-bold text-center mb-2">ברוך הבא! 🎉</p>
+          <p className="text-white text-xl font-bold text-center mb-2">ברוך הבא!</p>
           <p className="text-blue-200 text-center text-sm">שיתוף חניות בין שכנים בצורה חכמה</p>
         </div>
         <div className="bg-white rounded-t-3xl p-6 space-y-3">
@@ -182,7 +204,7 @@ export default function Onboarding() {
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "מחפש..." : "המשך ←"}
+            {loading ? "מחפש..." : "המשך"}
           </button>
         </div>
       </div>
@@ -199,18 +221,18 @@ export default function Onboarding() {
         <div className="bg-white rounded-2xl p-4 mb-6 flex items-center gap-3" style={{ border: "2px solid #EBF4FF" }}>
           <CheckCircle2 size={22} style={{ color: "#007AFF" }} />
           <div>
-            <p className="text-xs text-gray-400">בניין נמצא ✓</p>
+            <p className="text-xs text-gray-400">בניין נמצא</p>
             <p className="font-bold text-gray-800">{foundBuilding?.name}</p>
             <p className="text-gray-500 text-xs">{foundBuilding?.address}, {foundBuilding?.city}</p>
           </div>
         </div>
 
         <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
-        <p className="text-gray-500 text-sm mb-6">כמה פרטים אחרונים ואתה פנימה 😊</p>
+        <p className="text-gray-500 text-sm mb-6">כמה פרטים אחרונים ואתה פנימה</p>
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה *</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
             <input value={apartment} onChange={e => setApartment(e.target.value)} placeholder="לדוגמה: 5" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
@@ -219,7 +241,7 @@ export default function Onboarding() {
           </div>
           {foundBuilding?.underground_parking && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת חניה 🏗️</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת חניה</label>
               <input value={joinFloor} onChange={e => setJoinFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
               <p className="text-gray-400 text-xs mt-1">הבניין כולל חניון תת קרקעי</p>
             </div>
@@ -231,7 +253,7 @@ export default function Onboarding() {
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "מצטרף..." : "הצטרף לבניין 🎉"}
+            {loading ? "מצטרף..." : "הצטרף לבניין"}
           </button>
         </div>
       </div>
@@ -272,7 +294,7 @@ export default function Onboarding() {
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF" }}
           >
-            המשך ←
+            המשך
           </button>
         </div>
       </div>
@@ -300,9 +322,12 @@ export default function Onboarding() {
           </div>
 
           <div className="rounded-2xl p-4 flex items-center justify-between" style={{ background: "white", border: "1px solid #E5E7EB" }}>
-            <div>
-              <p className="font-medium text-gray-800 text-sm">חניון תת קרקעי 🏗️</p>
-              <p className="text-gray-400 text-xs">דיירים יצטרכו לציין קומת חניה</p>
+            <div className="flex items-center gap-2">
+              <Layers size={18} style={{ color: "#007AFF" }} />
+              <div>
+                <p className="font-medium text-gray-800 text-sm">חניון תת קרקעי</p>
+                <p className="text-gray-400 text-xs">דיירים יצטרכו לציין קומת חניה</p>
+              </div>
             </div>
             <button
               type="button"
@@ -319,7 +344,7 @@ export default function Onboarding() {
 
           {undergroundParking && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי 🏗️</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי</label>
               <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
             </div>
           )}
@@ -330,7 +355,7 @@ export default function Onboarding() {
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF" }}
           >
-            המשך ←
+            המשך
           </button>
         </div>
       </div>
@@ -353,18 +378,37 @@ export default function Onboarding() {
         </div>
 
         <div className="space-y-3 mb-8">
-          <div className="bg-white rounded-2xl p-4" style={{ border: "1px solid #E5E7EB" }}>
-            <p className="text-xs text-gray-400 mb-2">🏢 הבניין</p>
+          <SummaryCard icon={Building2} title="פרטי הבניין" onEdit={() => setStep("create")}>
             <p className="font-bold text-gray-800">{buildingName}</p>
             <p className="text-gray-500 text-sm">{buildingAddress}, {buildingCity}</p>
-            {undergroundParking && <p className="text-blue-500 text-xs mt-1">✓ חניון תת קרקעי</p>}
-          </div>
-          <div className="bg-white rounded-2xl p-4" style={{ border: "1px solid #E5E7EB" }}>
-            <p className="text-xs text-gray-400 mb-2">👤 הפרטים שלך</p>
-            {ownerApartment && <p className="text-gray-700 text-sm">דירה: <span className="font-medium">{ownerApartment}</span></p>}
-            {ownerParking && <p className="text-gray-700 text-sm">חניה: <span className="font-medium">{ownerParking}</span></p>}
-            {undergroundParking && ownerFloor && <p className="text-gray-700 text-sm">קומה: <span className="font-medium">{ownerFloor}</span></p>}
-          </div>
+            {undergroundParking && (
+              <div className="flex items-center gap-1 mt-1">
+                <Layers size={12} style={{ color: "#007AFF" }} />
+                <p className="text-blue-500 text-xs">חניון תת קרקעי</p>
+              </div>
+            )}
+          </SummaryCard>
+
+          <SummaryCard icon={User} title="הפרטים שלך" onEdit={() => setStep("create2")}>
+            {ownerApartment && (
+              <div className="flex items-center gap-2">
+                <MapPin size={13} className="text-gray-400" />
+                <p className="text-gray-700 text-sm">דירה <span className="font-medium">{ownerApartment}</span></p>
+              </div>
+            )}
+            {ownerParking && (
+              <div className="flex items-center gap-2">
+                <Car size={13} className="text-gray-400" />
+                <p className="text-gray-700 text-sm">חניה <span className="font-medium">{ownerParking}</span></p>
+              </div>
+            )}
+            {undergroundParking && ownerFloor && (
+              <div className="flex items-center gap-2">
+                <Layers size={13} className="text-gray-400" />
+                <p className="text-gray-700 text-sm">קומה <span className="font-medium">{ownerFloor}</span></p>
+              </div>
+            )}
+          </SummaryCard>
         </div>
 
         {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
@@ -374,7 +418,7 @@ export default function Onboarding() {
           className="w-full py-4 rounded-2xl font-bold text-white text-base"
           style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
         >
-          {loading ? "יוצר בניין..." : "צור בניין 🏢"}
+          {loading ? "יוצר בניין..." : "צור בניין"}
         </button>
       </div>
     );
