@@ -48,6 +48,7 @@ export default function PublishParking() {
       owner_email: user.email,
       owner_name: user.full_name,
       spot_number: resident.parking_spot || "?",
+      parking_floor: resident.parking_floor || "",
       available_from: from.toISOString(),
       available_until: to.toISOString(),
       price_per_hour: parseFloat(pricePerHour) || 10,
