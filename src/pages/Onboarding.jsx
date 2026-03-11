@@ -45,15 +45,15 @@ export default function Onboarding() {
   }
 
   async function completeJoin() {
-    if (!joinBuilding) return;
+    if (!foundBuilding) return;
     setLoading(true);
     await base44.entities.Resident.create({
       user_email: user.email,
       user_name: user.full_name,
-      building_id: joinBuilding.id,
+      building_id: foundBuilding.id,
       apartment_number: apartment,
       parking_spot: parkingSpot,
-      parking_floor: joinBuilding.underground_parking ? joinFloor : "",
+      parking_floor: foundBuilding.underground_parking ? joinFloor : "",
       credits: 0,
       status: "pending",
     });
