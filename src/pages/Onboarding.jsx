@@ -2,21 +2,49 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Building2, Key, ChevronRight } from "lucide-react";
+import { Building2, Key, ChevronRight, CheckCircle2 } from "lucide-react";
+
+function StepDots({ current, total }) {
+  return (
+    <div className="flex gap-2 justify-center mb-6">
+      {Array.from({ length: total }).map((_, i) => (
+        <div
+          key={i}
+          className="h-2 rounded-full transition-all"
+          style={{
+            width: i === current ? 24 : 8,
+            background: i === current ? "#007AFF" : "#D1D5DB",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function BackButton({ onClick }) {
+  return (
+    <button onClick={onClick} className="flex items-center gap-1 text-gray-500 mb-6">
+      <ChevronRight size={20} />
+      <span>חזרה</span>
+    </button>
+  );
+}
 
 export default function Onboarding() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [step, setStep] = useState("choose"); // choose | join | create
+  const [step, setStep] = useState("choose");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Join form
+  // Join flow
   const [inviteCode, setInviteCode] = useState("");
+  const [foundBuilding, setFoundBuilding] = useState(null);
   const [apartment, setApartment] = useState("");
   const [parkingSpot, setParkingSpot] = useState("");
+  const [joinFloor, setJoinFloor] = useState("");
 
-  // Create form
+  // Create flow
   const [buildingName, setBuildingName] = useState("");
   const [buildingAddress, setBuildingAddress] = useState("");
   const [buildingCity, setBuildingCity] = useState("");
@@ -25,21 +53,16 @@ export default function Onboarding() {
   const [ownerParking, setOwnerParking] = useState("");
   const [ownerFloor, setOwnerFloor] = useState("");
 
-  // Join form - floor
-  const [joinFloor, setJoinFloor] = useState("");
-  const [foundBuilding, setJoinBuildingData] = useState(null);
-
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin(createPageUrl("Home")));
   }, []);
 
-  async function handleJoinBuilding() {
+  async function handleCheckCode() {
     if (!inviteCode.trim()) { setError("נא להזין קוד הצטרפות"); return; }
     setLoading(true); setError("");
     const buildings = await base44.entities.Building.filter({ invite_code: inviteCode.trim().toUpperCase() });
     if (buildings.length === 0) { setError("קוד שגוי, נסה שוב"); setLoading(false); return; }
-    const building = buildings[0];
-    setJoinBuildingData(building);
+    setFoundBuilding(buildings[0]);
     setLoading(false);
     setStep("join2");
   }
@@ -61,8 +84,13 @@ export default function Onboarding() {
     navigate(createPageUrl("Home"));
   }
 
-  async function createBuilding() {
+  async function handleCreateBuilding() {
     if (!buildingName || !buildingAddress || !buildingCity) { setError("נא למלא את כל השדות"); return; }
+    setError("");
+    setStep("create2");
+  }
+
+  async function completeCreateBuilding() {
     setLoading(true); setError("");
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
     const building = await base44.entities.Building.create({
@@ -87,6 +115,7 @@ export default function Onboarding() {
     navigate(createPageUrl("Home"));
   }
 
+  // ── CHOOSE ──
   if (step === "choose") {
     return (
       <div className="min-h-screen flex flex-col" style={{ background: "#007AFF" }}>
@@ -101,7 +130,6 @@ export default function Onboarding() {
           <p className="text-white text-xl font-bold text-center mb-2">ברוך הבא! 🎉</p>
           <p className="text-blue-200 text-center text-sm">שיתוף חניות בין שכנים בצורה חכמה</p>
         </div>
-
         <div className="bg-white rounded-t-3xl p-6 space-y-3">
           <button
             onClick={() => setStep("join")}
@@ -124,80 +152,69 @@ export default function Onboarding() {
     );
   }
 
+  // ── JOIN 1: קוד הצטרפות ──
   if (step === "join") {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <button onClick={() => setStep("choose")} className="flex items-center gap-1 text-gray-500 mb-6">
-          <ChevronRight size={20} />
-          <span>חזרה</span>
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">הצטרף לבניין</h2>
-        <p className="text-gray-500 text-sm mb-6">הזן את קוד ההצטרפות שקיבלת מבעל הבניין</p>
+        <BackButton onClick={() => setStep("choose")} />
+        <StepDots current={0} total={2} />
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EBF4FF" }}>
+            <Key size={30} style={{ color: "#007AFF" }} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-1">קוד הצטרפות</h2>
+          <p className="text-gray-500 text-sm">הזן את הקוד שקיבלת מבעל הבניין</p>
+        </div>
 
         <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">קוד הצטרפות *</label>
-            <input
-              value={inviteCode}
-              onChange={e => setInviteCode(e.target.value)}
-              placeholder="לדוגמה: ABC123"
-              className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-center text-lg font-bold tracking-widest outline-none focus:border-blue-400"
-              style={{ background: "white" }}
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
-            <input
-              value={apartment}
-              onChange={e => setApartment(e.target.value)}
-              placeholder="לדוגמה: 5"
-              className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400"
-              style={{ background: "white" }}
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה שלי</label>
-            <input
-              value={parkingSpot}
-              onChange={e => setParkingSpot(e.target.value)}
-              placeholder="לדוגמה: P15"
-              className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400"
-              style={{ background: "white" }}
-            />
-          </div>
-
+          <input
+            value={inviteCode}
+            onChange={e => { setInviteCode(e.target.value); setError(""); }}
+            placeholder="לדוגמה: ABC123"
+            className="w-full border-2 border-gray-200 rounded-2xl px-4 py-4 text-center text-2xl font-bold tracking-widest outline-none focus:border-blue-400"
+            style={{ background: "white", letterSpacing: "0.3em" }}
+            autoCapitalize="characters"
+          />
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
           <button
-            onClick={handleJoinBuilding}
+            onClick={handleCheckCode}
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "מחפש..." : "המשך"}
+            {loading ? "מחפש..." : "המשך ←"}
           </button>
         </div>
       </div>
     );
   }
 
+  // ── JOIN 2: פרטי דירה וחניה ──
   if (step === "join2") {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <button onClick={() => setStep("join")} className="flex items-center gap-1 text-gray-500 mb-6">
-          <ChevronRight size={20} />
-          <span>חזרה</span>
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">פרטי החניה</h2>
-        <p className="text-gray-500 text-sm mb-6">בניין: <span className="font-medium text-gray-700">{foundBuilding?.name}</span></p>
+        <BackButton onClick={() => setStep("join")} />
+        <StepDots current={1} total={2} />
+
+        <div className="bg-white rounded-2xl p-4 mb-6 flex items-center gap-3" style={{ border: "2px solid #EBF4FF" }}>
+          <CheckCircle2 size={22} style={{ color: "#007AFF" }} />
+          <div>
+            <p className="text-xs text-gray-400">בניין נמצא ✓</p>
+            <p className="font-bold text-gray-800">{foundBuilding?.name}</p>
+            <p className="text-gray-500 text-xs">{foundBuilding?.address}, {foundBuilding?.city}</p>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
+        <p className="text-gray-500 text-sm mb-6">כמה פרטים אחרונים ואתה פנימה 😊</p>
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה *</label>
             <input value={apartment} onChange={e => setApartment(e.target.value)} placeholder="לדוגמה: 5" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה שלי</label>
             <input value={parkingSpot} onChange={e => setParkingSpot(e.target.value)} placeholder="לדוגמה: P15" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           {foundBuilding?.underground_parking && (
@@ -207,31 +224,33 @@ export default function Onboarding() {
               <p className="text-gray-400 text-xs mt-1">הבניין כולל חניון תת קרקעי</p>
             </div>
           )}
-
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
           <button
             onClick={completeJoin}
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "מצטרף..." : "הצטרף לבניין"}
+            {loading ? "מצטרף..." : "הצטרף לבניין 🎉"}
           </button>
         </div>
       </div>
     );
   }
 
+  // ── CREATE 1: פרטי הבניין ──
   if (step === "create") {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
-        <button onClick={() => setStep("choose")} className="flex items-center gap-1 text-gray-500 mb-6">
-          <ChevronRight size={20} />
-          <span>חזרה</span>
-        </button>
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">רשום בניין חדש</h2>
-        <p className="text-gray-500 text-sm mb-6">צור קהילת חניות לבניין שלך</p>
+        <BackButton onClick={() => setStep("choose")} />
+        <StepDots current={0} total={2} />
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: "#EBF4FF" }}>
+            <Building2 size={30} style={{ color: "#007AFF" }} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-1">פרטי הבניין</h2>
+          <p className="text-gray-500 text-sm">קצת עלינו על הבניין שלך</p>
+        </div>
 
         <div className="space-y-4">
           <div>
@@ -247,7 +266,6 @@ export default function Onboarding() {
             <input value={buildingCity} onChange={e => setBuildingCity(e.target.value)} placeholder="לדוגמה: תל אביב" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
 
-          {/* Underground parking toggle */}
           <div className="rounded-2xl p-4 flex items-center justify-between" style={{ background: "white", border: "1px solid #E5E7EB" }}>
             <div>
               <p className="font-medium text-gray-800 text-sm">חניון תת קרקעי 🏗️</p>
@@ -266,6 +284,39 @@ export default function Onboarding() {
             </button>
           </div>
 
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <button
+            onClick={handleCreateBuilding}
+            className="w-full py-4 rounded-2xl font-bold text-white text-base"
+            style={{ background: "#007AFF" }}
+          >
+            המשך ←
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── CREATE 2: פרטי הדייר הבעלים ──
+  if (step === "create2") {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <BackButton onClick={() => setStep("create")} />
+        <StepDots current={1} total={2} />
+
+        <div className="bg-white rounded-2xl p-4 mb-6 flex items-center gap-3" style={{ border: "2px solid #EBF4FF" }}>
+          <CheckCircle2 size={22} style={{ color: "#007AFF" }} />
+          <div>
+            <p className="text-xs text-gray-400">הבניין ✓</p>
+            <p className="font-bold text-gray-800">{buildingName}</p>
+            <p className="text-gray-500 text-xs">{buildingAddress}, {buildingCity}</p>
+          </div>
+        </div>
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
+        <p className="text-gray-500 text-sm mb-6">מספר דירה ומספר החניה שלך</p>
+
+        <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
             <input value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
@@ -276,20 +327,18 @@ export default function Onboarding() {
           </div>
           {undergroundParking && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי 🏗️</label>
               <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
             </div>
           )}
-
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
           <button
-            onClick={createBuilding}
+            onClick={completeCreateBuilding}
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
           >
-            {loading ? "יוצר..." : "צור בניין"}
+            {loading ? "יוצר בניין..." : "צור בניין 🏢"}
           </button>
         </div>
       </div>
