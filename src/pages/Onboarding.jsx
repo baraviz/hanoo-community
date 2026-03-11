@@ -169,7 +169,49 @@ export default function Onboarding() {
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
           <button
-            onClick={joinBuilding}
+            onClick={handleJoinBuilding}
+            disabled={loading}
+            className="w-full py-4 rounded-2xl font-bold text-white text-base"
+            style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
+          >
+            {loading ? "מחפש..." : "המשך"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === "join2") {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <button onClick={() => setStep("join")} className="flex items-center gap-1 text-gray-500 mb-6">
+          <ChevronRight size={20} />
+          <span>חזרה</span>
+        </button>
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">פרטי החניה</h2>
+        <p className="text-gray-500 text-sm mb-6">בניין: <span className="font-medium text-gray-700">{joinBuilding?.name}</span></p>
+
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
+            <input value={apartment} onChange={e => setApartment(e.target.value)} placeholder="לדוגמה: 5" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה</label>
+            <input value={parkingSpot} onChange={e => setParkingSpot(e.target.value)} placeholder="לדוגמה: P15" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+          </div>
+          {joinBuilding?.underground_parking && (
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">קומת חניה 🏗️</label>
+              <input value={joinFloor} onChange={e => setJoinFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+              <p className="text-gray-400 text-xs mt-1">הבניין כולל חניון תת קרקעי</p>
+            </div>
+          )}
+
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+          <button
+            onClick={completeJoin}
             disabled={loading}
             className="w-full py-4 rounded-2xl font-bold text-white text-base"
             style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
