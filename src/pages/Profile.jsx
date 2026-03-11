@@ -67,7 +67,7 @@ export default function Profile() {
   }
 
   function logout() {
-    base44.auth.logout(createPageUrl("Splash"));
+    base44.auth.logout();
   }
 
   return (
