@@ -200,7 +200,7 @@ export default function Onboarding() {
             <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה</label>
             <input value={parkingSpot} onChange={e => setParkingSpot(e.target.value)} placeholder="לדוגמה: P15" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
-          {joinBuilding?.underground_parking && (
+          {foundBuilding?.underground_parking && (
             <div>
               <label className="text-sm font-medium text-gray-700 block mb-1">קומת חניה 🏗️</label>
               <input value={joinFloor} onChange={e => setJoinFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
