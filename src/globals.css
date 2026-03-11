@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Heebo:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #007AFF;
+  --primary-light: #EBF4FF;
+  --primary-dark: #0056CC;
+}
+
+* {
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+}
+
+body {
+  background-color: #F5F7FA;
+  color: #1A1A2E;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.pacifico {
+  font-family: 'Pacifico', cursive;
+}
+
+.hanoo-blue {
+  background-color: #007AFF;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Bottom nav safe area */
+.bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile scroll fix */
+.page-content {
+  padding-bottom: 80px;
+}
