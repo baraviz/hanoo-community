@@ -47,24 +47,24 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Splash from './pages/Splash';
+import Chat from './pages/Chat';
+import FindParking from './pages/FindParking';
 import Home from './pages/Home';
 import Onboarding from './pages/Onboarding';
-import FindParking from './pages/FindParking';
-import PublishParking from './pages/PublishParking';
-import Chat from './pages/Chat';
 import Profile from './pages/Profile';
+import PublishParking from './pages/PublishParking';
+import Splash from './pages/Splash';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Splash": Splash,
+    "Chat": Chat,
+    "FindParking": FindParking,
     "Home": Home,
     "Onboarding": Onboarding,
-    "FindParking": FindParking,
-    "PublishParking": PublishParking,
-    "Chat": Chat,
     "Profile": Profile,
+    "PublishParking": PublishParking,
+    "Splash": Splash,
 }
 
 export const pagesConfig = {
