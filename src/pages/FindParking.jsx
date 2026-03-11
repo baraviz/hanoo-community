@@ -179,6 +179,7 @@ export default function FindParking() {
                   <div className="flex-1">
                     <p className="font-bold text-gray-800">חניה #{slot.spot_number || "?"}</p>
                     <p className="text-gray-500 text-sm">של {slot.owner_name}</p>
+                    {slot.parking_floor && <p className="text-gray-400 text-xs">קומה {slot.parking_floor}</p>}
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-lg" style={{ color: "#007AFF" }}>{cost}</p>
