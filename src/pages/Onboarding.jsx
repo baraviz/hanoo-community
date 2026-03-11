@@ -20,8 +20,14 @@ export default function Onboarding() {
   const [buildingName, setBuildingName] = useState("");
   const [buildingAddress, setBuildingAddress] = useState("");
   const [buildingCity, setBuildingCity] = useState("");
+  const [undergroundParking, setUndergroundParking] = useState(false);
   const [ownerApartment, setOwnerApartment] = useState("");
   const [ownerParking, setOwnerParking] = useState("");
+  const [ownerFloor, setOwnerFloor] = useState("");
+
+  // Join form - floor
+  const [joinFloor, setJoinFloor] = useState("");
+  const [joinBuilding, setJoinBuildingData] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin(createPageUrl("Home")));
