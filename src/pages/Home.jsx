@@ -101,7 +101,7 @@ export default function Home() {
     setShowRemoveModal(false);
     setRemovingSlot(true);
     setMyActiveSlot(null);
-    await base44.entities.ParkingSlot.update(myActiveSlot.id, { status: "completed" });
+    await base44.entities.WeeklyAvailability.delete(myActiveSlot.id);
     setRemovingSlot(false);
     loadData();
   }
