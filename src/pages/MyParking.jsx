@@ -527,6 +527,66 @@ export default function MyParking() {
   );
 }
 
+function EditTempModal({ slot, onClose, onSave, onDelete }) {
+  const s = new Date(slot.start_at);
+  const e = new Date(slot.end_at);
+  const [sH, setSH] = useState(s.getHours());
+  const [sM, setSM] = useState(s.getMinutes());
+  const [eH, setEH] = useState(e.getHours());
+  const [eM, setEM] = useState(e.getMinutes());
+
+  function handleSave() {
+    const newStart = new Date(slot.start_at);
+    newStart.setHours(sH, sM, 0, 0);
+    const newEnd = new Date(slot.end_at);
+    newEnd.setHours(eH, eM, 0, 0);
+    onSave(newStart.toISOString(), newEnd.toISOString());
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: "rgba(0,0,0,0.4)" }}>
+      <div className="bg-white rounded-3xl p-6 w-full max-w-xs space-y-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-gray-800">עריכת חד פעמי</h3>
+            <p className="text-xs text-gray-400 mt-0.5">{s.toLocaleDateString("he-IL", { day: "numeric", month: "long" })}</p>
+          </div>
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500"><X size={16} /></button>
+        </div>
+
+        <div className="space-y-3">
+          {[
+            { label: "מ", h: sH, setH: setSH, m: sM, setM: setSM, max: 23 },
+            { label: "עד", h: eH, setH: setEH, m: eM, setM: setEM, max: 24 },
+          ].map(({ label, h, setH, m, setM, max }) => (
+            <div key={label} className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-500 w-6">{label}</span>
+              <div className="flex-1 flex items-center gap-2 bg-gray-50 rounded-2xl px-3 py-2">
+                <select value={h} onChange={ev => setH(Number(ev.target.value))} className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none">
+                  {Array.from({ length: max + 1 }).map((_, i) => <option key={i} value={i}>{String(i).padStart(2, "0")}</option>)}
+                </select>
+                <span className="text-gray-400 font-bold">:</span>
+                <select value={m} onChange={ev => setM(Number(ev.target.value))} className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none">
+                  {[0, 30].map(v => <option key={v} value={v}>{String(v).padStart(2, "0")}</option>)}
+                </select>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <button onClick={onDelete} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
+            <Trash2 size={18} />
+          </button>
+          <button onClick={handleSave} className="flex-1 py-3 rounded-2xl font-bold text-white" style={{ background: "#007AFF" }}>
+            שמור
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EditModal({ block, onClose, onSave, onDelete }) {
   const [sH, setSH] = useState(Math.floor(block.start / 60));
   const [sM, setSM] = useState(block.start % 60);
