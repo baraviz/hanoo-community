@@ -51,7 +51,7 @@ export default function PublishParking() {
       parking_floor: resident.parking_floor || "",
       available_from: from.toISOString(),
       available_until: to.toISOString(),
-      price_per_hour: parseFloat(pricePerHour) || 10,
+      price_per_hour: 10,
       notes,
       status: "available",
     });
