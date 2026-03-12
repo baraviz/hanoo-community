@@ -220,7 +220,7 @@ export default function MyParking() {
               <div
                 key={i}
                 className="absolute w-full pr-1 text-right"
-                style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
+                style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)", paddingTop: i === 0 ? "6px" : i === HOURS ? "-6px" : undefined }}
               >
                 <span className="text-[9px] text-gray-400 leading-none">
                   {String(i).padStart(2, "0")}:00
