@@ -161,10 +161,18 @@ export default function MyParking() {
 
   async function saveChanges(currentBlocks) {
     if (!resident) return;
+    // If already saving, queue this as the latest pending save
+    if (saveInProgress.current) {
+      pendingSave.current = currentBlocks;
+      return;
+    }
+    saveInProgress.current = true;
     setSaving(true);
     const toSave = currentBlocks ?? blocks;
 
-    for (const b of savedBlocks) {
+    // Capture savedBlocks at call time before any async ops
+    const blocksToDelete = savedBlocks.slice();
+    for (const b of blocksToDelete) {
       try { await base44.entities.WeeklyAvailability.delete(b.id); } catch (_) {}
     }
     const created = [];
@@ -185,6 +193,14 @@ export default function MyParking() {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+    saveInProgress.current = false;
+
+    // If a save was queued while we were saving, run it now
+    if (pendingSave.current !== null) {
+      const next = pendingSave.current;
+      pendingSave.current = null;
+      await saveChanges(next);
+    }
   }
 
   function triggerSave() {
