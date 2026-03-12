@@ -85,15 +85,14 @@ export default function Home() {
   }
 
   async function deactivateSlot(slot) {
-    const isFirstPublish = !resident?.bonus_credits_received;
-    const message = isFirstPublish
-      ? "האם להסיר את פרסום החניה?\n⚠️ שים לב: זה הפרסום הראשון שלך — לא תקבל את 100 הקרדיטים אם תסיר אותו."
-      : "האם להסיר את פרסום החניה?";
-    const confirmed = window.confirm(message);
-    if (!confirmed) return;
+    setShowRemoveModal(true);
+  }
+
+  async function confirmDeactivate() {
+    setShowRemoveModal(false);
     setRemovingSlot(true);
     setMyActiveSlot(null);
-    await base44.entities.ParkingSlot.update(slot.id, { status: "completed" });
+    await base44.entities.ParkingSlot.update(myActiveSlot.id, { status: "completed" });
     setRemovingSlot(false);
     loadData();
   }
