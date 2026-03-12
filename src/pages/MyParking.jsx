@@ -632,11 +632,30 @@ function EditTempModal({ slot, onClose, onSave, onDelete }) {
   );
 }
 
-function EditModal({ block, onClose, onSave, onDelete }) {
+function EditModal({ block, onClose, onSave, onDelete, onConvertToTemp }) {
   const [sH, setSH] = useState(Math.floor(block.start / 60));
   const [sM, setSM] = useState(block.start % 60);
   const [eH, setEH] = useState(Math.floor(block.end / 60));
   const [eM, setEM] = useState(block.end % 60);
+  const [type, setType] = useState("recurring");
+
+  // For temp conversion: pick a date
+  const today = new Date();
+  const todayStr = today.toISOString().split("T")[0];
+  const [tempDate, setTempDate] = useState(todayStr);
+
+  function handleSave() {
+    if (type === "recurring") {
+      onSave(sH * 60 + sM, eH * 60 + eM);
+    } else {
+      // Convert to temp: delete recurring, create temp
+      const start = new Date(tempDate);
+      start.setHours(sH, sM, 0, 0);
+      const end = new Date(tempDate);
+      end.setHours(eH, eM, 0, 0);
+      onConvertToTemp(start.toISOString(), end.toISOString());
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: "rgba(0,0,0,0.4)" }}>
@@ -645,6 +664,37 @@ function EditModal({ block, onClose, onSave, onDelete }) {
           <h3 className="text-lg font-bold text-gray-800">{`יום ${["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"][block.dayIndex]}`}</h3>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500"><X size={16} /></button>
         </div>
+
+        {/* Type toggle */}
+        <div className="flex rounded-2xl overflow-hidden border border-gray-200">
+          <button
+            onClick={() => setType("recurring")}
+            className="flex-1 py-2 text-sm font-bold transition-all"
+            style={{ background: type === "recurring" ? "#007AFF" : "white", color: type === "recurring" ? "white" : "#6B7280" }}
+          >
+            קבוע
+          </button>
+          <button
+            onClick={() => setType("temp")}
+            className="flex-1 py-2 text-sm font-bold transition-all"
+            style={{ background: type === "temp" ? "#34C759" : "white", color: type === "temp" ? "white" : "#6B7280" }}
+          >
+            חד פעמי
+          </button>
+        </div>
+
+        {type === "temp" && (
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-gray-500 w-6">📅</span>
+            <input
+              type="date"
+              value={tempDate}
+              min={todayStr}
+              onChange={e => setTempDate(e.target.value)}
+              className="flex-1 bg-gray-50 rounded-2xl px-3 py-2 text-sm font-bold text-gray-800 outline-none border-none"
+            />
+          </div>
+        )}
 
         <div className="space-y-3">
           {[
@@ -670,11 +720,7 @@ function EditModal({ block, onClose, onSave, onDelete }) {
           <button onClick={() => { onDelete(); }} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
             <Trash2 size={18} />
           </button>
-          <button
-            onClick={() => onSave(sH * 60 + sM, eH * 60 + eM)}
-            className="flex-1 py-3 rounded-2xl font-bold text-white"
-            style={{ background: "#007AFF" }}
-          >
+          <button onClick={handleSave} className="flex-1 py-3 rounded-2xl font-bold text-white" style={{ background: type === "temp" ? "#34C759" : "#007AFF" }}>
             שמור
           </button>
         </div>
