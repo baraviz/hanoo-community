@@ -285,7 +285,23 @@ export default function MyParking() {
                     </div>
                   )}
 
-                  {/* Blocks */}
+                  {/* Temp blocks */}
+                  {dayTempBlocks.map(b => (
+                    <div
+                      key={b.id}
+                      className="absolute rounded pointer-events-none select-none"
+                      style={{
+                        top: `${(b.start / TOTAL_MINUTES) * 100}%`,
+                        height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
+                        left: 1, right: 1,
+                        background: "rgba(0,122,255,0.12)",
+                        border: "1.5px dashed #007AFF",
+                        minHeight: 4,
+                      }}
+                    />
+                  ))}
+
+                  {/* Recurring Blocks */}
                   {dayBlocks.map(b => (
                     <div
                       key={b.id}
