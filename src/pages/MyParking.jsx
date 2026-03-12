@@ -253,6 +253,12 @@ export default function MyParking() {
 
             {DAYS.map((_, dayIndex) => {
               const dayBlocks = blocks.filter(b => b.dayIndex === dayIndex);
+              // Temp blocks for this day of week
+              const dayTempBlocks = tempBlocks.filter(t => new Date(t.start_at).getDay() === dayIndex).map(t => ({
+                id: t.id,
+                start: new Date(t.start_at).getHours() * 60 + new Date(t.start_at).getMinutes(),
+                end: new Date(t.end_at).getHours() * 60 + new Date(t.end_at).getMinutes(),
+              }));
               const isDragDay = isDragging && dragStart?.dayIndex === dayIndex;
               const dragPreviewStart = isDragDay ? Math.min(dragStart.time, dragCurrent?.time ?? dragStart.time) : null;
               const dragPreviewEnd = isDragDay ? Math.max(dragStart.time, dragCurrent?.time ?? dragStart.time) + 30 : null;
