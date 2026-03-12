@@ -16,6 +16,12 @@ export default function Home() {
   const [removingSlot, setRemovingSlot] = useState(false);
   const [endingBooking, setEndingBooking] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [closingModal, setClosingModal] = useState(false);
+
+  function closeRemoveModal() {
+    setClosingModal(true);
+    setTimeout(() => { setShowRemoveModal(false); setClosingModal(false); }, 280);
+  }
 
   useEffect(() => {
     loadData();
