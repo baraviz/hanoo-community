@@ -1,0 +1,387 @@
+import { useState, useEffect, useRef } from "react";
+import { base44 } from "@/api/base44Client";
+import { Check, Trash2, X, AlertTriangle, Clock } from "lucide-react";
+
+const DAYS = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"];
+const FULL_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+const TOTAL_MINUTES = 24 * 60;
+const HOURS = 24;
+
+const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+
+export default function MyParking() {
+  const [user, setUser] = useState(null);
+  const [resident, setResident] = useState(null);
+  const [blocks, setBlocks] = useState([]); // { id, dayIndex, start, end }
+  const [savedBlocks, setSavedBlocks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editingBlock, setEditingBlock] = useState(null);
+  const [clearConfirm, setClearConfirm] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState(null);
+  const [dragCurrent, setDragCurrent] = useState(null);
+  const [saved, setSaved] = useState(false);
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  async function init() {
+    const u = await base44.auth.me();
+    setUser(u);
+    const res = await base44.entities.Resident.filter({ user_email: u.email });
+    if (res.length === 0) { setLoading(false); return; }
+    const r = res[0];
+    setResident(r);
+
+    const avail = await base44.entities.WeeklyAvailability.filter({ owner_email: u.email });
+    const loaded = avail.map(a => ({ id: a.id, dayIndex: a.day_index, start: a.start_minutes, end: a.end_minutes }));
+    setBlocks(loaded);
+    setSavedBlocks(loaded);
+    setLoading(false);
+  }
+
+  function getTimeFromY(y, totalHeight) {
+    const pct = Math.min(Math.max(y / totalHeight, 0), 1);
+    return Math.floor((pct * TOTAL_MINUTES) / 30) * 30;
+  }
+
+  function handleMouseDown(e, dayIndex) {
+    if (!gridRef.current) return;
+    const rect = gridRef.current.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const time = getTimeFromY(y, rect.height);
+    setIsDragging(true);
+    setDragStart({ dayIndex, time });
+    setDragCurrent({ dayIndex, time });
+  }
+
+  function handleTouchStart(e, dayIndex) {
+    if (!gridRef.current) return;
+    const touch = e.touches[0];
+    const rect = gridRef.current.getBoundingClientRect();
+    const y = touch.clientY - rect.top;
+    const time = getTimeFromY(y, rect.height);
+    setIsDragging(true);
+    setDragStart({ dayIndex, time });
+    setDragCurrent({ dayIndex, time });
+  }
+
+  function handleMouseMove(e) {
+    if (!isDragging || !gridRef.current) return;
+    const rect = gridRef.current.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    setDragCurrent(prev => ({ ...prev, time: getTimeFromY(y, rect.height) }));
+  }
+
+  function handleTouchMove(e) {
+    if (!isDragging || !gridRef.current) return;
+    const touch = e.touches[0];
+    const rect = gridRef.current.getBoundingClientRect();
+    const y = touch.clientY - rect.top;
+    setDragCurrent(prev => ({ ...prev, time: getTimeFromY(y, rect.height) }));
+  }
+
+  function handleDragEnd() {
+    if (!isDragging || !dragStart || !dragCurrent) {
+      setIsDragging(false); setDragStart(null); setDragCurrent(null);
+      return;
+    }
+    const start = Math.min(dragStart.time, dragCurrent.time);
+    const end = Math.max(dragStart.time, dragCurrent.time) + 30;
+    addBlock(dragStart.dayIndex, start, end);
+    setIsDragging(false); setDragStart(null); setDragCurrent(null);
+  }
+
+  function addBlock(dayIndex, newStart, newEnd) {
+    setBlocks(prev => {
+      let dayBlocks = prev.filter(b => b.dayIndex === dayIndex);
+      const others = prev.filter(b => b.dayIndex !== dayIndex);
+      const overlapping = dayBlocks.filter(b => newStart < b.end && newEnd > b.start);
+      let fStart = newStart, fEnd = newEnd;
+      if (overlapping.length > 0) {
+        fStart = Math.min(newStart, ...overlapping.map(b => b.start));
+        fEnd = Math.max(newEnd, ...overlapping.map(b => b.end));
+        dayBlocks = dayBlocks.filter(b => !overlapping.includes(b));
+      }
+      return [...others, ...dayBlocks, { id: Math.random().toString(36).slice(2), dayIndex, start: fStart, end: fEnd }];
+    });
+  }
+
+  function removeBlock(id) {
+    setBlocks(prev => prev.filter(b => b.id !== id));
+    setEditingBlock(null);
+  }
+
+  function updateBlock(id, start, end) {
+    if (end <= start) return;
+    setBlocks(prev => prev.map(b => b.id === id ? { ...b, start, end } : b));
+    setEditingBlock(null);
+  }
+
+  async function saveChanges() {
+    if (!resident) return;
+    setSaving(true);
+
+    // Delete old records
+    for (const b of savedBlocks) {
+      await base44.entities.WeeklyAvailability.delete(b.id);
+    }
+    // Create new ones
+    const created = [];
+    for (const b of blocks) {
+      const rec = await base44.entities.WeeklyAvailability.create({
+        resident_id: resident.id,
+        owner_email: user.email,
+        building_id: resident.building_id,
+        day_index: b.dayIndex,
+        start_minutes: b.start,
+        end_minutes: b.end,
+      });
+      created.push({ id: rec.id, dayIndex: b.dayIndex, start: b.start, end: b.end });
+    }
+    setSavedBlocks(created);
+    setBlocks(created);
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
+  const totalHours = blocks.reduce((acc, b) => acc + (b.end - b.start), 0) / 60;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
+        <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="flex flex-col bg-gray-50"
+      style={{ height: "calc(100vh - 64px)" }}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleDragEnd}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleDragEnd}
+    >
+      {/* Header */}
+      <div className="flex-none pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-white text-xl font-bold">החניה שלי 🅿️</h1>
+            <p className="text-blue-200 text-xs mt-0.5">גרור לסימון שעות זמינות קבועות</p>
+          </div>
+          <div className="bg-white bg-opacity-20 rounded-2xl px-3 py-2 text-center">
+            <p className="text-white text-lg font-bold">{totalHours.toFixed(1)}</p>
+            <p className="text-blue-200 text-xs">שעות/שבוע</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Grid */}
+      <div className="flex-1 overflow-hidden flex flex-col px-2 pt-3">
+        {/* Day headers */}
+        <div className="flex mb-1 pr-7">
+          {DAYS.map((d, i) => (
+            <div key={i} className="flex-1 text-center text-xs font-bold text-gray-500">{d}</div>
+          ))}
+        </div>
+
+        {/* Main grid area */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Hour labels */}
+          <div className="w-7 flex-none relative">
+            {Array.from({ length: HOURS + 1 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-full text-left"
+                style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
+              >
+                <span className="text-[9px] text-gray-400 leading-none">{i === 0 ? "" : `${i}`}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Columns */}
+          <div
+            ref={gridRef}
+            className="flex-1 flex relative border border-gray-200 rounded-2xl overflow-hidden bg-white"
+            style={{ touchAction: "none" }}
+          >
+            {/* Hour lines */}
+            {Array.from({ length: HOURS + 1 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute left-0 right-0 border-t border-gray-100 pointer-events-none"
+                style={{ top: `${(i / HOURS) * 100}%` }}
+              />
+            ))}
+
+            {DAYS.map((_, dayIndex) => {
+              const dayBlocks = blocks.filter(b => b.dayIndex === dayIndex);
+              const isDragDay = isDragging && dragStart?.dayIndex === dayIndex;
+              const dragPreviewStart = isDragDay ? Math.min(dragStart.time, dragCurrent?.time ?? dragStart.time) : null;
+              const dragPreviewEnd = isDragDay ? Math.max(dragStart.time, dragCurrent?.time ?? dragStart.time) + 30 : null;
+
+              return (
+                <div
+                  key={dayIndex}
+                  className="flex-1 relative border-r border-gray-100 last:border-r-0 cursor-crosshair"
+                  onMouseDown={(e) => handleMouseDown(e, dayIndex)}
+                  onTouchStart={(e) => handleTouchStart(e, dayIndex)}
+                >
+                  {/* Blocks */}
+                  {dayBlocks.map(b => (
+                    <div
+                      key={b.id}
+                      className="absolute left-0.5 right-0.5 rounded-lg cursor-pointer select-none"
+                      style={{
+                        top: `${(b.start / TOTAL_MINUTES) * 100}%`,
+                        height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
+                        background: "rgba(0,122,255,0.85)",
+                        minHeight: 4,
+                      }}
+                      onClick={(e) => { e.stopPropagation(); setEditingBlock(b); }}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onTouchStart={(e) => { e.stopPropagation(); setEditingBlock(b); }}
+                    />
+                  ))}
+
+                  {/* Drag preview */}
+                  {isDragDay && dragPreviewStart !== null && (
+                    <div
+                      className="absolute left-0.5 right-0.5 rounded-lg pointer-events-none"
+                      style={{
+                        top: `${(dragPreviewStart / TOTAL_MINUTES) * 100}%`,
+                        height: `${((dragPreviewEnd - dragPreviewStart) / TOTAL_MINUTES) * 100}%`,
+                        background: "rgba(0,122,255,0.35)",
+                        border: "1.5px dashed rgba(0,122,255,0.7)",
+                        minHeight: 4,
+                      }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom actions */}
+      <div className="flex-none px-4 py-3 flex gap-3">
+        <button
+          onClick={() => setClearConfirm(true)}
+          className="w-12 h-12 rounded-2xl flex items-center justify-center flex-none"
+          style={{ background: "#FEE2E2", color: "#EF4444" }}
+        >
+          <Trash2 size={18} />
+        </button>
+        <button
+          onClick={saveChanges}
+          disabled={saving}
+          className="flex-1 py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2 transition-all"
+          style={{ background: saved ? "#34C759" : "#007AFF", opacity: saving ? 0.7 : 1 }}
+        >
+          {saving ? (
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          ) : saved ? (
+            <><Check size={18} /> נשמר!</>
+          ) : (
+            <><Check size={18} /> שמור זמינות</>
+          )}
+        </button>
+      </div>
+
+      {/* Edit modal */}
+      {editingBlock && (
+        <EditModal
+          block={editingBlock}
+          onClose={() => setEditingBlock(null)}
+          onSave={(s, e) => updateBlock(editingBlock.id, s, e)}
+          onDelete={() => removeBlock(editingBlock.id)}
+        />
+      )}
+
+      {/* Clear confirm */}
+      {clearConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col justify-end"
+          style={{ background: "rgba(0,0,0,0.4)" }}
+          onClick={() => setClearConfirm(false)}
+        >
+          <div
+            className="bg-white rounded-t-3xl p-6 space-y-4"
+            style={{ paddingBottom: "calc(80px + 1.5rem)" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
+              <AlertTriangle size={24} style={{ color: "#EF4444" }} />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 text-center">נקה לוח זמינות?</h2>
+            <p className="text-gray-500 text-center text-sm">כל השעות שסימנת יימחקו</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button onClick={() => setClearConfirm(false)} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+              <button onClick={() => { setBlocks([]); setClearConfirm(false); }} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#EF4444" }}>נקה</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EditModal({ block, onClose, onSave, onDelete }) {
+  const [sH, setSH] = useState(Math.floor(block.start / 60));
+  const [sM, setSM] = useState(block.start % 60);
+  const [eH, setEH] = useState(Math.floor(block.end / 60));
+  const [eM, setEM] = useState(block.end % 60);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: "rgba(0,0,0,0.4)" }}>
+      <div className="bg-white rounded-3xl p-6 w-full max-w-xs space-y-5">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-bold text-gray-800">{`יום ${["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"][block.dayIndex]}`}</h3>
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500"><X size={16} /></button>
+        </div>
+
+        <div className="space-y-3">
+          {[
+            { label: "מ", h: sH, setH: setSH, m: sM, setM: setSM, max: 23 },
+            { label: "עד", h: eH, setH: setEH, m: eM, setM: setEM, max: 24 },
+          ].map(({ label, h, setH, m, setM, max }) => (
+            <div key={label} className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-500 w-6">{label}</span>
+              <div className="flex-1 flex items-center gap-2 bg-gray-50 rounded-2xl px-3 py-2">
+                <select value={h} onChange={e => setH(Number(e.target.value))} className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none">
+                  {Array.from({ length: max + 1 }).map((_, i) => <option key={i} value={i}>{String(i).padStart(2, "0")}</option>)}
+                </select>
+                <span className="text-gray-400 font-bold">:</span>
+                <select value={m} onChange={e => setM(Number(e.target.value))} className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none">
+                  {[0, 30].map(v => <option key={v} value={v}>{String(v).padStart(2, "0")}</option>)}
+                </select>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <button onClick={onDelete} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
+            <Trash2 size={18} />
+          </button>
+          <button
+            onClick={() => onSave(sH * 60 + sM, eH * 60 + eM)}
+            className="flex-1 py-3 rounded-2xl font-bold text-white"
+            style={{ background: "#007AFF" }}
+          >
+            שמור
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
