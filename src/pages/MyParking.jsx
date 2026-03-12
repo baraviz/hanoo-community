@@ -150,9 +150,10 @@ export default function MyParking() {
         resident_id: resident.id,
         owner_email: user.email,
         building_id: resident.building_id,
-        day_index: b.dayIndex,
-        start_minutes: b.start,
-        end_minutes: b.end,
+        slot_type: "recurring",
+        days_of_week: [b.dayIndex],
+        time_start: b.start,
+        time_end: b.end,
       });
       created.push({ id: rec.id, dayIndex: b.dayIndex, start: b.start, end: b.end });
     }
