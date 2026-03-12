@@ -540,6 +540,20 @@ export default function MyParking() {
           onClose={() => setEditingBlock(null)}
           onSave={(s, e) => updateBlock(editingBlock.id, s, e)}
           onDelete={() => deleteBlock(editingBlock.id)}
+          onConvertToTemp={async (startAt, endAt) => {
+            // Delete the recurring block and create a temp one
+            deleteBlock(editingBlock.id);
+            const rec = await base44.entities.WeeklyAvailability.create({
+              resident_id: resident.id,
+              owner_email: user.email,
+              building_id: resident.building_id,
+              slot_type: "temp",
+              start_at: startAt,
+              end_at: endAt,
+            });
+            setTempBlocks(prev => [...prev, rec]);
+            setEditingBlock(null);
+          }}
         />
       )}
 
