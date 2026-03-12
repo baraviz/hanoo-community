@@ -133,14 +133,14 @@ export default function Home() {
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end"
           style={{ background: "rgba(0,0,0,0.4)" }}
-          onClick={() => setShowRemoveModal(false)}
+          onClick={closeRemoveModal}
         >
           <div
             className="bg-white rounded-t-3xl w-full p-6 space-y-4"
-            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: "slideUp 0.3s ease-out" }}
+            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingModal ? "slideDown 0.28s ease-in forwards" : "slideUp 0.3s ease-out" }}
             onClick={e => e.stopPropagation()}
           >
-            <style>{`@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }`}</style>
+            <style>{`@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } } @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }`}</style>
             <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-2" />
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FFF3CD" }}>
               <AlertTriangle size={24} style={{ color: "#F59E0B" }} />
