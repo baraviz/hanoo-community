@@ -39,8 +39,8 @@ export default function MyParking() {
     const r = res[0];
     setResident(r);
 
-    const avail = await base44.entities.WeeklyAvailability.filter({ owner_email: u.email });
-    const loaded = avail.map(a => ({ id: a.id, dayIndex: a.day_index, start: a.start_minutes, end: a.end_minutes }));
+    const avail = await base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" });
+    const loaded = avail.map(a => ({ id: a.id, dayIndex: a.days_of_week[0], start: a.time_start, end: a.time_end }));
     setBlocks(loaded);
     setSavedBlocks(loaded);
     setLoading(false);
