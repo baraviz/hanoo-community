@@ -325,36 +325,36 @@ export default function MyParking() {
       {/* Grid */}
       {viewMode === "calendar" && (
         <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
-        {/* Day headers */}
-        <div className="flex mb-1" style={{ paddingRight: "36px" }}>
-          {DAYS.map((d, i) => (
-            <div key={i} className="flex-1 text-center text-xs font-bold text-gray-500">{d}</div>
-          ))}
-        </div>
-
-        {/* Main grid area - padding top/bottom so first/last labels don't clip */}
-        <div className="flex flex-1 overflow-hidden" style={{ paddingTop: 8, paddingBottom: 8 }}>
-          {/* Hour labels */}
-          <div className="flex-none relative" style={{ width: 36 }}>
-            {Array.from({ length: HOURS + 1 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-full pr-1 text-right"
-                style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
-              >
-                <span className="text-[9px] text-gray-400 leading-none">
-                  {String(i).padStart(2, "0")}:00
-                </span>
-              </div>
+          {/* Day headers */}
+          <div className="flex mb-1" style={{ paddingRight: "36px" }}>
+            {DAYS.map((d, i) => (
+              <div key={i} className="flex-1 text-center text-xs font-bold text-gray-500">{d}</div>
             ))}
           </div>
 
-          {/* Columns */}
-          <div
-            ref={gridRef}
-            className="flex-1 flex relative border border-gray-200 rounded-xl overflow-hidden bg-white"
-            style={{ touchAction: "none" }}
-          >
+          {/* Main grid area */}
+          <div className="flex flex-1 overflow-hidden" style={{ paddingTop: 8, paddingBottom: 8 }}>
+            {/* Hour labels */}
+            <div className="flex-none relative" style={{ width: 36 }}>
+              {Array.from({ length: HOURS + 1 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-full pr-1 text-right"
+                  style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
+                >
+                  <span className="text-[9px] text-gray-400 leading-none">
+                    {String(i).padStart(2, "0")}:00
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Columns */}
+            <div
+              ref={gridRef}
+              className="flex-1 flex relative border border-gray-200 rounded-xl overflow-hidden bg-white"
+              style={{ touchAction: "none" }}
+            >
             {/* Hour lines */}
             {Array.from({ length: HOURS + 1 }).map((_, i) => (
               <div
