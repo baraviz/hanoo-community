@@ -18,6 +18,7 @@ export default function Layout({ children, currentPageName }) {
   const navItems = [
     { name: "Home", label: "בית", icon: Home },
     { name: "FindParking", label: "מצא חניה", icon: Car },
+    { name: "MyParking", label: "החניה שלי", icon: ParkingSquare },
     { name: "Chat", label: "צ'אט", icon: MessageCircle },
     { name: "Profile", label: "פרופיל", icon: User },
   ];
