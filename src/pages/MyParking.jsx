@@ -112,10 +112,7 @@ export default function MyParking() {
     });
   }
 
-  function removeBlock(id) {
-    setBlocks(prev => prev.filter(b => b.id !== id));
-    setEditingBlock(null);
-  }
+
 
   function updateBlock(id, start, end) {
     if (end <= start) return;
