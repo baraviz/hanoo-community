@@ -163,7 +163,7 @@ export default function MyParking() {
     const toSave = currentBlocks ?? blocks;
 
     for (const b of savedBlocks) {
-      await base44.entities.WeeklyAvailability.delete(b.id);
+      try { await base44.entities.WeeklyAvailability.delete(b.id); } catch (_) {}
     }
     const created = [];
     for (const b of toSave) {
