@@ -124,9 +124,19 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       {/* Remove parking modal */}
       {showRemoveModal && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>
-          <div className="bg-white rounded-t-3xl w-full p-6 pb-10 space-y-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-2" style={{ background: "#FFF3CD" }}>
+        <div
+          className="fixed inset-0 z-50 flex flex-col justify-end"
+          style={{ background: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowRemoveModal(false)}
+        >
+          <div
+            className="bg-white rounded-t-3xl w-full p-6 space-y-4"
+            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: "slideUp 0.3s ease-out" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <style>{`@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }`}</style>
+            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-2" />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FFF3CD" }}>
               <AlertTriangle size={24} style={{ color: "#F59E0B" }} />
             </div>
             <h2 className="text-xl font-bold text-gray-800 text-center">הסרת פרסום חניה</h2>
