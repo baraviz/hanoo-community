@@ -123,17 +123,16 @@ export default function MyParking() {
     setEditingBlock(null);
   }
 
-  async function saveChanges() {
+  async function saveChanges(currentBlocks) {
     if (!resident) return;
     setSaving(true);
+    const toSave = currentBlocks ?? blocks;
 
-    // Delete old records
     for (const b of savedBlocks) {
       await base44.entities.WeeklyAvailability.delete(b.id);
     }
-    // Create new ones
     const created = [];
-    for (const b of blocks) {
+    for (const b of toSave) {
       const rec = await base44.entities.WeeklyAvailability.create({
         resident_id: resident.id,
         owner_email: user.email,
@@ -149,6 +148,13 @@ export default function MyParking() {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  }
+
+  function triggerSave() {
+    setBlocks(current => {
+      saveChanges(current);
+      return current;
+    });
   }
 
   const totalHours = blocks.reduce((acc, b) => acc + (b.end - b.start), 0) / 60;
