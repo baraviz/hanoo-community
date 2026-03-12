@@ -122,6 +122,39 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Remove parking modal */}
+      {showRemoveModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgba(0,0,0,0.4)" }}>
+          <div className="bg-white rounded-t-3xl w-full p-6 pb-10 space-y-4">
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-2" style={{ background: "#FFF3CD" }}>
+              <AlertTriangle size={24} style={{ color: "#F59E0B" }} />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 text-center">הסרת פרסום חניה</h2>
+            {!resident?.bonus_credits_received && (
+              <div className="rounded-2xl p-3 text-center" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
+                <p className="text-amber-700 text-sm font-medium">⚠️ זהו הפרסום הראשון שלך — הסרה תמנע ממך לקבל 100 קרדיטים בונוס</p>
+              </div>
+            )}
+            <p className="text-gray-500 text-center text-sm">האם אתה בטוח שברצונך להסיר את פרסום החניה?</p>
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                onClick={() => setShowRemoveModal(false)}
+                className="py-3 rounded-2xl font-bold text-gray-700"
+                style={{ background: "#F3F4F6" }}
+              >
+                ביטול
+              </button>
+              <button
+                onClick={confirmDeactivate}
+                className="py-3 rounded-2xl font-bold text-white"
+                style={{ background: "#FF3B30" }}
+              >
+                הסר פרסום
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between mb-4">
