@@ -73,9 +73,7 @@ export default function Home() {
     const start = parseISO(booking.start_time);
     const end = new Date();
     const hours = Math.max(0.5, (end - start) / 3600000);
-    const slotData = await base44.entities.ParkingSlot.filter({ id: booking.parking_slot_id });
-    const pricePerHour = slotData[0]?.price_per_hour || 10;
-    const actualCost = Math.round(hours * pricePerHour);
+    const actualCost = Math.round(hours * 10);
     const originalCost = booking.total_credits;
     const refund = originalCost - actualCost;
 
@@ -87,8 +85,6 @@ export default function Home() {
         });
       }
     }
-
-    await base44.entities.ParkingSlot.update(booking.parking_slot_id, { status: "available" });
     setEndingBooking(false);
     loadData();
   }
