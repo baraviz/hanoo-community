@@ -128,7 +128,20 @@ export default function MyParking() {
   function updateBlock(id, start, end) {
     if (end <= start) return;
     setBlocks(prev => {
-      const updated = prev.map(b => b.id === id ? { ...b, start, end } : b);
+      const dayIndex = prev.find(b => b.id === id)?.dayIndex;
+      if (dayIndex === undefined) return prev;
+      // Remove the block being edited, then merge like addBlock does
+      const withoutEdited = prev.filter(b => b.id !== id);
+      const dayBlocks = withoutEdited.filter(b => b.dayIndex === dayIndex);
+      const others = withoutEdited.filter(b => b.dayIndex !== dayIndex);
+      const overlapping = dayBlocks.filter(b => start < b.end && end > b.start);
+      let fStart = start, fEnd = end;
+      if (overlapping.length > 0) {
+        fStart = Math.min(start, ...overlapping.map(b => b.start));
+        fEnd = Math.max(end, ...overlapping.map(b => b.end));
+      }
+      const remaining = dayBlocks.filter(b => !overlapping.includes(b));
+      const updated = [...others, ...remaining, { id, dayIndex, start: fStart, end: fEnd }];
       setTimeout(() => saveChanges(updated), 100);
       return updated;
     });
