@@ -24,6 +24,8 @@ export default function MyParking() {
   const [dragStart, setDragStart] = useState(null);
   const [dragCurrent, setDragCurrent] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [viewMode, setViewMode] = useState("calendar"); // "calendar" | "list"
+  const [editingTemp, setEditingTemp] = useState(null);
   const gridRef = useRef(null);
 
   useEffect(() => {
