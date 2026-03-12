@@ -261,6 +261,17 @@ export default function MyParking() {
                   onMouseDown={(e) => handleMouseDown(e, dayIndex)}
                   onTouchStart={(e) => handleTouchStart(e, dayIndex)}
                 >
+                  {/* Current time line */}
+                  {isToday && (
+                    <div
+                      className="absolute left-0 right-0 pointer-events-none z-20 flex items-center"
+                      style={{ top: `${currentTopPct}%` }}
+                    >
+                      <div className="absolute right-0 w-2 h-2 rounded-full bg-red-500" style={{ transform: "translate(50%, -50%)" }} />
+                      <div className="w-full border-t-2 border-red-500 opacity-80" />
+                    </div>
+                  )}
+
                   {/* Blocks */}
                   {dayBlocks.map(b => (
                     <div
