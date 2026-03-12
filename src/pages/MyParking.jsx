@@ -223,7 +223,7 @@ export default function MyParking() {
                 style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
               >
                 <span className="text-[9px] text-gray-400 leading-none">
-                  {String(i).padStart(2, "0")}
+                  {String(i).padStart(2, "0")}:00
                 </span>
               </div>
             ))}
