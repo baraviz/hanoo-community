@@ -101,6 +101,22 @@ export default function Profile() {
       </div>
 
       <div className="px-5 py-5 space-y-4">
+        {/* My parking */}
+        {resident && (resident.parking_spot || resident.parking_floor) && (
+          <div className="card p-4">
+            <p className="text-xs text-gray-400 mb-1">החניה שלי</p>
+            <div className="flex items-center gap-3 mt-1">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                <Car size={20} style={{ color: "#007AFF" }} />
+              </div>
+              <div>
+                <p className="font-bold text-gray-800">חניה {resident.parking_spot || "—"}</p>
+                {resident.parking_floor && <p className="text-gray-500 text-sm">קומה {resident.parking_floor}</p>}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Building code */}
         {building && (
           <div className="card p-4">
