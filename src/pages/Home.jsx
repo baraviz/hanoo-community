@@ -15,6 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [removingSlot, setRemovingSlot] = useState(false);
   const [endingBooking, setEndingBooking] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
 
   useEffect(() => {
     loadData();
