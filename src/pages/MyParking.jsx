@@ -84,7 +84,7 @@ export default function MyParking() {
     setDragCurrent(prev => ({ ...prev, time: getTimeFromY(y, rect.height) }));
   }
 
-  function handleDragEnd() {
+  async function handleDragEnd() {
     if (!isDragging || !dragStart || !dragCurrent) {
       setIsDragging(false); setDragStart(null); setDragCurrent(null);
       return;
@@ -93,6 +93,8 @@ export default function MyParking() {
     const end = Math.max(dragStart.time, dragCurrent.time) + 30;
     addBlock(dragStart.dayIndex, start, end);
     setIsDragging(false); setDragStart(null); setDragCurrent(null);
+    // auto-save after short delay so state updates first
+    setTimeout(() => triggerSave(), 100);
   }
 
   function addBlock(dayIndex, newStart, newEnd) {
