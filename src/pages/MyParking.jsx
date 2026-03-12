@@ -14,6 +14,7 @@ export default function MyParking() {
   const [resident, setResident] = useState(null);
   const [blocks, setBlocks] = useState([]); // { id, dayIndex, start, end }
   const [savedBlocks, setSavedBlocks] = useState([]);
+  const [tempBlocks, setTempBlocks] = useState([]); // { id, start_at, end_at } — temp slots
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
