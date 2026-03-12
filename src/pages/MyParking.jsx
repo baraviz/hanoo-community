@@ -191,9 +191,9 @@ export default function MyParking() {
       </div>
 
       {/* Grid */}
-      <div className="flex-1 overflow-hidden flex flex-col px-2 pt-3">
+      <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
         {/* Day headers */}
-        <div className="flex mb-1 pr-7">
+        <div className="flex mb-1" style={{ paddingRight: "36px" }}>
           {DAYS.map((d, i) => (
             <div key={i} className="flex-1 text-center text-xs font-bold text-gray-500">{d}</div>
           ))}
@@ -202,14 +202,16 @@ export default function MyParking() {
         {/* Main grid area */}
         <div className="flex flex-1 overflow-hidden">
           {/* Hour labels */}
-          <div className="w-7 flex-none relative">
+          <div className="flex-none relative" style={{ width: 36 }}>
             {Array.from({ length: HOURS + 1 }).map((_, i) => (
               <div
                 key={i}
-                className="absolute w-full text-left"
+                className="absolute w-full pr-1 text-right"
                 style={{ top: `${(i / HOURS) * 100}%`, transform: "translateY(-50%)" }}
               >
-                <span className="text-[9px] text-gray-400 leading-none">{i === 0 ? "" : `${i}`}</span>
+                <span className="text-[9px] text-gray-400 leading-none">
+                  {String(i).padStart(2, "0")}
+                </span>
               </div>
             ))}
           </div>
@@ -217,7 +219,7 @@ export default function MyParking() {
           {/* Columns */}
           <div
             ref={gridRef}
-            className="flex-1 flex relative border border-gray-200 rounded-2xl overflow-hidden bg-white"
+            className="flex-1 flex relative border border-gray-200 rounded-xl overflow-hidden bg-white"
             style={{ touchAction: "none" }}
           >
             {/* Hour lines */}
@@ -238,7 +240,8 @@ export default function MyParking() {
               return (
                 <div
                   key={dayIndex}
-                  className="flex-1 relative border-r border-gray-100 last:border-r-0 cursor-crosshair"
+                  className="flex-1 relative cursor-crosshair"
+                  style={{ borderRight: "1px solid #e5e7eb" }}
                   onMouseDown={(e) => handleMouseDown(e, dayIndex)}
                   onTouchStart={(e) => handleTouchStart(e, dayIndex)}
                 >
@@ -246,10 +249,11 @@ export default function MyParking() {
                   {dayBlocks.map(b => (
                     <div
                       key={b.id}
-                      className="absolute left-0.5 right-0.5 rounded-lg cursor-pointer select-none"
+                      className="absolute rounded cursor-pointer select-none"
                       style={{
                         top: `${(b.start / TOTAL_MINUTES) * 100}%`,
                         height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
+                        left: 1, right: 1,
                         background: "rgba(0,122,255,0.85)",
                         minHeight: 4,
                       }}
@@ -262,10 +266,11 @@ export default function MyParking() {
                   {/* Drag preview */}
                   {isDragDay && dragPreviewStart !== null && (
                     <div
-                      className="absolute left-0.5 right-0.5 rounded-lg pointer-events-none"
+                      className="absolute rounded pointer-events-none"
                       style={{
                         top: `${(dragPreviewStart / TOTAL_MINUTES) * 100}%`,
                         height: `${((dragPreviewEnd - dragPreviewStart) / TOTAL_MINUTES) * 100}%`,
+                        left: 1, right: 1,
                         background: "rgba(0,122,255,0.35)",
                         border: "1.5px dashed rgba(0,122,255,0.7)",
                         minHeight: 4,
