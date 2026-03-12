@@ -249,12 +249,15 @@ export default function MyParking() {
               const isDragDay = isDragging && dragStart?.dayIndex === dayIndex;
               const dragPreviewStart = isDragDay ? Math.min(dragStart.time, dragCurrent?.time ?? dragStart.time) : null;
               const dragPreviewEnd = isDragDay ? Math.max(dragStart.time, dragCurrent?.time ?? dragStart.time) + 30 : null;
+              const isToday = dayIndex === currentTime.getDay();
+              const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+              const currentTopPct = (currentMinutes / TOTAL_MINUTES) * 100;
 
               return (
                 <div
                   key={dayIndex}
                   className="flex-1 relative cursor-crosshair"
-                  style={{ borderRight: "1px solid #e5e7eb" }}
+                  style={{ borderRight: "1px solid #e5e7eb", background: isToday ? "rgba(0,122,255,0.04)" : undefined }}
                   onMouseDown={(e) => handleMouseDown(e, dayIndex)}
                   onTouchStart={(e) => handleTouchStart(e, dayIndex)}
                 >
