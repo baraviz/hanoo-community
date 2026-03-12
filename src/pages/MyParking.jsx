@@ -450,7 +450,7 @@ export default function MyParking() {
             })}
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Auto-save indicator */}
       {(saving || saved) && (
