@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Car, CheckCircle, ChevronRight } from "lucide-react";
+import { Car, CheckCircle, ChevronRight, Gift, ParkingSquare } from "lucide-react";
 
 export default function PublishParking() {
   const navigate = useNavigate();
@@ -96,49 +96,46 @@ export default function PublishParking() {
           <ChevronRight size={20} />
           <span className="text-sm">חזרה</span>
         </button>
-        <h1 className="text-white text-xl font-bold">פרסם את החניה שלך 🅿️</h1>
+        <h1 className="text-white text-xl font-bold flex items-center gap-2"><ParkingSquare size={22} />פרסם את החניה שלך</h1>
         <p className="text-blue-200 text-sm">שתף עם שכנים וצבור קרדיטים</p>
       </div>
 
       <div className="px-5 py-5 space-y-4">
         {!resident?.bonus_credits_received && (
-          <div className="rounded-2xl p-4" style={{ background: "#E8F8EF", border: "1px solid #34C759" }}>
-            <p className="font-bold text-green-700">🎁 פרסם 2+ שעות השבוע</p>
-            <p className="text-green-600 text-sm">וקבל 200 קרדיטים מתנה!</p>
+          <div className="rounded-2xl p-4 flex items-start gap-3" style={{ background: "#E8F8EF", border: "1px solid #34C759" }}>
+            <Gift size={20} className="text-green-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-bold text-green-700">פרסם 2+ שעות השבוע</p>
+              <p className="text-green-600 text-sm">וקבל 200 קרדיטים מתנה!</p>
+            </div>
           </div>
         )}
 
         <div className="card p-4 space-y-4">
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">זמין מ</label>
-            <input
-              type="datetime-local"
-              value={fromTime}
-              onChange={e => setFromTime(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 outline-none focus:border-blue-400"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">זמין עד</label>
-            <input
-              type="datetime-local"
-              value={toTime}
-              onChange={e => setToTime(e.target.value)}
-              className="w-full border border-gray-200 rounded-xl px-3 py-3 outline-none focus:border-blue-400"
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">זמין מ</label>
+              <input
+                type="datetime-local"
+                value={fromTime}
+                onChange={e => setFromTime(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-3 outline-none focus:border-blue-400 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 block mb-1">זמין עד</label>
+              <input
+                type="datetime-local"
+                value={toTime}
+                onChange={e => setToTime(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl px-3 py-3 outline-none focus:border-blue-400 text-sm"
+              />
+            </div>
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">מחיר לשעה (קרדיטים)</label>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                value={pricePerHour}
-                onChange={e => setPricePerHour(e.target.value)}
-                min="1"
-                max="50"
-                className="flex-1 border border-gray-200 rounded-xl px-3 py-3 outline-none focus:border-blue-400"
-              />
-              <span className="text-gray-500 text-sm">₪/שעה</span>
+            <div className="w-full border border-gray-100 rounded-xl px-3 py-3 bg-gray-50 text-gray-500 text-sm">
+              10 קרדיטים לשעה
             </div>
           </div>
           <div>
