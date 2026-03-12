@@ -36,21 +36,57 @@ export default function FindParking() {
   async function searchParking() {
     if (!fromTime || !toTime) return;
     setLoading(true); setSearched(true);
-    const from = new Date(fromTime).toISOString();
-    const to = new Date(toTime).toISOString();
 
-    const slots = await base44.entities.ParkingSlot.filter({
+    const fromDate = new Date(fromTime);
+    const toDate = new Date(toTime);
+    const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
+    const toMins = toDate.getHours() * 60 + toDate.getMinutes();
+    const dayOfWeek = fromDate.getDay(); // 0=Sunday
+
+    // Get all availability entries for this building (excluding self)
+    const allAvail = await base44.entities.WeeklyAvailability.filter({
       building_id: resident.building_id,
-      status: "available",
     });
 
-    const available = slots.filter(s =>
-      s.owner_email !== user.email &&
-      new Date(s.available_from) <= new Date(from) &&
-      new Date(s.available_until) >= new Date(to)
-    );
+    // Get residents for owner info
+    const residents = await base44.entities.Resident.filter({ building_id: resident.building_id });
+    const residentMap = {};
+    residents.forEach(r => { residentMap[r.user_email] = r; });
 
-    setResults(available);
+    // Check active bookings to exclude already-booked slots
+    const activeBookings = await base44.entities.Booking.filter({
+      building_id: resident.building_id,
+      status: "active",
+    });
+
+    const bookedAvailIds = new Set(activeBookings.map(b => b.parking_slot_id));
+
+    const available = allAvail.filter(a => {
+      if (a.owner_email === user.email) return false;
+      if (bookedAvailIds.has(a.id)) return false;
+
+      if (a.slot_type === "recurring") {
+        // Check day and time range
+        return (a.days_of_week || []).includes(dayOfWeek) &&
+          (a.time_start ?? 0) <= fromMins &&
+          (a.time_end ?? 1440) >= toMins;
+      }
+
+      if (a.slot_type === "temp") {
+        // Check date range
+        return new Date(a.start_at) <= fromDate && new Date(a.end_at) >= toDate;
+      }
+
+      return false;
+    });
+
+    // Attach owner resident info
+    const enriched = available.map(a => ({
+      ...a,
+      ownerResident: residentMap[a.owner_email] || null,
+    }));
+
+    setResults(enriched);
     setLoading(false);
   }
 
@@ -58,7 +94,7 @@ export default function FindParking() {
     const from = new Date(fromTime).toISOString();
     const to = new Date(toTime).toISOString();
     const hours = differenceInMinutes(new Date(to), new Date(from)) / 60;
-    const cost = Math.round(hours * (slot.price_per_hour || 10));
+    const cost = Math.round(hours * 10);
 
     if ((resident.credits || 0) < cost) {
       alert(`אין מספיק קרדיטים. יש לך ${resident.credits}, נדרש ${cost}`);
@@ -69,7 +105,7 @@ export default function FindParking() {
     await base44.entities.Resident.update(resident.id, {
       credits: (resident.credits || 0) - cost,
     });
-    // Add credits to owner (will be finalized on checkout)
+    // Add credits to owner
     const ownerRes = await base44.entities.Resident.filter({ user_email: slot.owner_email });
     if (ownerRes.length > 0) {
       await base44.entities.Resident.update(ownerRes[0].id, {
@@ -77,22 +113,22 @@ export default function FindParking() {
       });
     }
 
-    const booking = await base44.entities.Booking.create({
+    const ownerResident = slot.ownerResident;
+    await base44.entities.Booking.create({
       parking_slot_id: slot.id,
       building_id: slot.building_id,
       renter_email: user.email,
       renter_name: user.full_name,
       owner_email: slot.owner_email,
-      owner_name: slot.owner_name,
-      spot_number: slot.spot_number,
+      owner_name: ownerResident?.user_name || slot.owner_email,
+      spot_number: ownerResident?.parking_spot || "?",
       start_time: from,
       end_time: to,
       total_credits: cost,
       status: "active",
     });
 
-    await base44.entities.ParkingSlot.update(slot.id, { status: "booked" });
-    setBookingId(booking.id);
+    setBookingId(slot.id);
 
     // Update local resident credits
     setResident(prev => ({ ...prev, credits: (prev.credits || 0) - cost }));
