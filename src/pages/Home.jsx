@@ -84,7 +84,11 @@ export default function Home() {
   }
 
   async function deactivateSlot(slot) {
-    const confirmed = window.confirm("האם להסיר את פרסום החניה? שים לב: אם זה הפרסום הראשון שלך, לא תקבל את 150 הקרדיטים.");
+    const isFirstPublish = !resident?.bonus_credits_received;
+    const message = isFirstPublish
+      ? "האם להסיר את פרסום החניה?\n⚠️ שים לב: זה הפרסום הראשון שלך — לא תקבל את 100 הקרדיטים אם תסיר אותו."
+      : "האם להסיר את פרסום החניה?";
+    const confirmed = window.confirm(message);
     if (!confirmed) return;
     setRemovingSlot(true);
     setMyActiveSlot(null);
@@ -147,9 +151,9 @@ export default function Home() {
           <div className="rounded-2xl p-4" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
             <div className="flex items-center gap-2 mb-1">
               <Gift size={16} className="text-amber-700" />
-              <p className="font-bold text-amber-800">קבל 200 קרדיטים!</p>
+              <p className="font-bold text-amber-800">קבל 100 קרדיטים בונוס!</p>
             </div>
-            <p className="text-amber-700 text-sm">פרסם זמינות של לפחות שעתיים וקבל 150 קרדיטים בונוס (כבר קיבלת 50 בהצטרפות!)</p>
+            <p className="text-amber-700 text-sm">פרסם זמינות של לפחות שעתיים בפעם הראשונה וקבל 100 קרדיטים (כבר קיבלת 50 בהצטרפות)</p>
             <button
               onClick={() => navigate(createPageUrl("PublishParking"))}
               className="mt-3 w-full py-2 rounded-xl text-sm font-semibold text-white"
