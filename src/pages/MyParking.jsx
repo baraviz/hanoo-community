@@ -586,20 +586,25 @@ export default function MyParking() {
   );
 }
 
-function EditTempModal({ slot, onClose, onSave, onDelete }) {
+function EditTempModal({ slot, onClose, onSave, onDelete, onConvertToRecurring }) {
   const s = new Date(slot.start_at);
   const e = new Date(slot.end_at);
   const [sH, setSH] = useState(s.getHours());
   const [sM, setSM] = useState(s.getMinutes());
   const [eH, setEH] = useState(e.getHours());
   const [eM, setEM] = useState(e.getMinutes());
+  const [type, setType] = useState("temp");
 
   function handleSave() {
-    const newStart = new Date(slot.start_at);
-    newStart.setHours(sH, sM, 0, 0);
-    const newEnd = new Date(slot.end_at);
-    newEnd.setHours(eH, eM, 0, 0);
-    onSave(newStart.toISOString(), newEnd.toISOString());
+    if (type === "temp") {
+      const newStart = new Date(slot.start_at);
+      newStart.setHours(sH, sM, 0, 0);
+      const newEnd = new Date(slot.end_at);
+      newEnd.setHours(eH, eM, 0, 0);
+      onSave(newStart.toISOString(), newEnd.toISOString());
+    } else {
+      onConvertToRecurring(s.getDay(), sH * 60 + sM, eH * 60 + eM);
+    }
   }
 
   return (
@@ -607,10 +612,28 @@ function EditTempModal({ slot, onClose, onSave, onDelete }) {
       <div className="bg-white rounded-3xl p-6 w-full max-w-xs space-y-5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-gray-800">עריכת חד פעמי</h3>
+            <h3 className="text-lg font-bold text-gray-800">עריכת זמינות</h3>
             <p className="text-xs text-gray-400 mt-0.5">{s.toLocaleDateString("he-IL", { day: "numeric", month: "long" })}</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500"><X size={16} /></button>
+        </div>
+
+        {/* Type toggle */}
+        <div className="flex rounded-2xl overflow-hidden border border-gray-200">
+          <button
+            onClick={() => setType("temp")}
+            className="flex-1 py-2 text-sm font-bold transition-all"
+            style={{ background: type === "temp" ? "#34C759" : "white", color: type === "temp" ? "white" : "#6B7280" }}
+          >
+            חד פעמי
+          </button>
+          <button
+            onClick={() => setType("recurring")}
+            className="flex-1 py-2 text-sm font-bold transition-all"
+            style={{ background: type === "recurring" ? "#007AFF" : "white", color: type === "recurring" ? "white" : "#6B7280" }}
+          >
+            קבוע
+          </button>
         </div>
 
         <div className="space-y-3">
@@ -637,7 +660,7 @@ function EditTempModal({ slot, onClose, onSave, onDelete }) {
           <button onClick={onDelete} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
             <Trash2 size={18} />
           </button>
-          <button onClick={handleSave} className="flex-1 py-3 rounded-2xl font-bold text-white" style={{ background: "#007AFF" }}>
+          <button onClick={handleSave} className="flex-1 py-3 rounded-2xl font-bold text-white" style={{ background: type === "recurring" ? "#007AFF" : "#34C759" }}>
             שמור
           </button>
         </div>
