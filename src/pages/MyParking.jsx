@@ -27,6 +27,8 @@ export default function MyParking() {
   const [viewMode, setViewMode] = useState("calendar"); // "calendar" | "list"
   const [editingTemp, setEditingTemp] = useState(null);
   const gridRef = useRef(null);
+  const saveInProgress = useRef(false);
+  const pendingSave = useRef(null);
 
   useEffect(() => {
     init();
