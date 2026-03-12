@@ -154,7 +154,7 @@ export default function Home() {
             <p className="text-gray-500 text-center text-sm">האם אתה בטוח שברצונך להסיר את פרסום החניה?</p>
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
-                onClick={() => setShowRemoveModal(false)}
+                onClick={closeRemoveModal}
                 className="py-3 rounded-2xl font-bold text-gray-700"
                 style={{ background: "#F3F4F6" }}
               >
