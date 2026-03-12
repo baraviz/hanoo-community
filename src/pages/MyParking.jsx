@@ -233,8 +233,97 @@ export default function MyParking() {
         </div>
       </div>
 
+      {/* List View */}
+      {viewMode === "list" && (
+        <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4 space-y-5">
+          {(() => {
+            // Group recurring blocks by day
+            const recurringByDay = {};
+            blocks.forEach(b => {
+              if (!recurringByDay[b.dayIndex]) recurringByDay[b.dayIndex] = [];
+              recurringByDay[b.dayIndex].push(b);
+            });
+            // Group temp blocks by day
+            const tempByDay = {};
+            tempBlocks.forEach(t => {
+              const d = new Date(t.start_at).getDay();
+              if (!tempByDay[d]) tempByDay[d] = [];
+              tempByDay[d].push(t);
+            });
+
+            const allDays = [...new Set([
+              ...Object.keys(recurringByDay).map(Number),
+              ...Object.keys(tempByDay).map(Number)
+            ])].sort((a, b) => a - b);
+
+            if (allDays.length === 0) {
+              return (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <p className="text-4xl mb-3">🅿️</p>
+                  <p className="text-gray-500 text-sm">אין זמינויות עדיין</p>
+                  <p className="text-gray-400 text-xs mt-1">עבור לתצוגת יומן כדי להוסיף</p>
+                </div>
+              );
+            }
+
+            return allDays.map(dayIndex => (
+              <div key={dayIndex} className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <h3 className="font-bold text-gray-800">יום {FULL_DAYS[dayIndex]}</h3>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {(recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start).map(b => (
+                    <div key={b.id} className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full flex-none" style={{ background: "#007AFF" }} />
+                        <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                        <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => setEditingBlock(b)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                          <Pencil size={12} style={{ color: "#007AFF" }} />
+                        </button>
+                        <button onClick={() => deleteBlock(b.id)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
+                          <Trash2 size={12} style={{ color: "#EF4444" }} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {(tempByDay[dayIndex] || []).sort((a,b) => new Date(a.start_at) - new Date(b.start_at)).map(t => {
+                    const s = new Date(t.start_at);
+                    const e = new Date(t.end_at);
+                    const startMin = s.getHours() * 60 + s.getMinutes();
+                    const endMin = e.getHours() * 60 + e.getMinutes();
+                    return (
+                      <div key={t.id} className="flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: "#34C759" }} />
+                          <span className="text-gray-800 text-sm font-medium">{fmt(startMin)} עד {fmt(endMin)}</span>
+                          <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">חד פעמי</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => setEditingTemp(t)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                            <Pencil size={12} style={{ color: "#007AFF" }} />
+                          </button>
+                          <button onClick={async () => {
+                            await base44.entities.WeeklyAvailability.delete(t.id);
+                            setTempBlocks(prev => prev.filter(x => x.id !== t.id));
+                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
+                            <Trash2 size={12} style={{ color: "#EF4444" }} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ));
+          })()}
+        </div>
+      )}
+
       {/* Grid */}
-      <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
+      {viewMode === "calendar" && <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
         {/* Day headers */}
         <div className="flex mb-1" style={{ paddingRight: "36px" }}>
           {DAYS.map((d, i) => (
