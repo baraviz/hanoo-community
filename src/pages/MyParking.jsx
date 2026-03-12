@@ -355,16 +355,16 @@ export default function MyParking() {
               className="flex-1 flex relative border border-gray-200 rounded-xl overflow-hidden bg-white"
               style={{ touchAction: "none" }}
             >
-            {/* Hour lines */}
-            {Array.from({ length: HOURS + 1 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute left-0 right-0 border-t border-gray-100 pointer-events-none"
-                style={{ top: `${(i / HOURS) * 100}%` }}
-              />
-            ))}
+              {/* Hour lines */}
+              {Array.from({ length: HOURS + 1 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute left-0 right-0 border-t border-gray-100 pointer-events-none"
+                  style={{ top: `${(i / HOURS) * 100}%` }}
+                />
+              ))}
 
-            {DAYS.map((_, dayIndex) => {
+              {DAYS.map((_, dayIndex) => {
               const dayBlocks = blocks.filter(b => b.dayIndex === dayIndex);
               // Temp blocks for this day of week
               const dayTempBlocks = tempBlocks.filter(t => new Date(t.start_at).getDay() === dayIndex).map(t => ({
