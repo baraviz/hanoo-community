@@ -16,6 +16,7 @@ export default function MyParking() {
   const [savedBlocks, setSavedBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [editingBlock, setEditingBlock] = useState(null);
   const [clearConfirm, setClearConfirm] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
