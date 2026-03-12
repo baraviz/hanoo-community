@@ -205,7 +205,8 @@ export default function FindParking() {
         <div className="space-y-3">
           {results.map(slot => {
             const hours = differenceInMinutes(new Date(toTime), new Date(fromTime)) / 60;
-            const cost = Math.round(hours * (slot.price_per_hour || 10));
+            const cost = Math.round(hours * 10);
+            const owner = slot.ownerResident;
             return (
               <div key={slot.id} className="card p-4">
                 <div className="flex items-center gap-3 mb-3">
@@ -213,16 +214,15 @@ export default function FindParking() {
                     <Car size={24} style={{ color: "#007AFF" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-800">חניה #{slot.spot_number || "?"}</p>
-                    <p className="text-gray-500 text-sm">של {slot.owner_name}</p>
-                    {slot.parking_floor && <p className="text-gray-400 text-xs">קומה {slot.parking_floor}</p>}
+                    <p className="font-bold text-gray-800">חניה #{owner?.parking_spot || "?"}</p>
+                    <p className="text-gray-500 text-sm">של {owner?.user_name || slot.owner_email}</p>
+                    {owner?.parking_floor && <p className="text-gray-400 text-xs">קומה {owner.parking_floor}</p>}
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-lg" style={{ color: "#007AFF" }}>{cost}</p>
                     <p className="text-gray-400 text-xs">קרדיטים</p>
                   </div>
                 </div>
-                {slot.notes && <p className="text-gray-500 text-sm mb-3">{slot.notes}</p>}
                 <button
                   onClick={() => bookSlot(slot)}
                   className="w-full py-3 rounded-xl font-bold text-white"
