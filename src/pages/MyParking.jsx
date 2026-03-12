@@ -281,8 +281,22 @@ export default function MyParking() {
 
             return allDays.map(dayIndex => (
               <div key={dayIndex} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-100">
+                <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                   <h3 className="font-bold text-gray-800">יום {FULL_DAYS[dayIndex]}</h3>
+                  <button
+                    onClick={() => {
+                      const existing = (recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start);
+                      const lastEnd = existing.length > 0 ? existing[existing.length - 1].end : 8 * 60;
+                      const newStart = Math.min(lastEnd, 23 * 60);
+                      const newEnd = Math.min(newStart + 60, 24 * 60);
+                      addBlock(dayIndex, newStart, newEnd);
+                      setTimeout(() => triggerSave(), 100);
+                    }}
+                    className="text-xs font-bold px-3 py-1 rounded-xl"
+                    style={{ color: "#007AFF", background: "#EBF4FF" }}
+                  >
+                    + טווח נוסף
+                  </button>
                 </div>
                 <div className="divide-y divide-gray-50">
                   {(recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start).map(b => (
