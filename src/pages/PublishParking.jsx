@@ -56,10 +56,10 @@ export default function PublishParking() {
       status: "available",
     });
 
-    // Check for initial bonus: first publish >= 2 hours this week
-    if (!resident.initial_availability_published && hours >= 2 && !resident.bonus_credits_received) {
+    // בונוס 150 קרדיטים בפרסום ראשון של 2+ שעות
+    if (!resident.bonus_credits_received && hours >= 2) {
       await base44.entities.Resident.update(resident.id, {
-        credits: (resident.credits || 0) + 200,
+        credits: (resident.credits || 0) + 150,
         initial_availability_published: true,
         bonus_credits_received: true,
       });
@@ -77,7 +77,7 @@ export default function PublishParking() {
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">פורסם! 🎉</h2>
         <p className="text-gray-500 mb-2">החניה שלך זמינה לשכנים</p>
-        {resident && !resident.bonus_credits_received && <p className="text-green-600 font-bold mb-6">+200 קרדיטים נוספו לחשבונך!</p>}
+        {resident && !resident.bonus_credits_received && <p className="text-green-600 font-bold mb-6">+150 קרדיטים נוספו לחשבונך!</p>}
         <button
           onClick={() => navigate(createPageUrl("Home"))}
           className="w-full py-4 rounded-2xl font-bold text-white"
@@ -105,8 +105,8 @@ export default function PublishParking() {
           <div className="rounded-2xl p-4 flex items-start gap-3" style={{ background: "#E8F8EF", border: "1px solid #34C759" }}>
             <Gift size={20} className="text-green-600 mt-0.5 shrink-0" />
             <div>
-              <p className="font-bold text-green-700">פרסם 2+ שעות השבוע</p>
-              <p className="text-green-600 text-sm">וקבל 200 קרדיטים מתנה!</p>
+              <p className="font-bold text-green-700">פרסם 2+ שעות בפעם הראשונה</p>
+              <p className="text-green-600 text-sm">וקבל 150 קרדיטים בונוס! (כבר קיבלת 50 בהצטרפות)</p>
             </div>
           </div>
         )}

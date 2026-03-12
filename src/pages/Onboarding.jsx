@@ -99,7 +99,7 @@ export default function Onboarding() {
       apartment_number: apartment,
       parking_spot: parkingSpot,
       parking_floor: foundBuilding.underground_parking ? joinFloor : "",
-      credits: 0,
+      credits: 50,
       status: "pending",
     });
     setLoading(false);
@@ -130,7 +130,7 @@ export default function Onboarding() {
       apartment_number: ownerApartment,
       parking_spot: ownerParking,
       parking_floor: undergroundParking ? ownerFloor : "",
-      credits: 0,
+      credits: 50,
       status: "approved",
     });
     setLoading(false);

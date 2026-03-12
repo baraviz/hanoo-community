@@ -84,8 +84,10 @@ export default function Home() {
   }
 
   async function deactivateSlot(slot) {
+    const confirmed = window.confirm("האם להסיר את פרסום החניה? שים לב: אם זה הפרסום הראשון שלך, לא תקבל את 150 הקרדיטים.");
+    if (!confirmed) return;
     setRemovingSlot(true);
-    setMyActiveSlot(null); // חיווי מיידי
+    setMyActiveSlot(null);
     await base44.entities.ParkingSlot.update(slot.id, { status: "completed" });
     setRemovingSlot(false);
     loadData();
@@ -147,7 +149,7 @@ export default function Home() {
               <Gift size={16} className="text-amber-700" />
               <p className="font-bold text-amber-800">קבל 200 קרדיטים!</p>
             </div>
-            <p className="text-amber-700 text-sm">פרסם זמינות של לפחות שעתיים השבוע וקבל 200 קרדיטים מתנה</p>
+            <p className="text-amber-700 text-sm">פרסם זמינות של לפחות שעתיים וקבל 150 קרדיטים בונוס (כבר קיבלת 50 בהצטרפות!)</p>
             <button
               onClick={() => navigate(createPageUrl("PublishParking"))}
               className="mt-3 w-full py-2 rounded-xl text-sm font-semibold text-white"
