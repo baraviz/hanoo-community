@@ -530,6 +530,14 @@ export default function MyParking() {
             setTempBlocks(prev => prev.filter(t => t.id !== editingTemp.id));
             setEditingTemp(null);
           }}
+          onConvertToRecurring={async (dayIndex, start, end) => {
+            // Delete the temp block and create a recurring one
+            await base44.entities.WeeklyAvailability.delete(editingTemp.id);
+            setTempBlocks(prev => prev.filter(t => t.id !== editingTemp.id));
+            addBlock(dayIndex, start, end);
+            setEditingTemp(null);
+            setTimeout(() => triggerSave(), 100);
+          }}
         />
       )}
 
