@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Car, Plus, Clock, Gift } from "lucide-react";
+import { Car, Plus, Clock, Gift, AlertTriangle } from "lucide-react";
 import { format, isAfter, isBefore, parseISO } from "date-fns";
 
 export default function Home() {
