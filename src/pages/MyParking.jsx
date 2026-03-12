@@ -452,8 +452,6 @@ export default function MyParking() {
         </div>
       </div>
 
-      </div>}
-
       {/* Auto-save indicator */}
       {(saving || saved) && (
         <div className="flex-none px-4 pb-2 flex justify-center">
