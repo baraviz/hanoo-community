@@ -203,11 +203,32 @@ export default function MyParking() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-white text-xl font-bold">החניה שלי 🅿️</h1>
-            <p className="text-blue-200 text-xs mt-0.5">גרור לסימון שעות זמינות קבועות</p>
+            <p className="text-blue-200 text-xs mt-0.5">
+              {viewMode === "calendar" ? "גרור לסימון שעות זמינות קבועות" : "כל הזמינויות שלך"}
+            </p>
           </div>
-          <div className="bg-white bg-opacity-20 rounded-2xl px-3 py-2 text-center">
-            <p className="text-white text-lg font-bold">{totalHours.toFixed(1)}</p>
-            <p className="text-blue-200 text-xs">שעות/שבוע</p>
+          <div className="flex items-center gap-2">
+            <div className="bg-white bg-opacity-20 rounded-2xl px-3 py-2 text-center">
+              <p className="text-white text-lg font-bold">{totalHours.toFixed(1)}</p>
+              <p className="text-blue-200 text-xs">שעות/שבוע</p>
+            </div>
+            {/* Toggle */}
+            <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
+              <button
+                onClick={() => setViewMode("calendar")}
+                className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
+                style={{ background: viewMode === "calendar" ? "white" : "transparent" }}
+              >
+                <CalendarDays size={16} style={{ color: viewMode === "calendar" ? "#007AFF" : "white" }} />
+              </button>
+              <button
+                onClick={() => setViewMode("list")}
+                className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
+                style={{ background: viewMode === "list" ? "white" : "transparent" }}
+              >
+                <List size={16} style={{ color: viewMode === "list" ? "#007AFF" : "white" }} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
