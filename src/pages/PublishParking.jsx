@@ -42,18 +42,13 @@ export default function PublishParking() {
     if (hours < 0.5) { alert("זמן מינימלי: חצי שעה"); return; }
 
     setLoading(true);
-    const slot = await base44.entities.ParkingSlot.create({
+    await base44.entities.WeeklyAvailability.create({
       resident_id: resident.id,
       building_id: resident.building_id,
       owner_email: user.email,
-      owner_name: user.full_name,
-      spot_number: resident.parking_spot || "?",
-      parking_floor: resident.parking_floor || "",
-      available_from: from.toISOString(),
-      available_until: to.toISOString(),
-      price_per_hour: 10,
-      notes,
-      status: "available",
+      slot_type: "temp",
+      start_at: from.toISOString(),
+      end_at: to.toISOString(),
     });
 
     // בונוס 100 קרדיטים בפרסום ראשון של 2+ שעות
