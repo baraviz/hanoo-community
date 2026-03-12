@@ -316,7 +316,7 @@ export default function MyParking() {
           block={editingBlock}
           onClose={() => setEditingBlock(null)}
           onSave={(s, e) => updateBlock(editingBlock.id, s, e)}
-          onDelete={() => removeBlock(editingBlock.id)}
+          onDelete={() => deleteBlock(editingBlock.id)}
         />
       )}
 
