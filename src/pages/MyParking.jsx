@@ -119,7 +119,20 @@ export default function MyParking() {
 
   function updateBlock(id, start, end) {
     if (end <= start) return;
-    setBlocks(prev => prev.map(b => b.id === id ? { ...b, start, end } : b));
+    setBlocks(prev => {
+      const updated = prev.map(b => b.id === id ? { ...b, start, end } : b);
+      setTimeout(() => saveChanges(updated), 100);
+      return updated;
+    });
+    setEditingBlock(null);
+  }
+
+  function deleteBlock(id) {
+    setBlocks(prev => {
+      const updated = prev.filter(b => b.id !== id);
+      setTimeout(() => saveChanges(updated), 100);
+      return updated;
+    });
     setEditingBlock(null);
   }
 
