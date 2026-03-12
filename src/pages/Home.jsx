@@ -132,9 +132,8 @@ export default function Home() {
       {showRemoveModal && (
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end"
-          style={{ background: "rgba(0,0,0,0.4)" }}
+          style={{ background: "rgba(0,0,0,0.4)", animation: closingModal ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
           onClick={closeRemoveModal}
-          style={{ animation: closingModal ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
         >
           <div
             className="bg-white rounded-t-3xl w-full p-6 space-y-4"
