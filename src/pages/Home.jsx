@@ -259,7 +259,7 @@ export default function Home() {
               <p className="font-bold text-gray-800">החניה שלי - פרסמתי</p>
             </div>
             <p className="text-gray-500 text-sm mb-3">
-              פתוחה {format(parseISO(myActiveSlot.available_from), "HH:mm")} – {format(parseISO(myActiveSlot.available_until), "HH:mm")}
+              פתוחה {format(parseISO(myActiveSlot.start_at), "HH:mm")} – {format(parseISO(myActiveSlot.end_at), "HH:mm")}
             </p>
             <button
               onClick={() => deactivateSlot(myActiveSlot)}
