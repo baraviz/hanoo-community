@@ -13,6 +13,8 @@ export default function Home() {
   const [activeBooking, setActiveBooking] = useState(null);
   const [myActiveSlot, setMyActiveSlot] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [removingSlot, setRemovingSlot] = useState(false);
+  const [endingBooking, setEndingBooking] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -52,6 +54,8 @@ export default function Home() {
   }
 
   async function endBooking(booking) {
+    setEndingBooking(true);
+    setActiveBooking(null); // חיווי מיידי
     const now = new Date().toISOString();
     await base44.entities.Booking.update(booking.id, { status: "completed", end_time: now });
 
@@ -75,11 +79,15 @@ export default function Home() {
     }
 
     await base44.entities.ParkingSlot.update(booking.parking_slot_id, { status: "available" });
+    setEndingBooking(false);
     loadData();
   }
 
   async function deactivateSlot(slot) {
+    setRemovingSlot(true);
+    setMyActiveSlot(null); // חיווי מיידי
     await base44.entities.ParkingSlot.update(slot.id, { status: "completed" });
+    setRemovingSlot(false);
     loadData();
   }
 
@@ -169,10 +177,13 @@ export default function Home() {
             </div>
             <button
               onClick={() => endBooking(activeBooking)}
-              className="w-full py-3 rounded-xl font-semibold text-white"
-              style={{ background: "#FF3B30" }}
+              disabled={endingBooking}
+              className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
+              style={{ background: "#FF3B30", opacity: endingBooking ? 0.6 : 1 }}
             >
-              סיים שימוש בחניה
+              {endingBooking ? (
+                <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />מסיים...</>
+              ) : "סיים שימוש בחניה"}
             </button>
           </div>
         )}
@@ -189,10 +200,13 @@ export default function Home() {
             </p>
             <button
               onClick={() => deactivateSlot(myActiveSlot)}
-              className="w-full py-3 rounded-xl font-semibold"
-              style={{ background: "#EBF4FF", color: "#007AFF" }}
+              disabled={removingSlot}
+              className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
+              style={{ background: "#EBF4FF", color: "#007AFF", opacity: removingSlot ? 0.6 : 1 }}
             >
-              הסר פרסום
+              {removingSlot ? (
+                <><div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />מסיר...</>
+              ) : "הסר פרסום"}
             </button>
           </div>
         )}
