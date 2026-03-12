@@ -470,6 +470,24 @@ export default function MyParking() {
         </div>
       )}
 
+      {/* Edit temp modal */}
+      {editingTemp && (
+        <EditTempModal
+          slot={editingTemp}
+          onClose={() => setEditingTemp(null)}
+          onSave={async (startAt, endAt) => {
+            await base44.entities.WeeklyAvailability.update(editingTemp.id, { start_at: startAt, end_at: endAt });
+            setTempBlocks(prev => prev.map(t => t.id === editingTemp.id ? { ...t, start_at: startAt, end_at: endAt } : t));
+            setEditingTemp(null);
+          }}
+          onDelete={async () => {
+            await base44.entities.WeeklyAvailability.delete(editingTemp.id);
+            setTempBlocks(prev => prev.filter(t => t.id !== editingTemp.id));
+            setEditingTemp(null);
+          }}
+        />
+      )}
+
       {/* Edit modal */}
       {editingBlock && (
         <EditModal
