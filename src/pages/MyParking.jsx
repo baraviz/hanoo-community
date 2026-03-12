@@ -40,10 +40,15 @@ export default function MyParking() {
     const r = res[0];
     setResident(r);
 
-    const avail = await base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" });
+    const [avail, temps] = await Promise.all([
+      base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" }),
+      base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "temp" }),
+    ]);
     const loaded = avail.map(a => ({ id: a.id, dayIndex: a.days_of_week[0], start: a.time_start, end: a.time_end }));
     setBlocks(loaded);
     setSavedBlocks(loaded);
+    // Only show future temp slots
+    setTempBlocks(temps.filter(t => new Date(t.end_at) > new Date()));
     setLoading(false);
   }
 
