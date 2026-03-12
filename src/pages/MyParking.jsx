@@ -384,7 +384,7 @@ function EditModal({ block, onClose, onSave, onDelete }) {
         </div>
 
         <div className="flex gap-3">
-          <button onClick={onDelete} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
+          <button onClick={() => { onDelete(); }} className="w-12 h-12 flex-none rounded-2xl flex items-center justify-center" style={{ background: "#FEE2E2", color: "#EF4444" }}>
             <Trash2 size={18} />
           </button>
           <button
