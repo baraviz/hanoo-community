@@ -271,30 +271,21 @@ export default function MyParking() {
         </div>
       </div>
 
-      {/* Bottom actions */}
-      <div className="flex-none px-4 py-3 flex gap-3">
-        <button
-          onClick={() => setClearConfirm(true)}
-          className="w-12 h-12 rounded-2xl flex items-center justify-center flex-none"
-          style={{ background: "#FEE2E2", color: "#EF4444" }}
-        >
-          <Trash2 size={18} />
-        </button>
-        <button
-          onClick={saveChanges}
-          disabled={saving}
-          className="flex-1 py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2 transition-all"
-          style={{ background: saved ? "#34C759" : "#007AFF", opacity: saving ? 0.7 : 1 }}
-        >
+      {/* Auto-save indicator */}
+      {(saving || saved) && (
+        <div className="flex-none px-4 pb-2 flex justify-center">
           {saving ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : saved ? (
-            <><Check size={18} /> נשמר!</>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              <div className="w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+              שומר...
+            </div>
           ) : (
-            <><Check size={18} /> שמור זמינות</>
+            <div className="flex items-center gap-1 text-xs text-green-500">
+              <Check size={12} /> נשמר
+            </div>
           )}
-        </button>
-      </div>
+        </div>
+      )}
 
       {/* Edit modal */}
       {editingBlock && (
