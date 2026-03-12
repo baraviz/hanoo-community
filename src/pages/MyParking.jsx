@@ -323,7 +323,8 @@ export default function MyParking() {
       )}
 
       {/* Grid */}
-      {viewMode === "calendar" && <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
+      {viewMode === "calendar" && (
+        <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
         {/* Day headers */}
         <div className="flex mb-1" style={{ paddingRight: "36px" }}>
           {DAYS.map((d, i) => (
