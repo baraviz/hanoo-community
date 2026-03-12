@@ -45,15 +45,18 @@ export default function Home() {
         return;
       }
 
-      const [buildings, bookings, slots] = await Promise.all([
+      const now = new Date().toISOString();
+      const [buildings, bookings, tempSlots] = await Promise.all([
         base44.entities.Building.filter({ id: r.building_id }),
         base44.entities.Booking.filter({ renter_email: u.email, status: "active" }),
-        base44.entities.ParkingSlot.filter({ owner_email: u.email, status: "available" }),
+        base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "temp" }),
       ]);
 
       if (buildings.length > 0) setBuilding(buildings[0]);
       if (bookings.length > 0) setActiveBooking(bookings[0]);
-      if (slots.length > 0) setMyActiveSlot(slots[0]);
+      // Show active temp slot (end_at in the future)
+      const activeTemp = tempSlots.find(s => new Date(s.end_at) > new Date());
+      if (activeTemp) setMyActiveSlot(activeTemp);
     } catch (e) {
       console.error(e);
     }
