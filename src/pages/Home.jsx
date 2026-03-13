@@ -121,16 +121,18 @@ export default function Home() {
         return;
       }
 
-      const [buildings, bookings, tempSlots, recurring] = await Promise.all([
+      const [buildings, bookings, tempSlots, recurring, blocks] = await Promise.all([
         base44.entities.Building.filter({ id: r.building_id }),
         base44.entities.Booking.filter({ renter_email: u.email, status: "active" }),
         base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "temp" }),
         base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" }),
+        base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "block" }),
       ]);
 
       if (buildings.length > 0) setBuilding(buildings[0]);
       if (bookings.length > 0) setActiveBooking(bookings[0]);
       setRecurringSlots(recurring);
+      setActiveBlocks(blocks.filter(b => new Date(b.end_at) > new Date()));
       // Show active temp slot (end_at in the future)
       const activeTemp = tempSlots.find(s => new Date(s.end_at) > new Date());
       if (activeTemp) setMyActiveSlot(activeTemp);
