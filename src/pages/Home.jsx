@@ -13,14 +13,57 @@ export default function Home() {
   const [activeBooking, setActiveBooking] = useState(null);
   const [myActiveSlot, setMyActiveSlot] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [recurringSlots, setRecurringSlots] = useState([]);
   const [removingSlot, setRemovingSlot] = useState(false);
   const [endingBooking, setEndingBooking] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [closingModal, setClosingModal] = useState(false);
+  const [showStatusDrawer, setShowStatusDrawer] = useState(false);
+  const [closingDrawer, setClosingDrawer] = useState(false);
+  const [durationHours, setDurationHours] = useState(2);
 
-  function closeRemoveModal() {
-    setClosingModal(true);
-    setTimeout(() => { setShowRemoveModal(false); setClosingModal(false); }, 280);
+  function closeStatusDrawer() {
+    setClosingDrawer(true);
+    setTimeout(() => { setShowStatusDrawer(false); setClosingDrawer(false); }, 280);
+  }
+
+  function isAvailableNow() {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    // Check temp slot
+    if (myActiveSlot && new Date(myActiveSlot.start_at) <= now && new Date(myActiveSlot.end_at) > now) return true;
+    // Check recurring
+    const recurring = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
+    return !!recurring;
+  }
+
+  function getNextAvailableText() {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    // Check upcoming temp
+    const upcomingTemp = myActiveSlot && new Date(myActiveSlot.start_at) > now ? myActiveSlot : null;
+    if (upcomingTemp) {
+      return `זמין מ-${format(parseISO(upcomingTemp.start_at), "HH:mm")}`;
+    }
+    // Check recurring today later
+    const todayRecurring = recurringSlots.filter(s => s.days_of_week?.includes(dayOfWeek) && s.time_start > minutes);
+    if (todayRecurring.length > 0) {
+      const next = todayRecurring.sort((a, b) => a.time_start - b.time_start)[0];
+      const h = Math.floor(next.time_start / 60), m = next.time_start % 60;
+      return `זמין היום מ-${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+    }
+    // Check future days
+    for (let i = 1; i <= 7; i++) {
+      const day = (dayOfWeek + i) % 7;
+      const daySlots = recurringSlots.filter(s => s.days_of_week?.includes(day));
+      if (daySlots.length > 0) {
+        const next = daySlots.sort((a, b) => a.time_start - b.time_start)[0];
+        const days = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+        const h = Math.floor(next.time_start / 60), m = next.time_start % 60;
+        return `ביום ${days[day]} מ-${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+      }
+    }
+    return null;
   }
 
   useEffect(() => {
