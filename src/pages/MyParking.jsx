@@ -321,8 +321,6 @@ export default function MyParking() {
                 </div>
                 <div className="divide-y divide-gray-50">
                   {(recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start).map(b => {
-                    // Find active block overlapping this slot (today only)
-                    const today = new Date();
                     const activeBlock = blockSlots.find(bs => {
                       const bsDay = new Date(bs.start_at).getDay();
                       const bsStart = new Date(bs.start_at).getHours() * 60 + new Date(bs.start_at).getMinutes();
@@ -331,24 +329,24 @@ export default function MyParking() {
                     });
                     const blockEndTime = activeBlock ? fmt(new Date(activeBlock.end_at).getHours() * 60 + new Date(activeBlock.end_at).getMinutes()) : null;
                     return (
-                    <div key={b.id} className="flex items-center justify-between px-4 py-3">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="w-2 h-2 rounded-full flex-none" style={{ background: blockEndTime ? "#EF4444" : "#007AFF" }} />
-                        <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
-                        <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
-                        {blockEndTime && (
-                          <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
-                        )}
+                      <div key={b.id} className="flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: blockEndTime ? "#EF4444" : "#007AFF" }} />
+                          <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                          <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
+                          {blockEndTime && (
+                            <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => setEditingBlock(b)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                            <Pencil size={12} style={{ color: "#007AFF" }} />
+                          </button>
+                          <button onClick={() => deleteBlock(b.id)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
+                            <Trash2 size={12} style={{ color: "#EF4444" }} />
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <button onClick={() => setEditingBlock(b)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                          <Pencil size={12} style={{ color: "#007AFF" }} />
-                        </button>
-                        <button onClick={() => deleteBlock(b.id)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
-                          <Trash2 size={12} style={{ color: "#EF4444" }} />
-                        </button>
-                      </div>
-                    </div>
                     );
                   })}
                   {(tempByDay[dayIndex] || []).sort((a,b) => new Date(a.start_at) - new Date(b.start_at)).map(t => {
