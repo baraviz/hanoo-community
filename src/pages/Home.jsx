@@ -457,7 +457,7 @@ export default function Home() {
                 <p className="text-gray-400 text-sm mb-3">{nextText}</p>
               )}
               <button
-                onClick={() => setShowStatusDrawer(true)}
+                onClick={() => { setBlockUntilHour(null); setShowStatusDrawer(true); }}
                 disabled={removingSlot}
                 className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
                 style={{ background: available ? "#FEE2E2" : "#D1FAE5", color: available ? "#DC2626" : "#059669", opacity: removingSlot ? 0.6 : 1 }}
