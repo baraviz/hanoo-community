@@ -382,7 +382,28 @@ export default function MyParking() {
                   })}
                 </div>
               </div>
-            ));
+            ))}{missingDays.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                <div className="px-4 py-3">
+                  <p className="text-xs text-gray-400 mb-2">הוסף זמינות ליום נוסף</p>
+                  <div className="flex flex-wrap gap-2">
+                    {missingDays.map(d => (
+                      <button
+                        key={d}
+                        onClick={() => {
+                          addBlock(d, 8 * 60, 10 * 60);
+                          setTimeout(() => triggerSave(), 100);
+                        }}
+                        className="px-3 py-1.5 rounded-xl text-sm font-bold"
+                        style={{ background: "#EBF4FF", color: "#007AFF" }}
+                      >
+                        + {FULL_DAYS[d]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}</>);
           })()}
         </div>
       )}
