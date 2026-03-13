@@ -531,9 +531,9 @@ export default function MyParking() {
                           background: "rgba(0,122,255,0.85)",
                           minHeight: 4,
                         }}
-                        onClick={(e) => { e.stopPropagation(); setEditingBlock(b); }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onTouchStart={(e) => { e.stopPropagation(); setEditingBlock(b); }}
+                        onClick={(e) => { if (!calendarEditMode) return; e.stopPropagation(); setEditingBlock(b); }}
+                        onMouseDown={(e) => calendarEditMode && e.stopPropagation()}
+                        onTouchStart={(e) => { if (!calendarEditMode) return; e.stopPropagation(); setEditingBlock(b); }}
                       >
                         {overlappingBlock && (() => {
                           const overlapStart = Math.max(b.start, overlappingBlock.start);
