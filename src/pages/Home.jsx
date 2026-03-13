@@ -186,16 +186,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Remove parking modal */}
-      {showRemoveModal && (
+      {/* Status drawer */}
+      {showStatusDrawer && (
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end"
-          style={{ background: "rgba(0,0,0,0.4)", animation: closingModal ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
-          onClick={closeRemoveModal}
+          style={{ background: "rgba(0,0,0,0.4)", animation: closingDrawer ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
+          onClick={closeStatusDrawer}
         >
           <div
             className="bg-white rounded-t-3xl w-full p-6 space-y-4"
-            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingModal ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
+            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingDrawer ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
             onClick={e => e.stopPropagation()}
           >
             <style>{`
@@ -205,32 +205,52 @@ export default function Home() {
               @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
             `}</style>
             <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-2" />
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FFF3CD" }}>
-              <AlertTriangle size={24} style={{ color: "#F59E0B" }} />
-            </div>
-            <h2 className="text-xl font-bold text-gray-800 text-center">הסרת פרסום חניה</h2>
-            {!resident?.bonus_credits_received && (
-              <div className="rounded-2xl p-3 text-center" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
-                <p className="text-amber-700 text-sm font-medium">⚠️ זהו הפרסום הראשון שלך — הסרה תמנע ממך לקבל 100 קרדיטים בונוס</p>
-              </div>
+            {isAvailableNow() ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
+                  <AlertTriangle size={24} style={{ color: "#EF4444" }} />
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 text-center">השבתת זמינות</h2>
+                {!resident?.bonus_credits_received && (
+                  <div className="rounded-2xl p-3 text-center" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
+                    <p className="text-amber-700 text-sm font-medium">⚠️ זהו הפרסום הראשון שלך — הסרה תמנע ממך לקבל 100 קרדיטים בונוס</p>
+                  </div>
+                )}
+                <p className="text-gray-500 text-center text-sm">החניה תוסר מרשימת הזמינות מיידית</p>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+                  <button onClick={confirmDeactivate} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#FF3B30" }}>השבת</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#D1FAE5" }}>
+                  <ParkingSquare size={24} style={{ color: "#059669" }} />
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 text-center">הפוך את החניה לזמינה</h2>
+                <p className="text-gray-500 text-center text-sm">כמה זמן תרצה לפתוח את החניה?</p>
+                <div className="space-y-2">
+                  {[1, 2, 3, 4, 6, 8].map(h => (
+                    <button
+                      key={h}
+                      onClick={() => setDurationHours(h)}
+                      className="w-full py-3 rounded-2xl font-semibold text-sm flex items-center justify-between px-5"
+                      style={{
+                        background: durationHours === h ? "#007AFF" : "#F3F4F6",
+                        color: durationHours === h ? "white" : "#374151"
+                      }}
+                    >
+                      <span>{h === 1 ? "שעה אחת" : `${h} שעות`}</span>
+                      {durationHours === h && <span>✓</span>}
+                    </button>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#34C759" }}>פתח חניה</button>
+                </div>
+              </>
             )}
-            <p className="text-gray-500 text-center text-sm">האם אתה בטוח שברצונך להסיר את פרסום החניה?</p>
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <button
-                onClick={closeRemoveModal}
-                className="py-3 rounded-2xl font-bold text-gray-700"
-                style={{ background: "#F3F4F6" }}
-              >
-                ביטול
-              </button>
-              <button
-                onClick={confirmDeactivate}
-                className="py-3 rounded-2xl font-bold text-white"
-                style={{ background: "#FF3B30" }}
-              >
-                הסר פרסום
-              </button>
-            </div>
           </div>
         </div>
       )}
