@@ -501,8 +501,21 @@ export default function Home() {
         {(recurringSlots.length > 0 || myActiveSlot) && (() => {
           const available = isAvailableNow();
           const nextText = !available ? getNextAvailableText() : null;
-          const activeUntil = available && myActiveSlot && new Date(myActiveSlot.start_at) <= new Date()
-            ? format(parseISO(myActiveSlot.end_at), "HH:mm") : null;
+          let activeUntil = null;
+          if (available) {
+            if (myActiveSlot && new Date(myActiveSlot.start_at) <= new Date()) {
+              activeUntil = format(parseISO(myActiveSlot.end_at), "HH:mm");
+            } else {
+              const now = new Date();
+              const dayOfWeek = now.getDay();
+              const minutes = now.getHours() * 60 + now.getMinutes();
+              const rec = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
+              if (rec) {
+                const h = Math.floor(rec.time_end / 60), m = rec.time_end % 60;
+                activeUntil = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+              }
+            }
+          }
           return (
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
