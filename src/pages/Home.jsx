@@ -387,14 +387,7 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Building info */}
-        {building && (
-          <div className="card p-4">
-            <p className="text-xs text-gray-400 mb-1">הבניין שלי</p>
-            <p className="font-bold text-gray-800">{building.name}</p>
-            <p className="text-gray-500 text-sm">{building.address}, {building.city}</p>
-          </div>
-        )}
+
       </div>
     </div>
   );
