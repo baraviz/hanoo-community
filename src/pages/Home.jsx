@@ -171,9 +171,24 @@ export default function Home() {
   async function confirmDeactivate() {
     closeStatusDrawer();
     setRemovingSlot(true);
+    // Always delete temp if exists
     if (myActiveSlot) {
       setMyActiveSlot(null);
       await base44.entities.WeeklyAvailability.delete(myActiveSlot.id);
+    }
+    // If recurring is active, create a block until chosen hour
+    if (isRecurringActiveNow() && blockUntilHour !== null) {
+      const now = new Date();
+      const blockEnd = new Date(now);
+      blockEnd.setHours(Math.floor(blockUntilHour / 60), blockUntilHour % 60, 0, 0);
+      await base44.entities.WeeklyAvailability.create({
+        resident_id: resident.id,
+        owner_email: user.email,
+        building_id: resident.building_id,
+        slot_type: "block",
+        start_at: now.toISOString(),
+        end_at: blockEnd.toISOString(),
+      });
     }
     setRemovingSlot(false);
     loadData();
