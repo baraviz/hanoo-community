@@ -236,6 +236,19 @@ export default function Home() {
     loadData();
   }
 
+  function getResumeUntilText() {
+    // When unblocking a recurring slot, find when the recurring slot ends
+    const currentBlock = getActiveBlock();
+    if (!currentBlock) return null;
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    const recurring = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
+    if (!recurring) return null;
+    const h = Math.floor(recurring.time_end / 60), m = recurring.time_end % 60;
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
