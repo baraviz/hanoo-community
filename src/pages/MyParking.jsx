@@ -58,6 +58,7 @@ export default function MyParking() {
     const loaded = avail.map(a => ({ id: a.id, dayIndex: a.days_of_week[0], start: a.time_start, end: a.time_end }));
     setBlocks(loaded);
     setSavedBlocks(loaded);
+    savedBlocksRef.current = loaded;
     // Only show future temp slots
     setTempBlocks(temps.filter(t => new Date(t.end_at) > new Date()));
     setBlockSlots(bSlots.filter(b => new Date(b.end_at) > new Date()));
