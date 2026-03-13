@@ -223,11 +223,15 @@ export default function Home() {
                 ) : (
                   <p className="text-gray-500 text-center text-sm">החניה תוסר מרשימת הזמינות מיידית</p>
                 )}
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+                  <button onClick={confirmDeactivate} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#FF3B30" }}>השבת</button>
+                </div>
                 {(() => {
                   const nextText = getNextAvailableText();
                   if (!nextText) return null;
                   return (
-                    <p className="text-gray-400 text-center text-xs">
+                    <p className="text-gray-400 text-center text-xs pt-1">
                       לפי{" "}
                       <span
                         className="underline cursor-pointer text-blue-500"
@@ -235,14 +239,10 @@ export default function Home() {
                       >
                         יומן הזמינות
                       </span>
-                      , {nextText.replace("זמין ", "החניה תהיה זמינה ")}
+                      , החניה תהיה זמינה שוב {nextText.replace("זמין היום מ-", "היום מ-").replace("זמין מ-", "מ-").replace("ביום ", "ביום ").replace(/^זמין /, "")}
                     </p>
                   );
                 })()}
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-                  <button onClick={confirmDeactivate} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#FF3B30" }}>השבת</button>
-                </div>
               </>
             ) : (
               <>
