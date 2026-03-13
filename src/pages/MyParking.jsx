@@ -34,6 +34,7 @@ export default function MyParking() {
   const gridRef = useRef(null);
   const saveInProgress = useRef(false);
   const pendingSave = useRef(null);
+  const savedBlocksRef = useRef([]);
 
   useEffect(() => {
     init();
