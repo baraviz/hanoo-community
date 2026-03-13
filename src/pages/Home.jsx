@@ -306,28 +306,44 @@ export default function Home() {
           </div>
         )}
 
-        {/* My slot status */}
-        {myActiveSlot && (
-          <div className="card p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
-              <p className="font-bold text-gray-800">החניה שלי - פרסמתי</p>
+        {/* Parking status card */}
+        {(recurringSlots.length > 0 || myActiveSlot) && (() => {
+          const available = isAvailableNow();
+          const nextText = !available ? getNextAvailableText() : null;
+          const activeUntil = available && myActiveSlot && new Date(myActiveSlot.start_at) <= new Date()
+            ? format(parseISO(myActiveSlot.end_at), "HH:mm") : null;
+          return (
+            <div className="card p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <ParkingSquare size={18} style={{ color: "#007AFF" }} />
+                  <p className="font-bold text-gray-800">החניה שלי</p>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
+                  style={{ background: available ? "#D1FAE5" : "#FEE2E2", color: available ? "#059669" : "#DC2626" }}>
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: available ? "#34C759" : "#EF4444" }} />
+                  {available ? "זמין עכשיו" : "לא זמין"}
+                </div>
+              </div>
+              {available && activeUntil && (
+                <p className="text-gray-500 text-sm mb-3">זמין עד {activeUntil}</p>
+              )}
+              {!available && nextText && (
+                <p className="text-gray-400 text-sm mb-3">{nextText}</p>
+              )}
+              <button
+                onClick={() => setShowStatusDrawer(true)}
+                disabled={removingSlot}
+                className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+                style={{ background: available ? "#FEE2E2" : "#D1FAE5", color: available ? "#DC2626" : "#059669", opacity: removingSlot ? 0.6 : 1 }}
+              >
+                {removingSlot
+                  ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
+                  : available ? "השבת זמינות" : "הפוך לזמין"}
+              </button>
             </div>
-            <p className="text-gray-500 text-sm mb-3">
-              פתוחה {format(parseISO(myActiveSlot.start_at), "HH:mm")} – {format(parseISO(myActiveSlot.end_at), "HH:mm")}
-            </p>
-            <button
-              onClick={() => deactivateSlot(myActiveSlot)}
-              disabled={removingSlot}
-              className="w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2"
-              style={{ background: "#EBF4FF", color: "#007AFF", opacity: removingSlot ? 0.6 : 1 }}
-            >
-              {removingSlot ? (
-                <><div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />מסיר...</>
-              ) : "הסר פרסום"}
-            </button>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Action buttons */}
         <div className="grid grid-cols-2 gap-3">
