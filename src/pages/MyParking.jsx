@@ -349,7 +349,8 @@ export default function MyParking() {
                         </button>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                   {(tempByDay[dayIndex] || []).sort((a,b) => new Date(a.start_at) - new Date(b.start_at)).map(t => {
                     const s = new Date(t.start_at);
                     const e = new Date(t.end_at);
