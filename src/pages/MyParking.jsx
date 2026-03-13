@@ -245,17 +245,24 @@ export default function MyParking() {
       <div className="flex-none pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-white text-xl font-bold">החניה שלי 🅿️</h1>
+            <h1 className="text-white text-xl font-bold">החניה שלי</h1>
             <p className="text-blue-200 text-xs mt-0.5">
-              {viewMode === "calendar" ? "גרור לסימון שעות זמינות קבועות" : "כל הזמינויות שלך"}
+              {viewMode === "list" ? "כל הזמינויות שלך" : (calendarEditMode ? "גרור לסימון שעות זמינות קבועות" : "תצוגת יומן")}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="bg-white bg-opacity-20 rounded-2xl px-3 py-2 text-center">
-              <p className="text-white text-lg font-bold">{totalHours.toFixed(1)}</p>
-              <p className="text-blue-200 text-xs">שעות/שבוע</p>
-            </div>
-            {/* Toggle */}
+            {/* Edit mode toggle - only in calendar view */}
+            {viewMode === "calendar" && (
+              <button
+                onClick={() => setCalendarEditMode(prev => !prev)}
+                className="rounded-2xl px-3 py-2 flex items-center gap-1.5 transition-all"
+                style={{ background: calendarEditMode ? "white" : "rgba(255,255,255,0.2)" }}
+              >
+                <Pencil size={14} style={{ color: calendarEditMode ? "#007AFF" : "white" }} />
+                <span className="text-xs font-bold" style={{ color: calendarEditMode ? "#007AFF" : "white" }}>עריכה</span>
+              </button>
+            )}
+            {/* View toggle */}
             <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
               <button
                 onClick={() => setViewMode("calendar")}
