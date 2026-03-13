@@ -133,16 +133,31 @@ export default function Home() {
     loadData();
   }
 
-  async function deactivateSlot(slot) {
-    setShowRemoveModal(true);
+  async function confirmDeactivate() {
+    closeStatusDrawer();
+    setRemovingSlot(true);
+    if (myActiveSlot) {
+      setMyActiveSlot(null);
+      await base44.entities.WeeklyAvailability.delete(myActiveSlot.id);
+    }
+    setRemovingSlot(false);
+    loadData();
   }
 
-  async function confirmDeactivate() {
-    setShowRemoveModal(false);
-    setRemovingSlot(true);
-    setMyActiveSlot(null);
-    await base44.entities.WeeklyAvailability.delete(myActiveSlot.id);
-    setRemovingSlot(false);
+  async function makeAvailable() {
+    if (!resident) return;
+    closeStatusDrawer();
+    const now = new Date();
+    const end = new Date(now.getTime() + durationHours * 3600000);
+    const rec = await base44.entities.WeeklyAvailability.create({
+      resident_id: resident.id,
+      owner_email: user.email,
+      building_id: resident.building_id,
+      slot_type: "temp",
+      start_at: now.toISOString(),
+      end_at: end.toISOString(),
+    });
+    setMyActiveSlot(rec);
     loadData();
   }
 
