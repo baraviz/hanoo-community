@@ -78,6 +78,21 @@ export default function Home() {
     if (upcomingTemp) {
       return `זמין מ-${format(parseISO(upcomingTemp.start_at), "HH:mm")}`;
     }
+    // Check if there's an active block that ends inside a recurring slot → resume at block end
+    const activeBlock = activeBlocks.find(b => new Date(b.start_at) <= now && new Date(b.end_at) > now);
+    if (activeBlock) {
+      const blockEnd = new Date(activeBlock.end_at);
+      const blockEndMinutes = blockEnd.getHours() * 60 + blockEnd.getMinutes();
+      const blockEndDay = blockEnd.getDay();
+      const coveredByRecurring = recurringSlots.find(s =>
+        s.days_of_week?.includes(blockEndDay) &&
+        s.time_start <= blockEndMinutes &&
+        s.time_end > blockEndMinutes
+      );
+      if (coveredByRecurring) {
+        return `זמין היום מ-${format(blockEnd, "HH:mm")}`;
+      }
+    }
     // Check recurring today later
     const todayRecurring = recurringSlots.filter(s => s.days_of_week?.includes(dayOfWeek) && s.time_start > minutes);
     if (todayRecurring.length > 0) {
