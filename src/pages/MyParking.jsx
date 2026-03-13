@@ -179,8 +179,9 @@ export default function MyParking() {
     setSaving(true);
     const toSave = currentBlocks ?? blocks;
 
-    // Capture savedBlocks at call time before any async ops
-    const blocksToDelete = savedBlocks.slice();
+    // Use ref to always get the current saved blocks (avoids stale closure bug)
+    const blocksToDelete = savedBlocksRef.current.slice();
+    savedBlocksRef.current = []; // clear immediately so concurrent calls don't double-delete
     for (const b of blocksToDelete) {
       try { await base44.entities.WeeklyAvailability.delete(b.id); } catch (_) {}
     }
@@ -197,6 +198,7 @@ export default function MyParking() {
       });
       created.push({ id: rec.id, dayIndex: b.dayIndex, start: b.start, end: b.end });
     }
+    savedBlocksRef.current = created;
     setSavedBlocks(created);
     setBlocks(created);
     setSaving(false);
