@@ -303,7 +303,9 @@ export default function MyParking() {
             // Days with no recurring slots at all
             const missingDays = [0,1,2,3,4,5,6].filter(d => !recurringByDay[d]);
 
-            return (<>{allDays.map(dayIndex => (
+            return (
+              <div className="space-y-5">
+              {allDays.map(dayIndex => (
               <div key={dayIndex} className="bg-white rounded-2xl shadow-sm overflow-hidden">
                 <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                   <h3 className="font-bold text-gray-800">יום {FULL_DAYS[dayIndex]}</h3>
