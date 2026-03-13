@@ -223,6 +223,22 @@ export default function Home() {
                 ) : (
                   <p className="text-gray-500 text-center text-sm">החניה תוסר מרשימת הזמינות מיידית</p>
                 )}
+                {(() => {
+                  const nextText = getNextAvailableText();
+                  if (!nextText) return null;
+                  return (
+                    <p className="text-gray-400 text-center text-xs">
+                      לפי{" "}
+                      <span
+                        className="underline cursor-pointer text-blue-500"
+                        onClick={() => { closeStatusDrawer(); navigate(createPageUrl("MyParking")); }}
+                      >
+                        יומן הזמינות
+                      </span>
+                      , {nextText.replace("זמין ", "החניה תהיה זמינה ")}
+                    </p>
+                  );
+                })()}
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
                   <button onClick={confirmDeactivate} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#FF3B30" }}>השבת</button>
