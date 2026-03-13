@@ -393,7 +393,7 @@ export default function MyParking() {
               <div className="flex justify-center pt-1 pb-2">
                 <button
                   onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setAddDaySheet(true); }}
-                  className="text-sm font-bold"
+                  className="text-sm font-regular"
                   style={{ color: "#007AFF", textDecoration: "underline", textUnderlineOffset: 3 }}
                 >
                   הגדר זמינות ליום נוסף +
