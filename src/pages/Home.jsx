@@ -365,6 +365,34 @@ export default function Home() {
                   );
                 })()}
               </>
+            ) : getActiveBlock() && isRecurringActiveNow() ? (
+              <>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#D1FAE5" }}>
+                  <ParkingSquare size={24} style={{ color: "#059669" }} />
+                </div>
+                <h2 className="text-xl font-bold text-gray-800 text-center">פתיחת חניה מחדש</h2>
+                {(() => {
+                  const until = getResumeUntilText();
+                  return until ? (
+                    <p className="text-gray-500 text-center text-sm">
+                      החניה תהיה זמינה עד השעה <span className="font-bold text-gray-700">{until}</span>
+                    </p>
+                  ) : null;
+                })()}
+                <p className="text-gray-400 text-center text-xs pt-1">
+                  לפי{" "}
+                  <span
+                    className="underline cursor-pointer text-blue-500"
+                    onClick={() => { closeStatusDrawer(); navigate(createPageUrl("MyParking")); }}
+                  >
+                    יומן הזמינות
+                  </span>
+                </p>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#34C759" }}>פתח חניה</button>
+                </div>
+              </>
             ) : (
               <>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#D1FAE5" }}>
