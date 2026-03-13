@@ -927,7 +927,7 @@ function EditModal({ block, onClose, onSave, onDelete, onConvertToTemp }) {
 
         {type === "temp" && (
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-500 w-6">📅</span>
+            <span className="text-sm font-medium text-gray-500 w-6">תאריך</span>
             <input
               type="date"
               value={tempDate}
