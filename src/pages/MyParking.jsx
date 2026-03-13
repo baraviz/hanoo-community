@@ -414,6 +414,13 @@ export default function MyParking() {
 
               {DAYS.map((_, dayIndex) => {
               const dayBlocks = blocks.filter(b => b.dayIndex === dayIndex);
+              // Block slots (suppressed recurring) for today
+              const dayBlockSlots = blockSlots.filter(b => new Date(b.start_at).getDay() === dayIndex).map(b => ({
+                id: b.id,
+                start: new Date(b.start_at).getHours() * 60 + new Date(b.start_at).getMinutes(),
+                end: new Date(b.end_at).getHours() * 60 + new Date(b.end_at).getMinutes(),
+                end_at: b.end_at,
+              }));
               // Temp blocks for this day of week
               const dayTempBlocks = tempBlocks.filter(t => new Date(t.start_at).getDay() === dayIndex).map(t => ({
                 id: t.id,
