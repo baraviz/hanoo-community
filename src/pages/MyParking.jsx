@@ -388,28 +388,17 @@ export default function MyParking() {
                   })}
                 </div>
               </div>
-            ))}{missingDays.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="px-4 py-3">
-                  <p className="text-xs text-gray-400 mb-2">הוסף זמינות ליום נוסף</p>
-                  <div className="flex flex-wrap gap-2">
-                    {missingDays.map(d => (
-                      <button
-                        key={d}
-                        onClick={() => {
-                          addBlock(d, 8 * 60, 10 * 60);
-                          setTimeout(() => triggerSave(), 100);
-                        }}
-                        className="px-3 py-1.5 rounded-xl text-sm font-bold"
-                        style={{ background: "#EBF4FF", color: "#007AFF" }}
-                      >
-                        + {FULL_DAYS[d]}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            ))}
+              {/* Add day link */}
+              <div className="flex justify-center pt-1 pb-2">
+                <button
+                  onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setAddDaySheet(true); }}
+                  className="text-sm font-bold"
+                  style={{ color: "#007AFF", textDecoration: "underline", textUnderlineOffset: 3 }}
+                >
+                  הגדר זמינות ליום נוסף +
+                </button>
               </div>
-            )}
               </div>
             );
           })()}
