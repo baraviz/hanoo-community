@@ -213,6 +213,16 @@ export default function Home() {
     if (!resident) return;
     closeStatusDrawer();
     const now = new Date();
+
+    // If there's an active block suppressing a recurring slot → delete the block to resume
+    const currentBlock = getActiveBlock();
+    if (currentBlock && isRecurringActiveNow()) {
+      await base44.entities.WeeklyAvailability.delete(currentBlock.id);
+      setActiveBlocks(prev => prev.filter(b => b.id !== currentBlock.id));
+      loadData();
+      return;
+    }
+
     const end = new Date(now.getTime() + durationHours * 3600000);
     const rec = await base44.entities.WeeklyAvailability.create({
       resident_id: resident.id,
