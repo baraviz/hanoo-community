@@ -633,6 +633,124 @@ export default function MyParking() {
         />
       )}
 
+      {/* Add Day Sheet */}
+      {addDaySheet && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col justify-end"
+          style={{ background: "rgba(0,0,0,0.4)" }}
+          onClick={() => setAddDaySheet(false)}
+        >
+          <div
+            className="bg-white rounded-t-3xl p-6 space-y-5"
+            style={{ paddingBottom: "calc(80px + 1.5rem)" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
+
+            {addDayStep === "day" ? (
+              <>
+                <h2 className="text-xl font-bold text-gray-800 text-center">בחר יום</h2>
+                <div className="grid grid-cols-4 gap-2">
+                  {[0,1,2,3,4,5,6].map(d => {
+                    const hasDay = blocks.some(b => b.dayIndex === d);
+                    return (
+                      <button
+                        key={d}
+                        onClick={() => { setAddDayIndex(d); setAddDayStep("times"); }}
+                        className="py-3 rounded-2xl text-sm font-bold transition-all"
+                        style={{
+                          background: hasDay ? "#F3F4F6" : "#EBF4FF",
+                          color: hasDay ? "#9CA3AF" : "#007AFF",
+                          border: hasDay ? "1px solid #E5E7EB" : "none",
+                        }}
+                      >
+                        {FULL_DAYS[d]}
+                        {hasDay && <span className="block text-[10px] text-gray-400">קיים</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setAddDayStep("day")} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                    <span style={{ fontSize: 16 }}>›</span>
+                  </button>
+                  <h2 className="text-xl font-bold text-gray-800">יום {FULL_DAYS[addDayIndex]}</h2>
+                </div>
+
+                <div className="space-y-3">
+                  {addDayRanges.map((range, idx) => (
+                    <div key={idx} className="bg-gray-50 rounded-2xl p-3 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-gray-500">טווח {idx + 1}</span>
+                        {addDayRanges.length > 1 && (
+                          <button
+                            onClick={() => setAddDayRanges(prev => prev.filter((_, i) => i !== idx))}
+                            className="w-6 h-6 flex items-center justify-center rounded-full"
+                            style={{ background: "#FEE2E2", color: "#EF4444" }}
+                          >
+                            <X size={12} />
+                          </button>
+                        )}
+                      </div>
+                      {[
+                        { label: "מ", fH: "sH", fM: "sM", max: 23 },
+                        { label: "עד", fH: "eH", fM: "eM", max: 24 },
+                      ].map(({ label, fH, fM, max }) => (
+                        <div key={label} className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-500 w-6">{label}</span>
+                          <div className="flex-1 flex items-center gap-2 bg-white rounded-xl px-3 py-2">
+                            <select
+                              value={range[fH]}
+                              onChange={ev => setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: Number(ev.target.value) } : r))}
+                              className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none"
+                            >
+                              {Array.from({ length: max + 1 }).map((_, i) => <option key={i} value={i}>{String(i).padStart(2, "0")}</option>)}
+                            </select>
+                            <span className="text-gray-400 font-bold">:</span>
+                            <select
+                              value={range[fM]}
+                              onChange={ev => setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fM]: Number(ev.target.value) } : r))}
+                              className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none"
+                            >
+                              {[0, 30].map(v => <option key={v} value={v}>{String(v).padStart(2, "0")}</option>)}
+                            </select>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+
+                  <button
+                    onClick={() => setAddDayRanges(prev => [...prev, { sH: 12, sM: 0, eH: 14, eM: 0 }])}
+                    className="w-full py-2 rounded-2xl text-sm font-bold"
+                    style={{ color: "#007AFF", background: "#EBF4FF" }}
+                  >
+                    + הוסף טווח נוסף
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => {
+                    addDayRanges.forEach(r => {
+                      addBlock(addDayIndex, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
+                    });
+                    setTimeout(() => triggerSave(), 100);
+                    setAddDaySheet(false);
+                  }}
+                  className="w-full py-3 rounded-2xl font-bold text-white text-base"
+                  style={{ background: "#007AFF" }}
+                >
+                  שמור
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Clear confirm */}
       {clearConfirm && (
         <div
