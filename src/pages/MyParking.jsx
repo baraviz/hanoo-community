@@ -330,13 +330,15 @@ export default function MyParking() {
                     const blockEndTime = activeBlock ? fmt(new Date(activeBlock.end_at).getHours() * 60 + new Date(activeBlock.end_at).getMinutes()) : null;
                     return (
                       <div key={b.id} className="flex items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full flex-none" style={{ background: blockEndTime ? "#EF4444" : "#007AFF" }} />
-                          <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                          <div className="flex flex-col">
+                            <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                            {blockEndTime && (
+                              <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
+                            )}
+                          </div>
                           <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
-                          {blockEndTime && (
-                            <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
-                          )}
                         </div>
                         <div className="flex gap-2">
                           <button onClick={() => setEditingBlock(b)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
