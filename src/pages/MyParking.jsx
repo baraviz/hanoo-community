@@ -486,8 +486,8 @@ export default function MyParking() {
                   key={dayIndex}
                   className="flex-1 relative cursor-crosshair"
                   style={{ borderRight: "1px solid #e5e7eb", background: isToday ? "rgba(0,122,255,0.04)" : undefined }}
-                  onMouseDown={(e) => handleMouseDown(e, dayIndex)}
-                  onTouchStart={(e) => handleTouchStart(e, dayIndex)}
+                  onMouseDown={(e) => calendarEditMode && handleMouseDown(e, dayIndex)}
+                  onTouchStart={(e) => calendarEditMode && handleTouchStart(e, dayIndex)}
                 >
                   {/* Current time line */}
                   {isToday && (
