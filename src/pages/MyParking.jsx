@@ -15,6 +15,7 @@ export default function MyParking() {
   const [blocks, setBlocks] = useState([]); // { id, dayIndex, start, end }
   const [savedBlocks, setSavedBlocks] = useState([]);
   const [tempBlocks, setTempBlocks] = useState([]); // { id, start_at, end_at } — temp slots
+  const [blockSlots, setBlockSlots] = useState([]); // active blocks (slot_type="block")
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -44,15 +45,17 @@ export default function MyParking() {
     const r = res[0];
     setResident(r);
 
-    const [avail, temps] = await Promise.all([
+    const [avail, temps, bSlots] = await Promise.all([
       base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" }),
       base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "temp" }),
+      base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "block" }),
     ]);
     const loaded = avail.map(a => ({ id: a.id, dayIndex: a.days_of_week[0], start: a.time_start, end: a.time_end }));
     setBlocks(loaded);
     setSavedBlocks(loaded);
     // Only show future temp slots
     setTempBlocks(temps.filter(t => new Date(t.end_at) > new Date()));
+    setBlockSlots(bSlots.filter(b => new Date(b.end_at) > new Date()));
     setLoading(false);
   }
 
