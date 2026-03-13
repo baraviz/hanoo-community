@@ -26,6 +26,7 @@ export default function MyParking() {
   const [dragCurrent, setDragCurrent] = useState(null);
   const [saved, setSaved] = useState(false);
   const [viewMode, setViewMode] = useState("calendar"); // "calendar" | "list"
+  const [calendarEditMode, setCalendarEditMode] = useState(false);
   const [editingTemp, setEditingTemp] = useState(null);
   const [addDaySheet, setAddDaySheet] = useState(false); // bottom sheet for adding a new day
   const [addDayStep, setAddDayStep] = useState("day"); // "day" | "times"
