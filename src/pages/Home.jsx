@@ -19,6 +19,8 @@ export default function Home() {
   const [showStatusDrawer, setShowStatusDrawer] = useState(false);
   const [closingDrawer, setClosingDrawer] = useState(false);
   const [durationHours, setDurationHours] = useState(2);
+  const [blockUntilHour, setBlockUntilHour] = useState(null);
+  const [activeBlocks, setActiveBlocks] = useState([]);
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
@@ -31,9 +33,40 @@ export default function Home() {
     const minutes = now.getHours() * 60 + now.getMinutes();
     // Check temp slot
     if (myActiveSlot && new Date(myActiveSlot.start_at) <= now && new Date(myActiveSlot.end_at) > now) return true;
-    // Check recurring
+    // Check recurring (but not if blocked)
     const recurring = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
-    return !!recurring;
+    if (!recurring) return false;
+    // Check if there's an active block
+    const blocked = activeBlocks.some(b => new Date(b.start_at) <= now && new Date(b.end_at) > now);
+    return !blocked;
+  }
+
+  function getActiveBlock() {
+    const now = new Date();
+    return activeBlocks.find(b => new Date(b.start_at) <= now && new Date(b.end_at) > now) || null;
+  }
+
+  function isRecurringActiveNow() {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    return !!recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
+  }
+
+  function getBlockUntilOptions() {
+    // Generate time options for the rest of today (every 30 min until end of recurring slot)
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const minutes = now.getHours() * 60 + now.getMinutes();
+    const recurring = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
+    if (!recurring) return [];
+    const options = [];
+    let t = Math.ceil((minutes + 1) / 30) * 30;
+    while (t <= recurring.time_end) {
+      options.push(t);
+      t += 30;
+    }
+    return options;
   }
 
   function getNextAvailableText() {
