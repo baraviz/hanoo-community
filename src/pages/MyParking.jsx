@@ -470,22 +470,45 @@ export default function MyParking() {
                   ))}
 
                   {/* Recurring Blocks */}
-                  {dayBlocks.map(b => (
-                    <div
-                      key={b.id}
-                      className="absolute rounded cursor-pointer select-none"
-                      style={{
-                        top: `${(b.start / TOTAL_MINUTES) * 100}%`,
-                        height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
-                        left: 1, right: 1,
-                        background: "rgba(0,122,255,0.85)",
-                        minHeight: 4,
-                      }}
-                      onClick={(e) => { e.stopPropagation(); setEditingBlock(b); }}
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onTouchStart={(e) => { e.stopPropagation(); setEditingBlock(b); }}
-                    />
-                  ))}
+                  {dayBlocks.map(b => {
+                    // Find any active block that overlaps this recurring slot
+                    const overlappingBlock = dayBlockSlots.find(bs => bs.start < b.end && bs.end > b.start);
+                    return (
+                      <div
+                        key={b.id}
+                        className="absolute rounded cursor-pointer select-none overflow-hidden"
+                        style={{
+                          top: `${(b.start / TOTAL_MINUTES) * 100}%`,
+                          height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
+                          left: 1, right: 1,
+                          background: "rgba(0,122,255,0.85)",
+                          minHeight: 4,
+                        }}
+                        onClick={(e) => { e.stopPropagation(); setEditingBlock(b); }}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => { e.stopPropagation(); setEditingBlock(b); }}
+                      >
+                        {overlappingBlock && (() => {
+                          const overlapStart = Math.max(b.start, overlappingBlock.start);
+                          const overlapEnd = Math.min(b.end, overlappingBlock.end);
+                          const topPct = ((overlapStart - b.start) / (b.end - b.start)) * 100;
+                          const heightPct = ((overlapEnd - overlapStart) / (b.end - b.start)) * 100;
+                          return (
+                            <div
+                              className="absolute pointer-events-none"
+                              style={{
+                                top: `${topPct}%`,
+                                height: `${heightPct}%`,
+                                left: 0, right: 0,
+                                background: "rgba(239,68,68,0.45)",
+                                backgroundImage: "repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(239,68,68,0.35) 3px, rgba(239,68,68,0.35) 5px)",
+                              }}
+                            />
+                          );
+                        })()}
+                      </div>
+                    );
+                  })}
 
                   {/* Drag preview */}
                   {isDragDay && dragPreviewStart !== null && (
