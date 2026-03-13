@@ -216,7 +216,13 @@ export default function Home() {
                     <p className="text-amber-700 text-sm font-medium">⚠️ זהו הפרסום הראשון שלך — הסרה תמנע ממך לקבל 100 קרדיטים בונוס</p>
                   </div>
                 )}
-                <p className="text-gray-500 text-center text-sm">החניה תוסר מרשימת הזמינות מיידית</p>
+                {myActiveSlot && new Date(myActiveSlot.start_at) <= new Date() && new Date(myActiveSlot.end_at) > new Date() ? (
+                  <p className="text-gray-500 text-center text-sm">
+                    הזמינות שנקבעה עד השעה <span className="font-bold text-gray-700">{format(parseISO(myActiveSlot.end_at), "HH:mm")}</span> תוסר
+                  </p>
+                ) : (
+                  <p className="text-gray-500 text-center text-sm">החניה תוסר מרשימת הזמינות מיידית</p>
+                )}
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
                   <button onClick={confirmDeactivate} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#FF3B30" }}>השבת</button>
