@@ -214,10 +214,10 @@ export default function Home() {
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
     const options = [];
-    let t = Math.ceil((currentMinutes + 1) / 30) * 30;
+    let t = Math.ceil((currentMinutes + 1) / 15) * 15;
     while (t <= 24 * 60) {
       options.push(t);
-      t += 30;
+      t += 15;
     }
     return options;
   }
