@@ -739,13 +739,15 @@ export default function MyParking() {
                     </div>
                   ))}
 
-                  <button
-                    onClick={() => setAddDayRanges(prev => [...prev, { sH: 12, sM: 0, eH: 14, eM: 0 }])}
-                    className="w-full py-2 rounded-2xl text-sm font-bold"
-                    style={{ color: "#007AFF", background: "#EBF4FF" }}
-                  >
-                    + הוסף טווח נוסף
-                  </button>
+                  {!editingTempDate && (
+                    <button
+                      onClick={() => setAddDayRanges(prev => [...prev, { sH: 12, sM: 0, eH: 14, eM: 0 }])}
+                      className="w-full py-2 rounded-2xl text-sm font-bold"
+                      style={{ color: "#007AFF", background: "#EBF4FF" }}
+                    >
+                      + הוסף טווח נוסף
+                    </button>
+                  )}
                 </div>
 
                 <div className="flex gap-3">
