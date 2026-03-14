@@ -395,8 +395,8 @@ export default function Home() {
               </>
             ) : (
               <>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#D1FAE5" }}>
-                  <ParkingSquare size={24} style={{ color: "#059669" }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#EBF4FF" }}>
+                  <ParkingSquare size={24} style={{ color: "#007AFF" }} />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800 text-center">הפוך את החניה לזמינה</h2>
                 <p className="text-gray-500 text-center text-sm">עד איזו שעה?</p>
@@ -404,7 +404,7 @@ export default function Home() {
                   options={getAvailUntilOptions()}
                   value={availUntilMinutes}
                   onChange={setAvailUntilMinutes}
-                  color="#34C759"
+                  color="#007AFF"
                 />
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
@@ -412,7 +412,7 @@ export default function Home() {
                     onClick={makeAvailable}
                     disabled={availUntilMinutes === null}
                     className="py-3 rounded-2xl font-bold text-white"
-                    style={{ background: "#34C759", opacity: availUntilMinutes === null ? 0.4 : 1 }}
+                    style={{ background: "#007AFF", opacity: availUntilMinutes === null ? 0.4 : 1 }}
                   >פתח חניה</button>
                 </div>
               </>
