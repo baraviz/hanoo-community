@@ -14,10 +14,10 @@ function formatBookingTime(startTime, endTime) {
   const sameDay = start.toDateString() === end.toDateString();
   
   if (sameDay) {
-    return `יום ${startDay}, ${format(start, "dd/MM, HH:mm")} - ${format(end, "HH:mm")}`;
+    return `${format(start, "dd/MM")}, יום ${startDay}, ${format(start, "HH:mm")} - ${format(end, "HH:mm")}`;
   } else {
     const endDay = days[end.getDay()];
-    return `יום ${startDay}, ${format(start, "dd/MM HH:mm")} - יום ${endDay}, ${format(end, "dd/MM HH:mm")}`;
+    return `${format(start, "dd/MM")}, יום ${startDay}, ${format(start, "HH:mm")} - ${format(end, "dd/MM")}, יום ${endDay}, ${format(end, "HH:mm")}`;
   }
 }
 
