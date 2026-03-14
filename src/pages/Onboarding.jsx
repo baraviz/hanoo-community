@@ -342,6 +342,11 @@ export default function Onboarding() {
             <label className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
             <input value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
+            <input value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <p className="text-gray-400 text-xs mt-1">לשימוש בתקשורת עם שכנים</p>
+          </div>
 
           <div className="rounded-2xl p-4 flex items-center justify-between" style={{ background: "white", border: "1px solid #E5E7EB" }}>
             <div className="flex items-center gap-2">
