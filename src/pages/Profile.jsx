@@ -117,6 +117,34 @@ export default function Profile() {
       </div>
 
       <div className="px-5 py-5 space-y-4">
+        {/* Phone number */}
+        {resident && (
+          <div className="card p-4">
+            <p className="text-xs text-gray-400 mb-2">מספר טלפון (לוואטסאפ עם שכנים)</p>
+            <div className="flex gap-2">
+              <div className="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2">
+                <Phone size={16} className="text-gray-400 flex-none" />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  placeholder="050-0000000"
+                  className="flex-1 text-sm font-medium text-gray-800 outline-none bg-transparent"
+                  dir="ltr"
+                />
+              </div>
+              <button
+                onClick={savePhone}
+                disabled={savingPhone}
+                className="px-4 py-2 rounded-xl text-sm font-bold text-white"
+                style={{ background: phoneSaved ? "#34C759" : "#007AFF", opacity: savingPhone ? 0.6 : 1 }}
+              >
+                {phoneSaved ? "✓" : "שמור"}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* My parking */}
         {resident && (resident.parking_spot || resident.parking_floor) && (
           <div className="card p-4">
