@@ -187,9 +187,10 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#F5F7FA" }}>
-            <span className="text-xs font-bold text-gray-500 w-14 flex-none">משעה</span>
-            <span className="flex-1 text-sm font-medium text-gray-800">
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#E8EAED" }}>
+            <Clock size={16} className="text-gray-500 flex-none" />
+            <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
+            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
               {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input
@@ -199,10 +200,11 @@ export default function FindParking() {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
           </label>
-          <div className="border-t border-gray-100 mx-3" />
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#F5F7FA" }}>
-            <span className="text-xs font-bold text-gray-500 w-14 flex-none">עד שעה</span>
-            <span className="flex-1 text-sm font-medium text-gray-800">
+          <div className="border-t border-gray-200 mx-3" />
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#E8EAED" }}>
+            <Clock size={16} className="text-gray-500 flex-none" />
+            <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
+            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
               {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input
