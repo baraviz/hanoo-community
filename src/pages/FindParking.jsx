@@ -184,36 +184,63 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <div style={{ position: "relative", background: "#E8EAED", borderRadius: 12 }}>
-            <div className="flex items-center gap-3 px-3 py-3 pointer-events-none">
-              <Clock size={16} className="text-gray-500 flex-none" />
-              <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
-              <span className="flex-1 text-sm font-medium text-gray-800">
-                {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
-              </span>
+          <style>{`
+            .hanoo-datepicker { width: 100%; }
+            .hanoo-datepicker .react-datepicker-wrapper { width: 100%; }
+            .hanoo-datepicker .react-datepicker__input-container { width: 100%; }
+            .hanoo-datepicker input { display: none; }
+            .react-datepicker { font-family: 'Heebo', sans-serif !important; border-radius: 16px !important; border: none !important; box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important; }
+            .react-datepicker__header { background: #007AFF !important; border-radius: 16px 16px 0 0 !important; border: none !important; }
+            .react-datepicker__current-month, .react-datepicker__day-name, .react-datepicker-time__header { color: white !important; }
+            .react-datepicker__day--selected, .react-datepicker__time-list-item--selected { background: #007AFF !important; }
+            .react-datepicker__day:hover, .react-datepicker__time-list-item:hover { background: #EBF4FF !important; color: #007AFF !important; }
+          `}</style>
+          <div
+            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
+            style={{ background: "#E8EAED" }}
+            onClick={() => document.getElementById("from-picker-input")?.click()}
+          >
+            <Clock size={16} className="text-gray-500 flex-none" />
+            <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
+            <span className="flex-1 text-sm font-medium text-gray-800">
+              {fromTime ? fromTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+            </span>
+            <div className="hanoo-datepicker">
+              <DatePicker
+                selected={fromTime}
+                onChange={date => setFromTime(date)}
+                showTimeSelect
+                timeIntervals={30}
+                dateFormat="dd/MM HH:mm"
+                customInput={<input id="from-picker-input" />}
+                popperPlacement="bottom-end"
+                withPortal
+              />
             </div>
-            <input
-              type="datetime-local"
-              value={fromTime}
-              onChange={e => setFromTime(e.target.value)}
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
-            />
           </div>
           <div className="border-t border-gray-200 mx-3" />
-          <div style={{ position: "relative", background: "#E8EAED", borderRadius: 12 }}>
-            <div className="flex items-center gap-3 px-3 py-3 pointer-events-none">
-              <Clock size={16} className="text-gray-500 flex-none" />
-              <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
-              <span className="flex-1 text-sm font-medium text-gray-800">
-                {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
-              </span>
+          <div
+            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
+            style={{ background: "#E8EAED" }}
+            onClick={() => document.getElementById("to-picker-input")?.click()}
+          >
+            <Clock size={16} className="text-gray-500 flex-none" />
+            <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
+            <span className="flex-1 text-sm font-medium text-gray-800">
+              {toTime ? toTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+            </span>
+            <div className="hanoo-datepicker">
+              <DatePicker
+                selected={toTime}
+                onChange={date => setToTime(date)}
+                showTimeSelect
+                timeIntervals={30}
+                dateFormat="dd/MM HH:mm"
+                customInput={<input id="to-picker-input" />}
+                popperPlacement="bottom-end"
+                withPortal
+              />
             </div>
-            <input
-              type="datetime-local"
-              value={toTime}
-              onChange={e => setToTime(e.target.value)}
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
-            />
           </div>
         </div>
         <button
