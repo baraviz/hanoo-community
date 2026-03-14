@@ -367,8 +367,8 @@ export default function Home() {
               </>
             ) : getActiveBlock() && isRecurringActiveNow() ? (
               <>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#D1FAE5" }}>
-                  <ParkingSquare size={24} style={{ color: "#059669" }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#EBF4FF" }}>
+                  <ParkingSquare size={24} style={{ color: "#007AFF" }} />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800 text-center">פתיחת חניה מחדש</h2>
                 {(() => {
