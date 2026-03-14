@@ -147,6 +147,14 @@ export default function FindParking() {
   if (bookingId) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+        {thankYouSlot && (
+          <ThankYouWhatsApp
+            ownerName={thankYouSlot.ownerName}
+            ownerPhone={thankYouSlot.ownerPhone}
+            spotNumber={thankYouSlot.spotNumber}
+            onClose={() => setThankYouSlot(null)}
+          />
+        )}
         <div className="w-24 h-24 rounded-full flex items-center justify-center mb-6" style={{ background: "#E8F8EF" }}>
           <CheckCircle size={44} style={{ color: "#34C759" }} />
         </div>
