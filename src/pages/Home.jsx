@@ -390,7 +390,7 @@ export default function Home() {
                 </p>
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#34C759" }}>פתח חניה</button>
+                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#007AFF" }}>פתח חניה</button>
                 </div>
               </>
             ) : (
