@@ -132,6 +132,13 @@ export default function FindParking() {
 
     setBookingId(slot.id);
 
+    // Show thank-you WhatsApp prompt
+    setThankYouSlot({
+      ownerName: ownerResident?.user_name || slot.owner_email,
+      ownerPhone: ownerResident?.phone || null,
+      spotNumber: ownerResident?.parking_spot || "?",
+    });
+
     // Update local resident credits
     setResident(prev => ({ ...prev, credits: (prev.credits || 0) - cost }));
     setResults([]);
