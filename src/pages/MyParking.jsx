@@ -780,20 +780,43 @@ export default function MyParking() {
                   </button>
                 </div>
 
-                <button
-                  onClick={() => {
-                    addDayRanges.forEach(r => {
-                      addBlock(addDayIndex, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
-                    });
-                    setTimeout(() => triggerSave(), 100);
-                    setClosingAddDay(true);
-                    setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
-                  }}
-                  className="w-full py-3 rounded-2xl font-bold text-white text-base"
-                  style={{ background: "#007AFF" }}
-                >
-                  שמור
-                </button>
+                <div className="flex gap-3">
+                  {editingBlock && (
+                    <button
+                      onClick={() => {
+                        deleteBlock(editingBlock.id);
+                        setEditingBlock(null);
+                        setClosingAddDay(true);
+                        setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
+                      }}
+                      className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
+                      style={{ background: "#FEE2E2", color: "#EF4444" }}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      if (editingBlock) {
+                        // Update existing block
+                        const r = addDayRanges[0];
+                        updateBlock(editingBlock.id, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
+                        setEditingBlock(null);
+                      } else {
+                        addDayRanges.forEach(r => {
+                          addBlock(addDayIndex, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
+                        });
+                        setTimeout(() => triggerSave(), 100);
+                      }
+                      setClosingAddDay(true);
+                      setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
+                    }}
+                    className="flex-1 py-3 rounded-2xl font-bold text-white text-base"
+                    style={{ background: "#007AFF" }}
+                  >
+                    שמור
+                  </button>
+                </div>
               </>
             )}
           </div>
