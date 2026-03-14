@@ -42,11 +42,10 @@ export default function Profile() {
       setIsOwner(b.owner_email === u.email);
 
       if (b.owner_email === u.email) {
-        const pending = await base44.entities.Resident.filter({
+        const allResidents = await base44.entities.Resident.filter({
           building_id: b.id,
-          status: "pending",
         });
-        setPendingResidents(pending);
+        setPendingResidents(allResidents.filter(r => r.user_email !== u.email));
       }
     }
     setMyBookings(bookings.slice(0, 5));
