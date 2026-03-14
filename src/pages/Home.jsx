@@ -209,6 +209,18 @@ export default function Home() {
     loadData();
   }
 
+  function getAvailUntilOptions() {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const options = [];
+    let t = Math.ceil((currentMinutes + 1) / 30) * 30;
+    while (t <= 24 * 60) {
+      options.push(t);
+      t += 30;
+    }
+    return options;
+  }
+
   async function makeAvailable() {
     if (!resident) return;
     closeStatusDrawer();
@@ -223,7 +235,8 @@ export default function Home() {
       return;
     }
 
-    const end = new Date(now.getTime() + durationHours * 3600000);
+    const end = new Date(now);
+    end.setHours(Math.floor(availUntilMinutes / 60), availUntilMinutes % 60, 0, 0);
     const rec = await base44.entities.WeeklyAvailability.create({
       resident_id: resident.id,
       owner_email: user.email,
