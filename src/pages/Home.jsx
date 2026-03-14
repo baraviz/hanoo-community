@@ -192,10 +192,11 @@ export default function Home() {
       await base44.entities.WeeklyAvailability.delete(myActiveSlot.id);
     }
     // If recurring is active, create a block until chosen hour
-    if (isRecurringActiveNow() && blockUntilHour !== null) {
+    const effectiveBlockUntil = blockUntilHour ?? getBlockUntilOptions()[0];
+    if (isRecurringActiveNow() && effectiveBlockUntil != null) {
       const now = new Date();
       const blockEnd = new Date(now);
-      blockEnd.setHours(Math.floor(blockUntilHour / 60), blockUntilHour % 60, 0, 0);
+      blockEnd.setHours(Math.floor(effectiveBlockUntil / 60), effectiveBlockUntil % 60, 0, 0);
       await base44.entities.WeeklyAvailability.create({
         resident_id: resident.id,
         owner_email: user.email,
