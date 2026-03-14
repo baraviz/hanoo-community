@@ -427,9 +427,19 @@ export default function MyParking() {
         <div className="flex-1 overflow-hidden flex flex-col px-2 pt-2 pb-1">
           {/* Day headers */}
           <div className="flex mb-1" style={{ paddingRight: "36px" }}>
-            {DAYS.map((d, i) => (
-              <div key={i} className="flex-1 text-center text-xs font-bold text-gray-500">{d}</div>
-            ))}
+            {DAYS.map((d, i) => {
+              const isToday = i === currentTime.getDay();
+              return (
+                <div key={i} className="flex-1 flex justify-center">
+                  <div
+                    className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold"
+                    style={isToday ? { background: "#007AFF", color: "white" } : { color: "#6B7280" }}
+                  >
+                    {d}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Main grid area */}
