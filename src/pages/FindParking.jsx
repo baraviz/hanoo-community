@@ -289,7 +289,7 @@ export default function FindParking() {
             <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
           </div>
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Search size={28} className="text-white" />
+            <Car size={28} className="text-white" />
           </div>
         </div>
       </div>
