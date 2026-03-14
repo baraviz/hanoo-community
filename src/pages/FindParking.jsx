@@ -91,13 +91,23 @@ export default function FindParking() {
     const bookedAvailIds = new Set(activeBookings.map(b => b.parking_slot_id));
 
     // Filter out self and booked, attach coverage
+    console.log("=== SEARCH DEBUG ===");
+    console.log("fromDate:", fromDate.toISOString(), "day:", fromDate.getDay(), "fromMins:", fromMins, "toMins:", toMins);
+    console.log("allAvail count:", allAvail.length);
+    allAvail.forEach(a => {
+      console.log(`  slot owner:${a.owner_email} type:${a.slot_type} days:${JSON.stringify(a.days_of_week)} start:${a.time_start} end:${a.time_end}`);
+    });
+
     const candidates = allAvail
       .filter(a => a.owner_email !== user.email && !bookedAvailIds.has(a.id))
       .map(a => {
         const cov = slotCoverage(a, fromDate, toDate);
+        console.log(`  coverage for ${a.owner_email} slot_type:${a.slot_type}:`, cov);
         return cov ? { ...a, covStart: cov[0], covEnd: cov[1], ownerResident: residentMap[a.owner_email] || null } : null;
       })
       .filter(Boolean);
+
+    console.log("candidates after coverage:", candidates.map(c => `${c.owner_email} [${c.covStart}-${c.covEnd}]`));
 
     // Full coverage slots
     const full = candidates.filter(a => a.covStart <= fromMins && a.covEnd >= toMins);
