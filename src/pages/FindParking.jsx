@@ -174,42 +174,51 @@ export default function FindParking() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
-        <h1 className="text-white text-xl font-bold mb-1">מצא חניה 🔍</h1>
-        <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-white text-xl font-bold">מצא חניה</h1>
+            <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
+          </div>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Search size={28} className="text-white" />
+          </div>
+        </div>
+
+        {/* Search inputs in header */}
+        <div className="space-y-2">
+          <div className="bg-white bg-opacity-20 rounded-2xl px-4 py-3 flex items-center gap-3">
+            <span className="text-blue-200 text-xs font-bold w-16">משעה</span>
+            <input
+              type="datetime-local"
+              value={fromTime}
+              onChange={e => setFromTime(e.target.value)}
+              className="flex-1 bg-transparent text-white text-sm font-medium outline-none"
+              style={{ colorScheme: "dark" }}
+            />
+          </div>
+          <div className="bg-white bg-opacity-20 rounded-2xl px-4 py-3 flex items-center gap-3">
+            <span className="text-blue-200 text-xs font-bold w-16">עד שעה</span>
+            <input
+              type="datetime-local"
+              value={toTime}
+              onChange={e => setToTime(e.target.value)}
+              className="flex-1 bg-transparent text-white text-sm font-medium outline-none"
+              style={{ colorScheme: "dark" }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="px-5 py-5">
-        <div className="card p-4 mb-4">
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div>
-              <label className="text-xs text-gray-500 block mb-1">מ</label>
-              <input
-                type="datetime-local"
-                value={fromTime}
-                onChange={e => setFromTime(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400"
-              />
-            </div>
-            <div>
-              <label className="text-xs text-gray-500 block mb-1">עד</label>
-              <input
-                type="datetime-local"
-                value={toTime}
-                onChange={e => setToTime(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400"
-              />
-            </div>
-          </div>
-          <button
-            onClick={searchParking}
-            disabled={loading || !resident}
-            className="w-full py-3 rounded-xl font-bold text-white flex items-center justify-center gap-2"
-            style={{ background: "#007AFF", opacity: loading ? 0.7 : 1 }}
-          >
-            <Search size={18} />
-            {loading ? "מחפש..." : "חפש חניה"}
-          </button>
-        </div>
+        <button
+          onClick={searchParking}
+          disabled={loading || !resident}
+          className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2 mb-4"
+          style={{ background: "#007AFF", opacity: loading ? 0.7 : 1 }}
+        >
+          <Search size={18} />
+          {loading ? "מחפש..." : "חפש חניה"}
+        </button>
 
         {searched && !loading && results.length === 0 && (
           <div className="text-center py-12">
