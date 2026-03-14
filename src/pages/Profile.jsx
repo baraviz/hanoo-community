@@ -14,6 +14,9 @@ export default function Profile() {
   const [myBookings, setMyBookings] = useState([]);
   const [copied, setCopied] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [savingPhone, setSavingPhone] = useState(false);
+  const [phoneSaved, setPhoneSaved] = useState(false);
 
   useEffect(() => {
     loadData();
