@@ -17,6 +17,7 @@ export default function Profile() {
   const [phone, setPhone] = useState("");
   const [savingPhone, setSavingPhone] = useState(false);
   const [phoneSaved, setPhoneSaved] = useState(false);
+  const [editingPhone, setEditingPhone] = useState(false);
 
   useEffect(() => {
     loadData();
