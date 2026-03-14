@@ -665,17 +665,19 @@ export default function MyParking() {
       {addDaySheet && (
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end"
-          style={{ background: "rgba(0,0,0,0.4)", animation: "fadeIn 0.22s ease-out" }}
-          onClick={() => setAddDaySheet(false)}
+          style={{ background: "rgba(0,0,0,0.4)", animation: closingAddDay ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
+          onClick={() => { setClosingAddDay(true); setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220); }}
         >
           <div
             className="bg-white rounded-t-3xl p-6 space-y-5"
-            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: "slideUp 0.22s ease-out" }}
+            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingAddDay ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
             onClick={e => e.stopPropagation()}
           >
             <style>{`
               @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+              @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
               @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+              @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
             `}</style>
             <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
 
