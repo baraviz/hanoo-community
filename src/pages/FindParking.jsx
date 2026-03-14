@@ -189,27 +189,35 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <div className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: "#E8EAED" }}>
-            <Clock size={16} className="text-gray-500 flex-none" />
-            <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
+          <div style={{ position: "relative", background: "#E8EAED", borderRadius: 12 }}>
+            <div className="flex items-center gap-3 px-3 py-3 pointer-events-none">
+              <Clock size={16} className="text-gray-500 flex-none" />
+              <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
+              <span className="flex-1 text-sm font-medium text-gray-800">
+                {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+              </span>
+            </div>
             <input
               type="datetime-local"
               value={fromTime}
               onChange={e => setFromTime(e.target.value)}
-              className="flex-1 bg-transparent text-sm font-medium text-gray-800 outline-none border-none"
-              style={{ colorScheme: "light" }}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
             />
           </div>
           <div className="border-t border-gray-200 mx-3" />
-          <div className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: "#E8EAED" }}>
-            <Clock size={16} className="text-gray-500 flex-none" />
-            <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
+          <div style={{ position: "relative", background: "#E8EAED", borderRadius: 12 }}>
+            <div className="flex items-center gap-3 px-3 py-3 pointer-events-none">
+              <Clock size={16} className="text-gray-500 flex-none" />
+              <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
+              <span className="flex-1 text-sm font-medium text-gray-800">
+                {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+              </span>
+            </div>
             <input
               type="datetime-local"
               value={toTime}
               onChange={e => setToTime(e.target.value)}
-              className="flex-1 bg-transparent text-sm font-medium text-gray-800 outline-none border-none"
-              style={{ colorScheme: "light" }}
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", opacity: 0, cursor: "pointer" }}
             />
           </div>
         </div>
