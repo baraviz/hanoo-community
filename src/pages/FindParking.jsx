@@ -36,8 +36,8 @@ export default function FindParking() {
     if (!fromTime || !toTime) return;
     setLoading(true); setSearched(true);
 
-    const fromDate = new Date(fromTime);
-    const toDate = new Date(toTime);
+    const fromDate = fromTime;
+    const toDate = toTime;
     const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
     const toMins = toDate.getHours() * 60 + toDate.getMinutes();
     const dayOfWeek = fromDate.getDay(); // 0=Sunday
