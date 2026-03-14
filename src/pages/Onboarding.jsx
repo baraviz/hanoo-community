@@ -65,6 +65,7 @@ export default function Onboarding() {
   const [apartment, setApartment] = useState("");
   const [parkingSpot, setParkingSpot] = useState("");
   const [joinFloor, setJoinFloor] = useState("");
+  const [joinPhone, setJoinPhone] = useState("");
 
   // Create flow
   const [buildingName, setBuildingName] = useState("");
