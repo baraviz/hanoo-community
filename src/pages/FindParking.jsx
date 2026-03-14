@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Car, Clock, Coins, Search, CheckCircle } from "lucide-react";
-import { format, parseISO, differenceInMinutes } from "date-fns";
+import { Car, Search, CheckCircle } from "lucide-react";
+import { format, differenceInMinutes } from "date-fns";
+import ThankYouWhatsApp from "@/components/ThankYouWhatsApp";
 
 export default function FindParking() {
   const [user, setUser] = useState(null);
