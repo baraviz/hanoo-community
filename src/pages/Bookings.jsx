@@ -6,6 +6,21 @@ import { he } from "date-fns/locale";
 
 const fmt = (dt) => format(new Date(dt), "dd/MM HH:mm");
 
+function formatBookingTime(startTime, endTime) {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+  const startDay = days[start.getDay()];
+  const sameDay = start.toDateString() === end.toDateString();
+  
+  if (sameDay) {
+    return `יום ${startDay}, ${format(start, "dd/MM, HH:mm")} - ${format(end, "HH:mm")}`;
+  } else {
+    const endDay = days[end.getDay()];
+    return `יום ${startDay}, ${format(start, "dd/MM HH:mm")} - יום ${endDay}, ${format(end, "dd/MM HH:mm")}`;
+  }
+}
+
 function BookingCard({ booking, isOwner }) {
   const isPastBooking = isPast(new Date(booking.end_time));
   return (
