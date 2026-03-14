@@ -757,14 +757,42 @@ export default function MyParking() {
                       <Trash2 size={20} />
                     </button>
                   )}
+                  {editingTempDate && (
+                    <button
+                      onClick={async () => {
+                        await base44.entities.WeeklyAvailability.delete(editingTempDate);
+                        setTempBlocks(prev => prev.filter(x => x.id !== editingTempDate));
+                        setEditingTempDate(null);
+                        setClosingAddDay(true);
+                        setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
+                      }}
+                      className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
+                      style={{ background: "#FEE2E2", color: "#EF4444" }}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  )}
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       if (editingBlock) {
-                        // Update existing block
+                        // Update existing recurring block
                         const r = addDayRanges[0];
                         updateBlock(editingBlock.id, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
                         setEditingBlock(null);
+                      } else if (editingTempDate) {
+                        // Update existing temp block
+                        const tempSlot = tempBlocks.find(t => t.id === editingTempDate);
+                        if (tempSlot) {
+                          const newStart = new Date(tempSlot.start_at);
+                          newStart.setHours(editingTempTime.sH, editingTempTime.sM, 0, 0);
+                          const newEnd = new Date(tempSlot.end_at);
+                          newEnd.setHours(editingTempTime.eH, editingTempTime.eM, 0, 0);
+                          await base44.entities.WeeklyAvailability.update(editingTempDate, { start_at: newStart.toISOString(), end_at: newEnd.toISOString() });
+                          setTempBlocks(prev => prev.map(t => t.id === editingTempDate ? { ...t, start_at: newStart.toISOString(), end_at: newEnd.toISOString() } : t));
+                          setEditingTempDate(null);
+                        }
                       } else {
+                        // Add new blocks
                         addDayRanges.forEach(r => {
                           addBlock(addDayIndex, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
                         });
