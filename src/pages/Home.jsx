@@ -55,17 +55,16 @@ export default function Home() {
   }
 
   function getBlockUntilOptions() {
-    // Generate time options for the rest of today (every 30 min until end of recurring slot)
     const now = new Date();
     const dayOfWeek = now.getDay();
     const minutes = now.getHours() * 60 + now.getMinutes();
     const recurring = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
     if (!recurring) return [];
     const options = [];
-    let t = Math.ceil((minutes + 1) / 30) * 30;
+    let t = Math.ceil((minutes + 1) / 15) * 15;
     while (t <= recurring.time_end) {
       options.push(t);
-      t += 30;
+      t += 15;
     }
     return options;
   }
