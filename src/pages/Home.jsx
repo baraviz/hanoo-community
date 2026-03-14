@@ -413,26 +413,13 @@ export default function Home() {
                   <ParkingSquare size={24} style={{ color: "#059669" }} />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800 text-center">הפוך את החניה לזמינה</h2>
-                <p className="text-gray-500 text-center text-sm">עד איזו שעה תרצה לפתוח את החניה?</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {getAvailUntilOptions().map(t => {
-                    const h = Math.floor(t / 60), m = t % 60;
-                    const label = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-                    return (
-                      <button
-                        key={t}
-                        onClick={() => setAvailUntilMinutes(t)}
-                        className="py-2.5 rounded-2xl font-semibold text-sm"
-                        style={{
-                          background: availUntilMinutes === t ? "#34C759" : "#F3F4F6",
-                          color: availUntilMinutes === t ? "white" : "#374151"
-                        }}
-                      >
-                        {label}
-                      </button>
-                    );
-                  })}
-                </div>
+                <p className="text-gray-500 text-center text-sm">עד איזו שעה?</p>
+                <TimeWheelPicker
+                  options={getAvailUntilOptions()}
+                  value={availUntilMinutes}
+                  onChange={setAvailUntilMinutes}
+                  color="#34C759"
+                />
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
                   <button
