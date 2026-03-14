@@ -54,7 +54,7 @@ function BookingCard({ booking, isOwner }) {
       </div>
       <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
         <Clock size={12} />
-        <span>{fmt(booking.start_time)} – {fmt(booking.end_time)}</span>
+        <span>{formatBookingTime(booking.start_time, booking.end_time)}</span>
       </div>
     </div>
   );
