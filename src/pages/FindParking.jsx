@@ -156,7 +156,7 @@ export default function FindParking() {
           <CheckCircle size={44} style={{ color: "#34C759" }} />
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">הוזמן! 🎉</h2>
-        <p className="text-gray-500 mb-6">החניה שלך מוכנה מ-{format(new Date(fromTime), "HH:mm")} עד {format(new Date(toTime), "HH:mm")}</p>
+        <p className="text-gray-500 mb-6">החניה שלך מוכנה מ-{fromTime ? format(fromTime, "HH:mm") : ""} עד {toTime ? format(toTime, "HH:mm") : ""}</p>
         <button
           onClick={() => { setBookingId(null); setSearched(false); setResults([]); }}
           className="w-full py-4 rounded-2xl font-bold text-white"
