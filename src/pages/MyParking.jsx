@@ -632,55 +632,7 @@ export default function MyParking() {
         </div>
       )}
 
-      {/* Edit temp modal */}
-      {editingTemp && (
-        <EditTempModal
-          slot={editingTemp}
-          onClose={() => setEditingTemp(null)}
-          onSave={async (startAt, endAt) => {
-            await base44.entities.WeeklyAvailability.update(editingTemp.id, { start_at: startAt, end_at: endAt });
-            setTempBlocks(prev => prev.map(t => t.id === editingTemp.id ? { ...t, start_at: startAt, end_at: endAt } : t));
-            setEditingTemp(null);
-          }}
-          onDelete={async () => {
-            await base44.entities.WeeklyAvailability.delete(editingTemp.id);
-            setTempBlocks(prev => prev.filter(t => t.id !== editingTemp.id));
-            setEditingTemp(null);
-          }}
-          onConvertToRecurring={async (dayIndex, start, end) => {
-            // Delete the temp block and create a recurring one
-            await base44.entities.WeeklyAvailability.delete(editingTemp.id);
-            setTempBlocks(prev => prev.filter(t => t.id !== editingTemp.id));
-            addBlock(dayIndex, start, end);
-            setEditingTemp(null);
-            setTimeout(() => triggerSave(), 100);
-          }}
-        />
-      )}
 
-      {/* Edit modal */}
-      {editingBlock && (
-        <EditModal
-          block={editingBlock}
-          onClose={() => setEditingBlock(null)}
-          onSave={(s, e) => updateBlock(editingBlock.id, s, e)}
-          onDelete={() => deleteBlock(editingBlock.id)}
-          onConvertToTemp={async (startAt, endAt) => {
-            // Delete the recurring block and create a temp one
-            deleteBlock(editingBlock.id);
-            const rec = await base44.entities.WeeklyAvailability.create({
-              resident_id: resident.id,
-              owner_email: user.email,
-              building_id: resident.building_id,
-              slot_type: "temp",
-              start_at: startAt,
-              end_at: endAt,
-            });
-            setTempBlocks(prev => [...prev, rec]);
-            setEditingBlock(null);
-          }}
-        />
-      )}
 
       {/* Add Day Sheet */}
       {addDaySheet && (
