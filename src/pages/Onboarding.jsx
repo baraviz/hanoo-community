@@ -331,7 +331,7 @@ export default function Onboarding() {
         <StepDots current={1} total={3} />
 
         <h2 className="text-2xl font-bold text-gray-800 mb-1">הפרטים שלך</h2>
-        <p className="text-gray-500 text-sm mb-6">מספר דירה, חניה וסוג החניון</p>
+        <p className="text-gray-500 text-sm mb-6">מספר דירה, חניה, טלפון וסוג החניון</p>
 
         <div className="space-y-4">
           <div>
