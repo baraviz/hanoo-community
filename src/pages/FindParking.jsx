@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Car, Search, CheckCircle, Clock } from "lucide-react";
 import { format, differenceInMinutes } from "date-fns";
 import ThankYouWhatsApp from "@/components/ThankYouWhatsApp";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function FindParking() {
   const [user, setUser] = useState(null);
