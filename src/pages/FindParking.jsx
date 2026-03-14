@@ -90,9 +90,9 @@ export default function FindParking() {
   }
 
   async function bookSlot(slot) {
-    const from = new Date(fromTime).toISOString();
-    const to = new Date(toTime).toISOString();
-    const hours = differenceInMinutes(new Date(to), new Date(from)) / 60;
+    const from = fromTime.toISOString();
+    const to = toTime.toISOString();
+    const hours = differenceInMinutes(toTime, fromTime) / 60;
     const cost = Math.round(hours * 10);
 
     if ((resident.credits || 0) < cost) {
