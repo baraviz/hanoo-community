@@ -538,7 +538,7 @@ export default function Home() {
               >
                 {removingSlot
                   ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
-                  : available ? "השבת זמינות" : "הפוך לזמין"}
+                  : available ? "השבת זמינות" : "הפוך את החניה לזמינה"}
               </button>
             </div>
           );
