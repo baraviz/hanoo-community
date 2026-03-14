@@ -687,7 +687,7 @@ export default function MyParking() {
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end"
           style={{ background: "rgba(0,0,0,0.4)", animation: closingAddDay ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
-          onClick={() => { setClosingAddDay(true); setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220); }}
+          onClick={() => { setEditingBlock(null); setClosingAddDay(true); setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220); }}
         >
           <div
             className="bg-white rounded-t-3xl p-6 space-y-5"
