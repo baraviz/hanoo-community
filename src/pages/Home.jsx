@@ -412,26 +412,34 @@ export default function Home() {
                   <ParkingSquare size={24} style={{ color: "#059669" }} />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800 text-center">הפוך את החניה לזמינה</h2>
-                <p className="text-gray-500 text-center text-sm">כמה זמן תרצה לפתוח את החניה?</p>
-                <div className="space-y-2">
-                  {[1, 2, 3, 4, 6, 8].map(h => (
-                    <button
-                      key={h}
-                      onClick={() => setDurationHours(h)}
-                      className="w-full py-3 rounded-2xl font-semibold text-sm flex items-center justify-between px-5"
-                      style={{
-                        background: durationHours === h ? "#007AFF" : "#F3F4F6",
-                        color: durationHours === h ? "white" : "#374151"
-                      }}
-                    >
-                      <span>{h === 1 ? "שעה אחת" : `${h} שעות`}</span>
-                      {durationHours === h && <span>✓</span>}
-                    </button>
-                  ))}
+                <p className="text-gray-500 text-center text-sm">עד איזו שעה תרצה לפתוח את החניה?</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {getAvailUntilOptions().map(t => {
+                    const h = Math.floor(t / 60), m = t % 60;
+                    const label = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => setAvailUntilMinutes(t)}
+                        className="py-2.5 rounded-2xl font-semibold text-sm"
+                        style={{
+                          background: availUntilMinutes === t ? "#34C759" : "#F3F4F6",
+                          color: availUntilMinutes === t ? "white" : "#374151"
+                        }}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
                 </div>
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#34C759" }}>פתח חניה</button>
+                  <button
+                    onClick={makeAvailable}
+                    disabled={availUntilMinutes === null}
+                    className="py-3 rounded-2xl font-bold text-white"
+                    style={{ background: "#34C759", opacity: availUntilMinutes === null ? 0.4 : 1 }}
+                  >פתח חניה</button>
                 </div>
               </>
             )}
