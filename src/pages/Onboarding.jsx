@@ -75,6 +75,7 @@ export default function Onboarding() {
   const [ownerApartment, setOwnerApartment] = useState("");
   const [ownerParking, setOwnerParking] = useState("");
   const [ownerFloor, setOwnerFloor] = useState("");
+  const [ownerPhone, setOwnerPhone] = useState("");
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
