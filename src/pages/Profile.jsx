@@ -194,13 +194,10 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Pending approvals (owner only) */}
+        {/* All residents (owner only) */}
         {isOwner && pendingResidents.length > 0 && (
           <div className="card p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse"></div>
-              <p className="font-bold text-gray-800">ממתינים לאישור ({pendingResidents.length})</p>
-            </div>
+            <p className="font-bold text-gray-800 mb-3">דיירים בבניין ({pendingResidents.length})</p>
             <div className="space-y-3">
               {pendingResidents.map(r => (
                 <div key={r.id} className="flex items-center gap-3">
@@ -210,9 +207,19 @@ export default function Profile() {
                   <div className="flex-1">
                     <p className="font-medium text-gray-800 text-sm">{r.user_name}</p>
                     <p className="text-gray-400 text-xs">דירה {r.apartment_number || "?"}</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <div className={`w-1.5 h-1.5 rounded-full ${r.status === "approved" ? "bg-green-500" : r.status === "pending" ? "bg-amber-500" : "bg-red-500"}`}></div>
+                      <span className="text-xs text-gray-400">
+                        {r.status === "approved" ? "פעיל" : r.status === "pending" ? "בהמתנה" : "דחוי"}
+                      </span>
+                    </div>
                   </div>
-                  <button onClick={() => rejectResident(r)} className="px-3 py-1.5 rounded-xl text-xs font-medium" style={{ background: "#FFE5E5", color: "#FF3B30" }}>דחה</button>
-                  <button onClick={() => approveResident(r)} className="px-3 py-1.5 rounded-xl text-xs font-medium text-white" style={{ background: "#34C759" }}>אשר</button>
+                  {r.status === "pending" && (
+                    <div className="flex gap-2">
+                      <button onClick={() => rejectResident(r)} className="px-2 py-1 rounded-lg text-xs font-medium" style={{ background: "#FFE5E5", color: "#FF3B30" }}>דחה</button>
+                      <button onClick={() => approveResident(r)} className="px-2 py-1 rounded-lg text-xs font-medium text-white" style={{ background: "#34C759" }}>אשר</button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
