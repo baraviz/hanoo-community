@@ -341,9 +341,8 @@ export default function Home() {
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
                   <button
                     onClick={confirmDeactivate}
-                    disabled={isRecurringActiveNow() && blockUntilHour === null}
                     className="py-3 rounded-2xl font-bold text-white"
-                    style={{ background: "#FF3B30", opacity: (isRecurringActiveNow() && blockUntilHour === null) ? 0.4 : 1 }}
+                    style={{ background: "#FF3B30" }}
                   >
                     השבת
                   </button>
