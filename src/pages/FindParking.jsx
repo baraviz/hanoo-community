@@ -3,21 +3,19 @@ import { base44 } from "@/api/base44Client";
 import { Car, Search, CheckCircle, Clock } from "lucide-react";
 import { format, differenceInMinutes } from "date-fns";
 import ThankYouWhatsApp from "@/components/ThankYouWhatsApp";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 export default function FindParking() {
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
-  const [fromTime, setFromTime] = useState(null);
-  const [toTime, setToTime] = useState(null);
+  const [fromTime, setFromTime] = useState("");
+  const [toTime, setToTime] = useState("");
   const [results, setResults] = useState([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [bookingId, setBookingId] = useState(null);
   const [thankYouSlot, setThankYouSlot] = useState(null); // { ownerName, ownerPhone, spotNumber }
-  const fromPickerRef = useRef(null);
-  const toPickerRef = useRef(null);
+  const fromRef = useRef(null);
+  const toRef = useRef(null);
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -30,16 +28,21 @@ export default function FindParking() {
     const now = new Date();
     now.setMinutes(0, 0, 0);
     const later = new Date(now.getTime() + 2 * 3600000);
-    setFromTime(now);
-    setToTime(later);
+    setFromTime(toLocalInput(now));
+    setToTime(toLocalInput(later));
   }, []);
+
+  function toLocalInput(d) {
+    const off = d.getTimezoneOffset() * 60000;
+    return new Date(d - off).toISOString().slice(0, 16);
+  }
 
   async function searchParking() {
     if (!fromTime || !toTime) return;
     setLoading(true); setSearched(true);
 
-    const fromDate = fromTime;
-    const toDate = toTime;
+    const fromDate = new Date(fromTime);
+    const toDate = new Date(toTime);
     const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
     const toMins = toDate.getHours() * 60 + toDate.getMinutes();
     const dayOfWeek = fromDate.getDay(); // 0=Sunday
@@ -92,9 +95,9 @@ export default function FindParking() {
   }
 
   async function bookSlot(slot) {
-    const from = fromTime.toISOString();
-    const to = toTime.toISOString();
-    const hours = differenceInMinutes(toTime, fromTime) / 60;
+    const from = new Date(fromTime).toISOString();
+    const to = new Date(toTime).toISOString();
+    const hours = differenceInMinutes(new Date(to), new Date(from)) / 60;
     const cost = Math.round(hours * 10);
 
     if ((resident.credits || 0) < cost) {
@@ -158,7 +161,7 @@ export default function FindParking() {
           <CheckCircle size={44} style={{ color: "#34C759" }} />
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">הוזמן! 🎉</h2>
-        <p className="text-gray-500 mb-6">החניה שלך מוכנה מ-{fromTime ? format(fromTime, "HH:mm") : ""} עד {toTime ? format(toTime, "HH:mm") : ""}</p>
+        <p className="text-gray-500 mb-6">החניה שלך מוכנה מ-{format(new Date(fromTime), "HH:mm")} עד {format(new Date(toTime), "HH:mm")}</p>
         <button
           onClick={() => { setBookingId(null); setSearched(false); setResults([]); }}
           className="w-full py-4 rounded-2xl font-bold text-white"
@@ -186,62 +189,35 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <style>{`
-            .hanoo-datepicker { width: 100%; }
-            .hanoo-datepicker .react-datepicker-wrapper { width: 100%; }
-            .hanoo-datepicker .react-datepicker__input-container { width: 100%; }
-            .hanoo-datepicker input { display: none; }
-            .react-datepicker { font-family: 'Heebo', sans-serif !important; border-radius: 16px !important; border: none !important; box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important; }
-            .react-datepicker__header { background: #007AFF !important; border-radius: 16px 16px 0 0 !important; border: none !important; }
-            .react-datepicker__current-month, .react-datepicker__day-name, .react-datepicker-time__header { color: white !important; }
-            .react-datepicker__day--selected, .react-datepicker__time-list-item--selected { background: #007AFF !important; }
-            .react-datepicker__day:hover, .react-datepicker__time-list-item:hover { background: #EBF4FF !important; color: #007AFF !important; }
-          `}</style>
-          <div
-            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
-            style={{ background: "#E8EAED" }}
-            onClick={() => fromPickerRef.current?.setOpen(true)}
-          >
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "#E8EAED" }}>
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
             <span className="flex-1 text-sm font-medium text-gray-800">
-              {fromTime ? fromTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+              {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
-            <div style={{ width: 0, height: 0, overflow: "hidden" }}>
-              <DatePicker
-                ref={fromPickerRef}
-                selected={fromTime}
-                onChange={date => setFromTime(date)}
-                showTimeSelect
-                timeIntervals={30}
-                dateFormat="dd/MM HH:mm"
-                withPortal
-              />
-            </div>
-          </div>
+            <input
+              type="datetime-local"
+              value={fromTime}
+              onChange={e => setFromTime(e.target.value)}
+              className="absolute inset-0 w-full h-full cursor-pointer"
+              style={{ opacity: 0 }}
+            />
+          </label>
           <div className="border-t border-gray-200 mx-3" />
-          <div
-            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
-            style={{ background: "#E8EAED" }}
-            onClick={() => toPickerRef.current?.setOpen(true)}
-          >
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "#E8EAED" }}>
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
             <span className="flex-1 text-sm font-medium text-gray-800">
-              {toTime ? toTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+              {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
-            <div style={{ width: 0, height: 0, overflow: "hidden" }}>
-              <DatePicker
-                ref={toPickerRef}
-                selected={toTime}
-                onChange={date => setToTime(date)}
-                showTimeSelect
-                timeIntervals={30}
-                dateFormat="dd/MM HH:mm"
-                withPortal
-              />
-            </div>
-          </div>
+            <input
+              type="datetime-local"
+              value={toTime}
+              onChange={e => setToTime(e.target.value)}
+              className="absolute inset-0 w-full h-full cursor-pointer"
+              style={{ opacity: 0 }}
+            />
+          </label>
         </div>
         <button
           onClick={searchParking}
