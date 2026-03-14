@@ -200,22 +200,21 @@ export default function FindParking() {
           <div
             className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
             style={{ background: "#E8EAED" }}
-            onClick={() => document.getElementById("from-picker-input")?.click()}
+            onClick={() => fromPickerRef.current?.setOpen(true)}
           >
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
             <span className="flex-1 text-sm font-medium text-gray-800">
               {fromTime ? fromTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
-            <div className="hanoo-datepicker">
+            <div style={{ width: 0, height: 0, overflow: "hidden" }}>
               <DatePicker
+                ref={fromPickerRef}
                 selected={fromTime}
                 onChange={date => setFromTime(date)}
                 showTimeSelect
                 timeIntervals={30}
                 dateFormat="dd/MM HH:mm"
-                customInput={<input id="from-picker-input" />}
-                popperPlacement="bottom-end"
                 withPortal
               />
             </div>
@@ -224,22 +223,21 @@ export default function FindParking() {
           <div
             className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
             style={{ background: "#E8EAED" }}
-            onClick={() => document.getElementById("to-picker-input")?.click()}
+            onClick={() => toPickerRef.current?.setOpen(true)}
           >
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
             <span className="flex-1 text-sm font-medium text-gray-800">
               {toTime ? toTime.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
-            <div className="hanoo-datepicker">
+            <div style={{ width: 0, height: 0, overflow: "hidden" }}>
               <DatePicker
+                ref={toPickerRef}
                 selected={toTime}
                 onChange={date => setToTime(date)}
                 showTimeSelect
                 timeIntervals={30}
                 dateFormat="dd/MM HH:mm"
-                customInput={<input id="to-picker-input" />}
-                popperPlacement="bottom-end"
                 withPortal
               />
             </div>
