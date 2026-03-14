@@ -74,11 +74,12 @@ export default function ThankYouWhatsApp({ ownerName, ownerPhone, spotNumber, on
           </button>
           <button
             onClick={sendWhatsApp}
+            disabled={sending}
             className="py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
-            style={{ background: "#25D366" }}
+            style={{ background: "#25D366", opacity: sending ? 0.6 : 1 }}
           >
             <Send size={16} />
-            שלח בוואטסאפ
+            {sending ? "שולח..." : "שלח בוואטסאפ +10"}
           </button>
         </div>
       </div>
