@@ -765,7 +765,8 @@ export default function MyParking() {
                       addBlock(addDayIndex, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
                     });
                     setTimeout(() => triggerSave(), 100);
-                    setAddDaySheet(false);
+                    setClosingAddDay(true);
+                    setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
                   }}
                   className="w-full py-3 rounded-2xl font-bold text-white text-base"
                   style={{ background: "#007AFF" }}
