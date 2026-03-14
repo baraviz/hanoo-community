@@ -664,7 +664,7 @@ export default function MyParking() {
             `}</style>
             <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
 
-            {addDayStep === "day" ? (
+            {addDayStep === "day" && !editingTempDate ? (
               <>
                 <h2 className="text-xl font-bold text-gray-800 text-center">בחר יום</h2>
                 <div className="grid grid-cols-4 gap-2">
