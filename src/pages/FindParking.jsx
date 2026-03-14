@@ -174,7 +174,7 @@ export default function FindParking() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-white text-xl font-bold">מצא חניה</h1>
             <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
@@ -183,33 +183,36 @@ export default function FindParking() {
             <Search size={28} className="text-white" />
           </div>
         </div>
+      </div>
 
-        {/* Search inputs in header */}
-        <div className="space-y-2">
-          <div className="bg-white bg-opacity-20 rounded-2xl px-4 py-3 flex items-center gap-3">
-            <span className="text-blue-200 text-xs font-bold w-16">משעה</span>
+      <div className="px-5 py-5">
+        <div className="card p-3 mb-4 space-y-2">
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#F5F7FA" }}>
+            <span className="text-xs font-bold text-gray-500 w-14 flex-none">משעה</span>
+            <span className="flex-1 text-sm font-medium text-gray-800">
+              {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+            </span>
             <input
               type="datetime-local"
               value={fromTime}
               onChange={e => setFromTime(e.target.value)}
-              className="flex-1 bg-transparent text-white text-sm font-medium outline-none"
-              style={{ colorScheme: "dark" }}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
-          </div>
-          <div className="bg-white bg-opacity-20 rounded-2xl px-4 py-3 flex items-center gap-3">
-            <span className="text-blue-200 text-xs font-bold w-16">עד שעה</span>
+          </label>
+          <div className="border-t border-gray-100 mx-3" />
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#F5F7FA" }}>
+            <span className="text-xs font-bold text-gray-500 w-14 flex-none">עד שעה</span>
+            <span className="flex-1 text-sm font-medium text-gray-800">
+              {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+            </span>
             <input
               type="datetime-local"
               value={toTime}
               onChange={e => setToTime(e.target.value)}
-              className="flex-1 bg-transparent text-white text-sm font-medium outline-none"
-              style={{ colorScheme: "dark" }}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
-          </div>
+          </label>
         </div>
-      </div>
-
-      <div className="px-5 py-5">
         <button
           onClick={searchParking}
           disabled={loading || !resident}
