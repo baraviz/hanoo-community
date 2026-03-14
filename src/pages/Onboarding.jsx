@@ -263,6 +263,11 @@ export default function Onboarding() {
               <p className="text-gray-400 text-xs mt-1">הבניין כולל חניון תת קרקעי</p>
             </div>
           )}
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
+            <input value={joinPhone} onChange={e => setJoinPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <p className="text-gray-400 text-xs mt-1">לשימוש בתקשורת עם שכנים</p>
+          </div>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <button
             onClick={completeJoin}
