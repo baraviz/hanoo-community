@@ -371,7 +371,14 @@ export default function MyParking() {
                           <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
                         </div>
                         <div className="flex gap-2">
-                          <button onClick={() => setEditingBlock(b)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                          <button onClick={() => {
+                            setAddDayIndex(b.dayIndex);
+                            setAddDayRanges([{ sH: Math.floor(b.start / 60), sM: b.start % 60, eH: Math.floor(b.end / 60), eM: b.end % 60 }]);
+                            setAddDayStep("times");
+                            setClosingAddDay(false);
+                            setEditingBlock(b);
+                            setAddDaySheet(true);
+                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
                             <Pencil size={12} style={{ color: "#007AFF" }} />
                           </button>
                           <button onClick={() => deleteBlock(b.id)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
