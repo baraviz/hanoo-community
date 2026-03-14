@@ -49,6 +49,19 @@ export default function Profile() {
       }
     }
     setMyBookings(bookings.slice(0, 5));
+    setPhone(r.phone || u.phone || "");
+  }
+
+  async function savePhone() {
+    if (!phone.trim()) return;
+    setSavingPhone(true);
+    await Promise.all([
+      base44.entities.Resident.update(resident.id, { phone: phone.trim() }),
+      base44.auth.updateMe({ phone: phone.trim() }),
+    ]);
+    setSavingPhone(false);
+    setPhoneSaved(true);
+    setTimeout(() => setPhoneSaved(false), 2000);
   }
 
   async function approveResident(r) {
