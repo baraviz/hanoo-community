@@ -108,7 +108,7 @@ export default function Home() {
         const next = daySlots.sort((a, b) => a.time_start - b.time_start)[0];
         const days = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
         const h = Math.floor(next.time_start / 60), m = next.time_start % 60;
-        return `ביום ${days[day]} מ-${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+        return `זמין ביום ${days[day]} מ-${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
       }
     }
     return null;
