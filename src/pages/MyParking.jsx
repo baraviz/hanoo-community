@@ -702,7 +702,7 @@ export default function MyParking() {
               <>
                 <div className="flex items-center gap-3">
                   <button onClick={() => setAddDayStep("day")} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-                    <span style={{ fontSize: 16 }}>›</span>
+                    <span style={{ fontSize: 16 }}>‹</span>
                   </button>
                   <h2 className="text-xl font-bold text-gray-800">יום {FULL_DAYS[addDayIndex]}</h2>
                 </div>
