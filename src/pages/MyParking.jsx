@@ -394,7 +394,15 @@ export default function MyParking() {
                           <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">חד פעמי</span>
                         </div>
                         <div className="flex gap-2">
-                          <button onClick={() => setEditingTemp(t)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
+                          <button onClick={() => {
+                          const s = new Date(t.start_at);
+                          setEditingTempDate(t.id);
+                          setEditingTempTime({ sH: s.getHours(), sM: s.getMinutes(), eH: new Date(t.end_at).getHours(), eM: new Date(t.end_at).getMinutes() });
+                          setEditingBlock(null);
+                          setAddDayStep("times");
+                          setClosingAddDay(false);
+                          setAddDaySheet(true);
+                        }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
                             <Pencil size={12} style={{ color: "#007AFF" }} />
                           </button>
                           <button onClick={async () => {
