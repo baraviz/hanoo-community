@@ -28,14 +28,9 @@ export default function FindParking() {
     const now = new Date();
     now.setMinutes(0, 0, 0);
     const later = new Date(now.getTime() + 2 * 3600000);
-    setFromTime(toLocalInput(now));
-    setToTime(toLocalInput(later));
+    setFromTime(now);
+    setToTime(later);
   }, []);
-
-  function toLocalInput(d) {
-    const off = d.getTimezoneOffset() * 60000;
-    return new Date(d - off).toISOString().slice(0, 16);
-  }
 
   async function searchParking() {
     if (!fromTime || !toTime) return;
