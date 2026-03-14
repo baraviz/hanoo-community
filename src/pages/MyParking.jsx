@@ -308,9 +308,15 @@ export default function MyParking() {
 
             if (allDays.length === 0) {
               return (
-                <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
                   <p className="text-gray-500 text-sm">אין זמינויות עדיין</p>
-                  <p className="text-gray-400 text-xs mt-1">עבור לתצוגת יומן כדי להוסיף</p>
+                  <button
+                    onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setAddDaySheet(true); }}
+                    className="px-6 py-3 rounded-2xl font-bold text-white text-sm"
+                    style={{ background: "#007AFF" }}
+                  >
+                    הוסף זמינות
+                  </button>
                 </div>
               );
             }
