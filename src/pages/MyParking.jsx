@@ -34,6 +34,8 @@ export default function MyParking() {
   const [addDayStep, setAddDayStep] = useState("day"); // "day" | "times"
   const [addDayIndex, setAddDayIndex] = useState(null);
   const [addDayRanges, setAddDayRanges] = useState([{ sH: 8, sM: 0, eH: 10, eM: 0 }]);
+  const [editingTempDate, setEditingTempDate] = useState(null);
+  const [editingTempTime, setEditingTempTime] = useState({ sH: 0, sM: 0, eH: 0, eM: 0 });
   const gridRef = useRef(null);
   const saveInProgress = useRef(false);
   const pendingSave = useRef(null);
