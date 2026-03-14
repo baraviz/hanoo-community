@@ -133,6 +133,7 @@ export default function Onboarding() {
       apartment_number: ownerApartment,
       parking_spot: ownerParking,
       parking_floor: undergroundParking ? ownerFloor : "",
+      phone: ownerPhone,
       credits: 50,
       status: "approved",
     });
