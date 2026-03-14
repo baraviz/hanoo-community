@@ -559,7 +559,7 @@ export default function Home() {
             onClick={() => navigate(createPageUrl("PublishParking"))}
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
           >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#34C759" }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
               <Plus size={22} className="text-white" />
             </div>
             <span className="text-sm font-semibold text-gray-700">פרסם חניה</span>
