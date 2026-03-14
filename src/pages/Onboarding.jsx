@@ -101,8 +101,9 @@ export default function Onboarding() {
       apartment_number: apartment,
       parking_spot: parkingSpot,
       parking_floor: foundBuilding.underground_parking ? joinFloor : "",
+      phone: joinPhone,
       credits: 50,
-      status: "pending",
+      status: "approved",
     });
     setLoading(false);
     navigate(createPageUrl("Home"));
