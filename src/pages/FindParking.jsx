@@ -189,33 +189,43 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#E8EAED" }}>
+          <div
+            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
+            style={{ background: "#E8EAED" }}
+            onClick={() => fromRef.current?.showPicker?.() || fromRef.current?.click()}
+          >
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
-            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
+            <span className="flex-1 text-sm font-medium text-gray-800">
               {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input
+              ref={fromRef}
               type="datetime-local"
               value={fromTime}
               onChange={e => setFromTime(e.target.value)}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="sr-only"
             />
-          </label>
+          </div>
           <div className="border-t border-gray-200 mx-3" />
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer" style={{ background: "#E8EAED" }}>
+          <div
+            className="flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer"
+            style={{ background: "#E8EAED" }}
+            onClick={() => toRef.current?.showPicker?.() || toRef.current?.click()}
+          >
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
-            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
+            <span className="flex-1 text-sm font-medium text-gray-800">
               {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input
+              ref={toRef}
               type="datetime-local"
               value={toTime}
               onChange={e => setToTime(e.target.value)}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="sr-only"
             />
-          </label>
+          </div>
         </div>
         <button
           onClick={searchParking}
