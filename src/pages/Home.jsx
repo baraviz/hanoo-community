@@ -18,7 +18,7 @@ export default function Home() {
   const [endingBooking, setEndingBooking] = useState(false);
   const [showStatusDrawer, setShowStatusDrawer] = useState(false);
   const [closingDrawer, setClosingDrawer] = useState(false);
-  const [durationHours, setDurationHours] = useState(2);
+  const [availUntilMinutes, setAvailUntilMinutes] = useState(null);
   const [blockUntilHour, setBlockUntilHour] = useState(null);
   const [activeBlocks, setActiveBlocks] = useState([]);
 
