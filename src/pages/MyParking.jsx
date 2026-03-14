@@ -698,7 +698,7 @@ export default function MyParking() {
                 </div>
 
                 <div className="space-y-3">
-                  {addDayRanges.map((range, idx) => (
+                  {editingTempDate ? [editingTempTime] : addDayRanges}.map((range, idx) => (
                     <div key={idx} className="bg-gray-50 rounded-2xl p-3 space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-gray-500">טווח {idx + 1}</span>
