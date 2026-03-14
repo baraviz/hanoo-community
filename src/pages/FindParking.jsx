@@ -36,10 +36,15 @@ export default function FindParking() {
   }
 
   // Returns [start, end] coverage of a slot in minutes relative to day
+  function localDay(d) {
+    // Parse as local time to get correct day-of-week
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()).getDay();
+  }
+
   function slotCoverage(a, fromDate, toDate) {
     const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
     const toMins = toDate.getHours() * 60 + toDate.getMinutes();
-    const dayOfWeek = fromDate.getDay();
+    const dayOfWeek = localDay(fromDate);
 
     if (a.slot_type === "recurring") {
       if (!(a.days_of_week || []).includes(dayOfWeek)) return null;
