@@ -9,8 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function FindParking() {
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
+  const [fromTime, setFromTime] = useState(null);
+  const [toTime, setToTime] = useState(null);
   const [results, setResults] = useState([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
