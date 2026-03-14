@@ -1,16 +1,30 @@
 import { useState } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function ThankYouWhatsApp({ ownerName, ownerPhone, spotNumber, onClose }) {
   const [message, setMessage] = useState(`היי ${ownerName}! תודה רבה על חניה מספר ${spotNumber}, זה עזר לי מאוד 🙏`);
+  const [sending, setSending] = useState(false);
 
-  function sendWhatsApp() {
+  async function sendWhatsApp() {
+    setSending(true);
     const phone = ownerPhone?.replace(/\D/g, "").replace(/^0/, "972");
     const encoded = encodeURIComponent(message);
     const url = phone
       ? `https://wa.me/${phone}?text=${encoded}`
       : `https://wa.me/?text=${encoded}`;
     window.open(url, "_blank");
+    
+    // Add 10 credits to user
+    const user = await base44.auth.me();
+    const residents = await base44.entities.Resident.filter({ user_email: user.email });
+    if (residents.length > 0) {
+      await base44.entities.Resident.update(residents[0].id, {
+        credits: (residents[0].credits || 0) + 10
+      });
+    }
+    
+    setSending(false);
     onClose();
   }
 
