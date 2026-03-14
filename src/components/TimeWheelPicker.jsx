@@ -1,0 +1,97 @@
+import { useRef, useEffect, useState } from "react";
+
+const ITEM_HEIGHT = 44;
+
+export default function TimeWheelPicker({ options, value, onChange, color = "#007AFF" }) {
+  const listRef = useRef(null);
+  const isDragging = useRef(false);
+  const startY = useRef(0);
+  const startScroll = useRef(0);
+  const selectedIndex = options.indexOf(value);
+
+  // Scroll to selected on mount / value change
+  useEffect(() => {
+    if (!listRef.current) return;
+    const idx = options.indexOf(value);
+    if (idx >= 0) {
+      listRef.current.scrollTop = idx * ITEM_HEIGHT;
+    }
+  }, [value]);
+
+  function onScroll() {
+    if (!listRef.current) return;
+    const idx = Math.round(listRef.current.scrollTop / ITEM_HEIGHT);
+    const clamped = Math.max(0, Math.min(idx, options.length - 1));
+    if (options[clamped] !== value) onChange(options[clamped]);
+  }
+
+  function fmt(t) {
+    const h = Math.floor(t / 60), m = t % 60;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  }
+
+  return (
+    <div className="relative flex flex-col items-center select-none" style={{ height: ITEM_HEIGHT * 5 }}>
+      {/* Fade top */}
+      <div className="absolute inset-x-0 top-0 z-10 pointer-events-none" style={{
+        height: ITEM_HEIGHT * 2,
+        background: "linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)"
+      }} />
+      {/* Highlight bar */}
+      <div className="absolute inset-x-4 z-10 rounded-xl pointer-events-none" style={{
+        top: ITEM_HEIGHT * 2,
+        height: ITEM_HEIGHT,
+        background: `${color}18`,
+        border: `2px solid ${color}33`,
+      }} />
+      {/* Fade bottom */}
+      <div className="absolute inset-x-0 bottom-0 z-10 pointer-events-none" style={{
+        height: ITEM_HEIGHT * 2,
+        background: "linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)"
+      }} />
+
+      {/* Scroll list */}
+      <div
+        ref={listRef}
+        onScroll={onScroll}
+        className="w-full overflow-y-scroll"
+        style={{
+          height: ITEM_HEIGHT * 5,
+          scrollSnapType: "y mandatory",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        <style>{`.wheel-hide::-webkit-scrollbar { display: none; }`}</style>
+        {/* Padding top/bottom so first/last items can center */}
+        <div style={{ height: ITEM_HEIGHT * 2 }} />
+        {options.map((t, i) => (
+          <div
+            key={t}
+            style={{
+              height: ITEM_HEIGHT,
+              scrollSnapAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 20,
+              fontWeight: "bold",
+              fontFamily: "monospace",
+              color: value === t ? color : "#9CA3AF",
+              transition: "color 0.15s",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              onChange(t);
+              if (listRef.current) listRef.current.scrollTop = i * ITEM_HEIGHT;
+            }}
+          >
+            {fmt(t)}
+          </div>
+        ))}
+        <div style={{ height: ITEM_HEIGHT * 2 }} />
+      </div>
+    </div>
+  );
+}
