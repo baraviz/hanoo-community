@@ -192,7 +192,7 @@ export default function FindParking() {
           <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "#E8EAED" }}>
             <Clock size={16} className="text-gray-500 flex-none" />
             <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
-            <span className="flex-1 text-sm font-medium text-gray-800">
+            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
               {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input
