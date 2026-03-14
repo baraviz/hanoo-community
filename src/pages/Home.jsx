@@ -328,25 +328,12 @@ export default function Home() {
                   return (
                     <div>
                       <p className="text-gray-500 text-center text-sm mb-2">עד מתי להשבית?</p>
-                      <div className="grid grid-cols-3 gap-2">
-                        {opts.map(t => {
-                          const h = Math.floor(t / 60), m = t % 60;
-                          const label = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-                          return (
-                            <button
-                              key={t}
-                              onClick={() => setBlockUntilHour(t)}
-                              className="py-2.5 rounded-2xl font-semibold text-sm"
-                              style={{
-                                background: blockUntilHour === t ? "#FF3B30" : "#F3F4F6",
-                                color: blockUntilHour === t ? "white" : "#374151"
-                              }}
-                            >
-                              {label}
-                            </button>
-                          );
-                        })}
-                      </div>
+                      <TimeWheelPicker
+                        options={opts}
+                        value={blockUntilHour ?? opts[0]}
+                        onChange={setBlockUntilHour}
+                        color="#FF3B30"
+                      />
                     </div>
                   );
                 })()}
