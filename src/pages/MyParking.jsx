@@ -548,9 +548,29 @@ export default function MyParking() {
                           background: "rgba(0,122,255,0.85)",
                           minHeight: 4,
                         }}
-                        onClick={(e) => { if (!calendarEditMode) return; e.stopPropagation(); setEditingBlock(b); }}
+                        onClick={(e) => {
+                            if (!calendarEditMode) return;
+                            e.stopPropagation();
+                            // Open the addDaySheet with existing block data for editing
+                            setAddDayIndex(b.dayIndex);
+                            setAddDayRanges([{ sH: Math.floor(b.start / 60), sM: b.start % 60, eH: Math.floor(b.end / 60), eM: b.end % 60 }]);
+                            setAddDayStep("times");
+                            setClosingAddDay(false);
+                            // Store block id for update
+                            setEditingBlock(b);
+                            setAddDaySheet(true);
+                          }}
                         onMouseDown={(e) => calendarEditMode && e.stopPropagation()}
-                        onTouchStart={(e) => { if (!calendarEditMode) return; e.stopPropagation(); setEditingBlock(b); }}
+                        onTouchStart={(e) => {
+                            if (!calendarEditMode) return;
+                            e.stopPropagation();
+                            setAddDayIndex(b.dayIndex);
+                            setAddDayRanges([{ sH: Math.floor(b.start / 60), sM: b.start % 60, eH: Math.floor(b.end / 60), eM: b.end % 60 }]);
+                            setAddDayStep("times");
+                            setClosingAddDay(false);
+                            setEditingBlock(b);
+                            setAddDaySheet(true);
+                          }}
                       >
                         {overlappingBlock && (() => {
                           const overlapStart = Math.max(b.start, overlappingBlock.start);
