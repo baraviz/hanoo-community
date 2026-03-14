@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { LogOut, Copy, CheckCircle, Car, Phone } from "lucide-react";
+import { LogOut, Copy, CheckCircle, Car, Phone, Pencil } from "lucide-react";
 import { format, parseISO } from "date-fns";
 
 export default function Profile() {
