@@ -713,28 +713,21 @@ export default function MyParking() {
                         )}
                       </div>
                       {[
-                        { label: "מ", fH: "sH", fM: "sM", max: 23 },
-                        { label: "עד", fH: "eH", fM: "eM", max: 24 },
-                      ].map(({ label, fH, fM, max }) => (
+                        { label: "משעה", fH: "sH", fM: "sM" },
+                        { label: "עד שעה", fH: "eH", fM: "eM" },
+                      ].map(({ label, fH, fM }) => (
                         <div key={label} className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-gray-500 w-6">{label}</span>
-                          <div className="flex-1 flex items-center gap-2 bg-white rounded-xl px-3 py-2">
-                            <select
-                              value={range[fH]}
-                              onChange={ev => setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: Number(ev.target.value) } : r))}
-                              className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none"
-                            >
-                              {Array.from({ length: max + 1 }).map((_, i) => <option key={i} value={i}>{String(i).padStart(2, "0")}</option>)}
-                            </select>
-                            <span className="text-gray-400 font-bold">:</span>
-                            <select
-                              value={range[fM]}
-                              onChange={ev => setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fM]: Number(ev.target.value) } : r))}
-                              className="flex-1 bg-transparent text-center font-mono font-bold text-gray-800 outline-none"
-                            >
-                              {[0, 30].map(v => <option key={v} value={v}>{String(v).padStart(2, "0")}</option>)}
-                            </select>
-                          </div>
+                          <Clock size={15} className="text-gray-400 flex-none" />
+                          <span className="text-sm text-gray-500 flex-none w-14">{label}</span>
+                          <input
+                            type="time"
+                            value={`${String(range[fH]).padStart(2,"0")}:${String(range[fM]).padStart(2,"0")}`}
+                            onChange={ev => {
+                              const [h, m] = ev.target.value.split(":").map(Number);
+                              setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: h, [fM]: m } : r));
+                            }}
+                            className="flex-1 bg-white rounded-xl px-3 py-2 text-sm font-bold text-gray-800 outline-none border border-gray-200"
+                          />
                         </div>
                       ))}
                     </div>
