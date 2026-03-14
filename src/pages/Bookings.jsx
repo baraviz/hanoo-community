@@ -23,6 +23,8 @@ function formatBookingTime(startTime, endTime) {
 
 function BookingCard({ booking, isOwner }) {
   const isPastBooking = isPast(new Date(booking.end_time));
+  const hours = Math.round(differenceInMinutes(new Date(booking.end_time), new Date(booking.start_time)) / 60 * 10) / 10;
+  
   return (
     <div className="bg-white rounded-2xl p-4 shadow-sm">
       <div className="flex items-center gap-3">
@@ -34,10 +36,10 @@ function BookingCard({ booking, isOwner }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-bold text-gray-800 text-sm">
-            חניה #{booking.spot_number || "?"}
+            {isOwner ? `הזמין ${booking.renter_name || booking.renter_email}` : `הזמנתי חניה`}
           </p>
           <p className="text-gray-500 text-xs truncate">
-            {isOwner ? `של ${booking.renter_name || booking.renter_email}` : `של ${booking.owner_name || booking.owner_email}`}
+            {isOwner ? "חניה" : `של ${booking.owner_name || booking.owner_email}`} #{booking.spot_number || "?"}
           </p>
         </div>
         <div className="text-left flex-none">
@@ -45,7 +47,7 @@ function BookingCard({ booking, isOwner }) {
             className="text-sm font-bold"
             style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }}
           >
-            {booking.total_credits} קרדיטים
+            {hours}h
           </p>
           <p className="text-xs text-gray-400">
             {booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל"}
