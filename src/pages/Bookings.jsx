@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Car, Clock, CalendarDays } from "lucide-react";
-import { format, isPast, isFuture } from "date-fns";
+import { format, isPast, isFuture, differenceInMinutes } from "date-fns";
 import { he } from "date-fns/locale";
 
 const fmt = (dt) => format(new Date(dt), "dd/MM HH:mm");
