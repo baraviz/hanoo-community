@@ -118,7 +118,7 @@ export default function Bookings() {
             className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
             style={{ background: tab === "mine" ? "white" : "transparent", color: tab === "mine" ? "#007AFF" : "white" }}
           >
-            הזמנות שלי
+            אני הזמנתי
           </button>
           <button
             onClick={() => setTab("theirs")}
