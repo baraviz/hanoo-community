@@ -47,7 +47,7 @@ function BookingCard({ booking, isOwner }) {
             className="text-sm font-bold"
             style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }}
           >
-            {hours}h
+            {hours} שעות
           </p>
           <p className="text-xs text-gray-400">
             {booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל"}
