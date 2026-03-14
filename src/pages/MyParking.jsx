@@ -726,7 +726,11 @@ export default function MyParking() {
                             value={`${String(range[fH]).padStart(2,"0")}:${String(range[fM]).padStart(2,"0")}`}
                             onChange={ev => {
                               const [h, m] = ev.target.value.split(":").map(Number);
-                              setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: h, [fM]: m } : r));
+                              if (editingTempDate) {
+                                setEditingTempTime(prev => ({ ...prev, [fH]: h, [fM]: m }));
+                              } else {
+                                setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: h, [fM]: m } : r));
+                              }
                             }}
                             className="flex-1 bg-white rounded-xl px-3 py-2 text-sm font-bold text-gray-800 outline-none border border-gray-200"
                           />
