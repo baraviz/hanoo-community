@@ -1,0 +1,166 @@
+import { useState, useEffect } from "react";
+import { base44 } from "@/api/base44Client";
+import { Car, Clock, CalendarDays } from "lucide-react";
+import { format, isPast, isFuture } from "date-fns";
+import { he } from "date-fns/locale";
+
+const fmt = (dt) => format(new Date(dt), "dd/MM HH:mm");
+
+function BookingCard({ booking, isOwner }) {
+  const isPastBooking = isPast(new Date(booking.end_time));
+  return (
+    <div className="bg-white rounded-2xl p-4 shadow-sm">
+      <div className="flex items-center gap-3">
+        <div
+          className="w-11 h-11 rounded-2xl flex items-center justify-center flex-none"
+          style={{ background: isPastBooking ? "#F3F4F6" : "#EBF4FF" }}
+        >
+          <Car size={20} style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-gray-800 text-sm">
+            חניה #{booking.spot_number || "?"}
+          </p>
+          <p className="text-gray-500 text-xs truncate">
+            {isOwner ? `של ${booking.renter_name || booking.renter_email}` : `של ${booking.owner_name || booking.owner_email}`}
+          </p>
+        </div>
+        <div className="text-left flex-none">
+          <p
+            className="text-sm font-bold"
+            style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }}
+          >
+            {booking.total_credits} קרדיטים
+          </p>
+          <p className="text-xs text-gray-400">
+            {booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל"}
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
+        <Clock size={12} />
+        <span>{fmt(booking.start_time)} – {fmt(booking.end_time)}</span>
+      </div>
+    </div>
+  );
+}
+
+function SectionLabel({ label }) {
+  return (
+    <div className="flex items-center gap-2 py-1">
+      <div className="flex-1 border-t border-gray-200" />
+      <span className="text-xs text-gray-400 font-medium px-1">{label}</span>
+      <div className="flex-1 border-t border-gray-200" />
+    </div>
+  );
+}
+
+export default function Bookings() {
+  const [user, setUser] = useState(null);
+  const [resident, setResident] = useState(null);
+  const [tab, setTab] = useState("mine"); // "mine" | "theirs"
+  const [myBookings, setMyBookings] = useState([]);
+  const [theirBookings, setTheirBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  async function init() {
+    const u = await base44.auth.me();
+    setUser(u);
+    const res = await base44.entities.Resident.filter({ user_email: u.email });
+    if (res.length > 0) setResident(res[0]);
+
+    const [mine, theirs] = await Promise.all([
+      base44.entities.Booking.filter({ renter_email: u.email }),
+      base44.entities.Booking.filter({ owner_email: u.email }),
+    ]);
+
+    setMyBookings(mine.sort((a, b) => new Date(b.start_time) - new Date(a.start_time)));
+    setTheirBookings(theirs.sort((a, b) => new Date(b.start_time) - new Date(a.start_time)));
+    setLoading(false);
+  }
+
+  const now = new Date();
+
+  const current = tab === "mine" ? myBookings : theirBookings;
+  const upcoming = current.filter(b => !isPast(new Date(b.end_time)));
+  const past = current.filter(b => isPast(new Date(b.end_time)));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
+        <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-white text-xl font-bold">הזמנות</h1>
+            <p className="text-blue-200 text-xs mt-0.5">היסטוריית החניות שלך</p>
+          </div>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <CalendarDays size={22} className="text-white" />
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex bg-white bg-opacity-20 rounded-2xl p-1 gap-1">
+          <button
+            onClick={() => setTab("mine")}
+            className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
+            style={{ background: tab === "mine" ? "white" : "transparent", color: tab === "mine" ? "#007AFF" : "white" }}
+          >
+            הזמנות שלי
+          </button>
+          <button
+            onClick={() => setTab("theirs")}
+            className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
+            style={{ background: tab === "theirs" ? "white" : "transparent", color: tab === "theirs" ? "#007AFF" : "white" }}
+          >
+            הזמינו ממני
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 pt-4 pb-6 space-y-2">
+        {upcoming.length === 0 && past.length === 0 && (
+          <div className="text-center py-20">
+            <div className="text-5xl mb-3">🅿️</div>
+            <p className="text-gray-500 font-medium">אין הזמנות עדיין</p>
+          </div>
+        )}
+
+        {upcoming.length > 0 && (
+          <>
+            <SectionLabel label="עתידיות ופעילות" />
+            <div className="space-y-3">
+              {upcoming.map(b => (
+                <BookingCard key={b.id} booking={b} isOwner={tab === "theirs"} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {past.length > 0 && (
+          <>
+            <SectionLabel label="עבר" />
+            <div className="space-y-3">
+              {past.map(b => (
+                <BookingCard key={b.id} booking={b} isOwner={tab === "theirs"} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
