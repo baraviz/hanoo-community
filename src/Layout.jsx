@@ -19,7 +19,7 @@ export default function Layout({ children, currentPageName }) {
     { name: "Home", label: "בית", icon: Home },
     { name: "FindParking", label: "מצא חניה", icon: Car },
     { name: "MyParking", label: "החניה שלי", icon: ParkingSquare },
-    { name: "Chat", label: "צ'אט", icon: MessageCircle },
+    { name: "Bookings", label: "הזמנות", icon: CalendarDays },
     { name: "Profile", label: "פרופיל", icon: User },
   ];
 
