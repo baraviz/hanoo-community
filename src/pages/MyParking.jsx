@@ -312,7 +312,7 @@ export default function MyParking() {
                 <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
                   <p className="text-gray-500 text-sm">אין זמינויות עדיין</p>
                   <button
-                    onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setAddDaySheet(true); }}
+                    onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setClosingAddDay(false); setAddDaySheet(true); }}
                     className="px-6 py-3 rounded-2xl font-bold text-white text-sm"
                     style={{ background: "#007AFF" }}
                   >
@@ -410,7 +410,7 @@ export default function MyParking() {
               {/* Add day link */}
               <div className="flex justify-center pt-1 pb-2">
                 <button
-                  onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setAddDaySheet(true); }}
+                  onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setClosingAddDay(false); setAddDaySheet(true); }}
                   className="text-sm font-regular"
                   style={{ color: "#007AFF", textDecoration: "underline", textUnderlineOffset: 3 }}
                 >
