@@ -122,13 +122,13 @@ export default function Bookings() {
       {/* Header */}
       <div className="pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between mb-4">
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Menu size={18} className="text-white" />
-          </button>
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">הזמנות</h1>
             <p className="text-blue-200 text-xs mt-0.5">היסטוריית החניות שלך</p>
           </div>
+          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Menu size={18} className="text-white" />
+          </button>
         </div>
 
         {/* Tabs */}
