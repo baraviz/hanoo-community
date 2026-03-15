@@ -26,6 +26,7 @@ export default function Home() {
   const [blockUntilHour, setBlockUntilHour] = useState(null);
   const [activeBlocks, setActiveBlocks] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
