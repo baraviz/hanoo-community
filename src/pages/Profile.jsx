@@ -30,6 +30,8 @@ export default function Profile() {
   const [editingPhone, setEditingPhone] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
+  const [shareLink, setShareLink] = useState("");
+  const [shareCopied, setShareCopied] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
