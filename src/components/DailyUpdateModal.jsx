@@ -26,8 +26,10 @@ export default function DailyUpdateModal({ user, resident }) {
       base44.entities.WeeklyAvailability.filter({ owner_email: user.email }),
     ]);
 
-    // Bookings received today (others booked my spot)
-    const receivedToday = bookingsAsOwner.filter(b => b.created_date && isToday(new Date(b.created_date)));
+    // Bookings received today (active bookings on my spot with start_time today)
+    const receivedToday = bookingsAsOwner.filter(b =>
+      b.status === "active" && b.start_time && isToday(new Date(b.start_time))
+    );
 
     // My bookings completed today
     const completedToday = bookingsAsRenter.filter(b => b.status === "completed" && b.updated_date && isToday(new Date(b.updated_date)));
@@ -70,7 +72,7 @@ export default function DailyUpdateModal({ user, resident }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgba(0,0,0,0.45)" }}>
-      <div className="bg-white rounded-t-3xl w-full p-6 pb-10 max-w-[430px]">
+      <div className="bg-white rounded-t-3xl w-full p-6 max-w-[430px]" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
           <h2 className="text-xl font-bold text-gray-800">בוקר טוב! ☀️</h2>
