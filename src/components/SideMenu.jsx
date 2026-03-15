@@ -20,8 +20,8 @@ export default function SideMenu({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex justify-start" dir="rtl">
       <style>{`
-        @keyframes slideInFromLeft  { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes slideOutToLeft   { from { transform: translateX(0); }   to { transform: translateX(100%); } }
+        @keyframes slideInFromLeft  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes slideOutToLeft   { from { transform: translateX(0); }   to { transform: translateX(-100%); } }
         @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
       `}</style>
@@ -35,7 +35,7 @@ export default function SideMenu({ onClose }) {
 
       {/* Drawer — slides from the right edge (visually right side of screen) */}
       <div
-        className="absolute top-0 right-0 bottom-0 w-64 bg-white flex flex-col shadow-2xl"
+        className="absolute top-0 left-0 bottom-0 w-64 bg-white flex flex-col shadow-2xl"
         style={{ animation: closing ? "slideOutToLeft 0.25s ease-in forwards" : "slideInFromLeft 0.25s ease-out" }}
       >
         {/* Header */}
