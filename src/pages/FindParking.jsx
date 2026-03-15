@@ -34,6 +34,7 @@ export default function FindParking() {
     if (urlFrom && urlTo) {
       setFromTime(toLocalInput(new Date(urlFrom)));
       setToTime(toLocalInput(new Date(urlTo)));
+      setAutoSearch(true);
     } else {
       const now = new Date();
       now.setMinutes(0, 0, 0);
