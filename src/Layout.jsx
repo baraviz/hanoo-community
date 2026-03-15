@@ -3,8 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
-import SideMenu from "@/components/SideMenu";
-
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
