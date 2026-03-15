@@ -271,6 +271,7 @@ export default function MyParking() {
             )}
             {/* View toggle */}
             <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
+
               <button
                 onClick={() => setViewMode("calendar")}
                 className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
