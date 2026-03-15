@@ -542,6 +542,15 @@ export default function MyParking() {
                 start: new Date(t.start_at).getHours() * 60 + new Date(t.start_at).getMinutes(),
                 end: new Date(t.end_at).getHours() * 60 + new Date(t.end_at).getMinutes(),
               }));
+              // Active bookings for this day
+              const dayActiveBookings = activeBookings
+                .filter(bk => new Date(bk.start_time).getDay() === dayIndex)
+                .map(bk => ({
+                  id: bk.id,
+                  start: new Date(bk.start_time).getHours() * 60 + new Date(bk.start_time).getMinutes(),
+                  end: new Date(bk.end_time).getHours() * 60 + new Date(bk.end_time).getMinutes(),
+                  renter_name: bk.renter_name,
+                }));
               const isDragDay = isDragging && dragStart?.dayIndex === dayIndex;
               const dragPreviewStart = isDragDay ? Math.min(dragStart.time, dragCurrent?.time ?? dragStart.time) : null;
               const dragPreviewEnd = isDragDay ? Math.max(dragStart.time, dragCurrent?.time ?? dragStart.time) + 30 : null;
