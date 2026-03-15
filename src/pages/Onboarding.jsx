@@ -141,14 +141,10 @@ export default function Onboarding() {
       }).catch(() => {});
 
       // Award 10 points to the referrer
-      const referrers = await base44.entities.Resident.filter({ user_email: ref, building_id: foundBuilding.id });
-      if (referrers.length > 0) {
-        base44.functions.invoke("awardPoints", {
-          resident_id: referrers[0].id,
-          reason: "referral",
-          points: 10,
-        }).catch(() => {});
-      }
+      base44.functions.invoke("awardPoints", {
+        user_email: ref,
+        reason: "referral",
+      }).catch(() => {});
     }
 
     // If joining same apartment as existing resident → pending (owner must approve)
