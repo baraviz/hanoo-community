@@ -151,6 +151,9 @@ export default function Onboarding() {
       }
     }
 
+    // If joining same apartment as existing resident → pending (owner must approve)
+    const needsApproval = !!duplicateResident;
+
     await base44.entities.Resident.create({
       user_email: user.email,
       user_name: user.full_name,
@@ -160,9 +163,20 @@ export default function Onboarding() {
       parking_floor: foundBuilding.underground_parking ? joinFloor : "",
       phone: joinPhone,
       credits: 50,
-      status: "approved",
+      status: needsApproval ? "pending" : "approved",
       referred_by: ref || "",
     });
+
+    // Notify the existing resident of same apartment to approve
+    if (needsApproval && duplicateResident) {
+      base44.entities.Notification.create({
+        user_email: duplicateResident.user_email,
+        title: "בקשת הצטרפות לדירתך 🏠",
+        body: `${user.full_name} ביקש/ה להצטרף כדייר/ת נוסף/ת בדירה ${apartment}. אשר/י בפרופיל.`,
+        type: "booking_received",
+        read: false,
+      }).catch(() => {});
+    }
     setLoading(false);
     navigate(createPageUrl("Home"));
   }
