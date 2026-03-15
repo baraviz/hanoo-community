@@ -5,6 +5,9 @@ import { pagesConfig } from './pages.config'
 import MyParking from './pages/MyParking'
 import Bookings from './pages/Bookings'
 import AdminDashboard from './pages/AdminDashboard'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
+import Accessibility from './pages/Accessibility'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
