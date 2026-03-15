@@ -35,14 +35,15 @@ export default function AdminDashboard() {
 
   async function loadData() {
     setRefreshing(true);
-    const [buildings, residents, bookings, availability, bugReports] = await Promise.all([
+    const [buildings, residents, bookings, availability, bugReports, referrals] = await Promise.all([
       base44.entities.Building.list(),
       base44.entities.Resident.list(),
       base44.entities.Booking.list(),
       base44.entities.WeeklyAvailability.list(),
       base44.entities.BugReport.list("-created_date"),
+      base44.entities.ReferralEvent.list("-created_date"),
     ]);
-    setData({ buildings, residents, bookings, availability, bugReports });
+    setData({ buildings, residents, bookings, availability, bugReports, referrals: referrals || [] });
     setRefreshing(false);
   }
 
