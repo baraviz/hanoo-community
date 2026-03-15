@@ -55,10 +55,21 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
 
   async function handleSendWhatsApp(booking) {
     setSending(true);
-    // Find renter's phone
     const renters = await base44.entities.Resident.filter({ user_email: booking.renter_email });
     const phone = renters[0]?.phone;
     const msg = buildWhatsAppMsg(booking);
+
+    // Send in-app notification to renter with deep link
+    const deepLink = `${window.location.origin}/FindParking?from=${encodeURIComponent(booking.start_time)}&to=${encodeURIComponent(booking.end_time)}`;
+    await base44.entities.Notification.create({
+      user_email: booking.renter_email,
+      title: "החניה שלך בוטלה ⚠️",
+      body: `בעל החניה ביטל את זמינותו ב-${format(new Date(booking.start_time), "dd/MM")} בין ${format(new Date(booking.start_time), "HH:mm")} ל-${format(new Date(booking.end_time), "HH:mm")}. לחץ כאן למציאת חניה חלופית.`,
+      type: "parking_cancelled",
+      booking_id: booking.id || "",
+      action_url: deepLink,
+      read: false,
+    }).catch(() => {});
 
     // Award 5 points to owner for notifying
     const owners = await base44.entities.Resident.filter({ user_email: ownerEmail });
