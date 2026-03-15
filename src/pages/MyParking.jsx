@@ -258,6 +258,10 @@ export default function MyParking() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            {/* Menu button */}
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
             {/* Edit mode toggle - only in calendar view */}
             {viewMode === "calendar" && (
               <button
@@ -269,10 +273,6 @@ export default function MyParking() {
                 <span className="text-xs font-bold" style={{ color: calendarEditMode ? "#007AFF" : "white" }}>עריכה</span>
               </button>
             )}
-            {/* Menu button */}
-            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-              <Menu size={18} className="text-white" />
-            </button>
             {/* View toggle */}
             <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
               <button
