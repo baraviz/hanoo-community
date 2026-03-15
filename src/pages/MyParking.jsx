@@ -18,6 +18,7 @@ export default function MyParking() {
   const [savedBlocks, setSavedBlocks] = useState([]);
   const [tempBlocks, setTempBlocks] = useState([]); // { id, start_at, end_at } — temp slots
   const [blockSlots, setBlockSlots] = useState([]); // active blocks (slot_type="block")
+  const [activeBookings, setActiveBookings] = useState([]); // active bookings on my parking
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
