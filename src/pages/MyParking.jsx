@@ -778,10 +778,16 @@ export default function MyParking() {
                   {editingBlock && (
                     <button
                       onClick={() => {
-                        deleteBlock(editingBlock.id);
-                        setEditingBlock(null);
+                        // Close the edit sheet first, then open cancel sheet
                         setClosingAddDay(true);
-                        setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
+                        setTimeout(() => {
+                          setAddDaySheet(false);
+                          setClosingAddDay(false);
+                          setCancelSheet({
+                            blockInfo: { type: "recurring", dayIndex: editingBlock.dayIndex, start: editingBlock.start, end: editingBlock.end },
+                            onConfirm: () => { deleteBlock(editingBlock.id); setEditingBlock(null); setCancelSheet(null); }
+                          });
+                        }, 230);
                       }}
                       className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
                       style={{ background: "#FEE2E2", color: "#EF4444" }}
