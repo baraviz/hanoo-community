@@ -5,7 +5,6 @@ import { base44 } from "@/api/base44Client";
 import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
