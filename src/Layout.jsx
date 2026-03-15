@@ -40,20 +40,6 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {showNav && (
-        <>
-          {/* Hamburger button — top left */}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="fixed top-4 left-4 z-40 w-10 h-10 flex items-center justify-center rounded-2xl bg-white shadow-md"
-            style={{ maxWidth: 430 }}
-            aria-label="פתח תפריט"
-          >
-            <Menu size={20} className="text-gray-700" />
-          </button>
-        </>
-      )}
-
-      {showNav && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-50" style={{maxWidth: 430, margin: "0 auto"}}>
           <div className="flex items-center justify-around py-2">
             {navItems.map(({ name, label, icon: Icon }) => {
