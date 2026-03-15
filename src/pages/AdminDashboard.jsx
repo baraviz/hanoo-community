@@ -6,6 +6,7 @@ import AdminBuildingsList from "@/components/admin/AdminBuildingsList";
 import AdminActiveBookings from "@/components/admin/AdminActiveBookings";
 import AdminWeeklyTimeline from "@/components/admin/AdminWeeklyTimeline";
 import AdminTicketing from "@/components/admin/AdminTicketing";
+import AdminReferralFunnel from "@/components/admin/AdminReferralFunnel";
 
 const ADMIN_EMAIL = "bar.avizemer@gmail.com";
 
