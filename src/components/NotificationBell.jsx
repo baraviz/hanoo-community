@@ -123,9 +123,9 @@ export default function NotificationBell({ userEmail }) {
               notifications.map(n => (
                 <div
                   key={n.id}
-                  onClick={() => markRead(n.id)}
+                  onClick={() => handleNotificationClick(n)}
                   className="flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
-                  style={{ background: n.read ? "white" : "#F0F7FF" }}
+                  style={{ background: n.read ? "white" : (n.type === "parking_cancelled" ? "#FFF8F0" : "#F0F7FF") }}
                 >
                   <span className="text-xl flex-none mt-0.5">{typeIcon[n.type] || "🔔"}</span>
                   <div className="flex-1 min-w-0">
