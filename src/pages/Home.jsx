@@ -4,7 +4,6 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
-import NotificationBell from "@/components/NotificationBell";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
 import { format, isAfter, isBefore, parseISO } from "date-fns";
 
