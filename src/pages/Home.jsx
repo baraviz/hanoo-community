@@ -526,7 +526,7 @@ export default function Home() {
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                   style={{ background: available ? "#D1FAE5" : "#FEE2E2", color: available ? "#059669" : "#DC2626" }}>
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: available ? "#34C759" : "#EF4444" }} />
-                  {available ? "זמין עכשיו" : "לא זמין"}
+                  {available ? "זמינה כעת" : "לא זמינה כעת"}
                 </div>
               </div>
               {available && activeUntil && (
