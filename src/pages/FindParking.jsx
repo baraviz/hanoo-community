@@ -147,8 +147,18 @@ export default function FindParking() {
     setLoading(false);
   }
 
+  function getDiscount() {
+    const league = resident?.league;
+    if (league === "Silver")   return 0.05;
+    if (league === "Gold")     return 0.10;
+    if (league === "Platinum") return 0.15;
+    if (league === "Diamond")  return 0.20;
+    return 0;
+  }
+
   function calcCost(startMins, endMins) {
-    return Math.round(((endMins - startMins) / 60) * 10);
+    const base = ((endMins - startMins) / 60) * 10;
+    return Math.round(base * (1 - getDiscount()));
   }
 
   async function bookSlot(slot, startMins, endMins) {
