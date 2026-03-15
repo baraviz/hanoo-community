@@ -101,38 +101,32 @@ export default function Profile() {
       <div className="pt-12 pb-5 px-5" style={{ background: "#007AFF" }}>
         {/* Avatar + name + hamburger on same row */}
         <div className="flex items-center gap-4 mb-4">
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl flex-none" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Menu size={18} className="text-white" />
-          </button>
           <div className="w-16 h-16 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-none">
             <span className="text-white text-2xl font-bold">{(user?.full_name || "?")[0]}</span>
           </div>
-          <div>
+          <div className="flex-1">
             <h1 className="text-white text-xl font-bold">{user?.full_name}</h1>
             <p className="text-blue-200 text-sm">{user?.email}</p>
             {isOwner && <span className="text-xs bg-white bg-opacity-20 text-white px-2 py-0.5 rounded-full mt-1 inline-block">👑 בעל בניין</span>}
           </div>
+          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl flex-none" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Menu size={18} className="text-white" />
+          </button>
         </div>
 
         {/* Stats row */}
         <div className="bg-white bg-opacity-20 rounded-2xl p-3 grid grid-cols-3 gap-2 text-center">
           <div>
+            <p className="text-blue-200 text-xs">דירה</p>
+            <p className="text-white text-xl font-bold">{resident?.apartment_number || "—"}</p>
+          </div>
+          <div>
+            <p className="text-blue-200 text-xs">חניה</p>
+            <p className="text-white text-xl font-bold">{resident?.parking_spot || "—"}</p>
+          </div>
+          <div>
             <p className="text-blue-200 text-xs">קרדיטים</p>
             <p className="text-white text-xl font-bold">{resident?.credits || 0}</p>
-          </div>
-          <div>
-            <p className="text-blue-200 text-xs">נקודות</p>
-            <p className="text-white text-xl font-bold">{resident?.points || 0}</p>
-          </div>
-          <div>
-            <p className="text-blue-200 text-xs">ליגה</p>
-            <p className="text-white text-lg font-bold">{
-              resident?.league === "Bronze" ? "🥉" :
-              resident?.league === "Silver" ? "🥈" :
-              resident?.league === "Gold"   ? "🥇" :
-              resident?.league === "Platinum" ? "💎" :
-              resident?.league === "Diamond" ? "👑" : "🥉"
-            } {resident?.league || "Bronze"}</p>
           </div>
         </div>
 

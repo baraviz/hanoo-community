@@ -449,6 +449,28 @@ export default function Home() {
       </div>
 
       <div className="px-5 py-5 space-y-4">
+        {/* Action buttons — TOP */}
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => navigate(createPageUrl("FindParking"))}
+            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
+              <Car size={22} className="text-white" />
+            </div>
+            <span className="text-sm font-semibold text-gray-700">מצא חניה</span>
+          </button>
+          <button
+            onClick={() => navigate("/MyParking?view=list")}
+            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
+              <Plus size={22} className="text-white" />
+            </div>
+            <span className="text-sm font-semibold text-gray-700">פרסם חניה</span>
+          </button>
+        </div>
+
         {/* Bonus credits alert */}
         {resident && !resident.bonus_credits_received && (
           <div className="rounded-2xl p-4" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
@@ -497,7 +519,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Parking status card */}
+        {/* Parking status card — BOTTOM */}
         {(recurringSlots.length > 0 || myActiveSlot) && (() => {
           const available = isAvailableNow();
           const nextText = !available ? getNextAvailableText() : null;
@@ -548,30 +570,6 @@ export default function Home() {
             </div>
           );
         })()}
-
-        {/* Action buttons */}
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => navigate(createPageUrl("FindParking"))}
-            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
-          >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
-              <Car size={22} className="text-white" />
-            </div>
-            <span className="text-sm font-semibold text-gray-700">מצא חניה</span>
-          </button>
-          <button
-            onClick={() => navigate("/MyParking?view=list")}
-            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
-          >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
-              <Plus size={22} className="text-white" />
-            </div>
-            <span className="text-sm font-semibold text-gray-700">פרסם חניה</span>
-          </button>
-        </div>
-
-
       </div>
     </div>
   );
