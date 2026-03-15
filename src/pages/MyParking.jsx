@@ -370,18 +370,29 @@ export default function MyParking() {
                       return bsDay === dayIndex && bsStart < b.end && bsEnd > b.start;
                     });
                     const blockEndTime = activeBlock ? fmt(new Date(activeBlock.end_at).getHours() * 60 + new Date(activeBlock.end_at).getMinutes()) : null;
+                    // Find active booking overlapping this recurring slot (today or any future date matching day)
+                    const activeBooking = activeBookings.find(bk => {
+                      const bkDay = new Date(bk.start_time).getDay();
+                      const bkStartMins = new Date(bk.start_time).getHours() * 60 + new Date(bk.start_time).getMinutes();
+                      const bkEndMins = new Date(bk.end_time).getHours() * 60 + new Date(bk.end_time).getMinutes();
+                      return bkDay === dayIndex && bkStartMins < b.end && bkEndMins > b.start;
+                    });
                     return (
-                      <div key={b.id} className="flex items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: blockEndTime ? "#EF4444" : "#007AFF" }} />
-                          <div className="flex flex-col">
-                            <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
-                            {blockEndTime && (
-                              <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
-                            )}
-                          </div>
-                          <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
-                        </div>
+                     <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "#FFF8F0" } : {}}>
+                       <div className="flex items-center gap-2">
+                         <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeBooking ? "#FF9500" : blockEndTime ? "#EF4444" : "#007AFF" }} />
+                         <div className="flex flex-col">
+                           <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                           {activeBooking && (
+                             <span className="text-xs font-medium" style={{ color: "#FF9500" }}>תפוס ע״י {activeBooking.renter_name}</span>
+                           )}
+                           {!activeBooking && blockEndTime && (
+                             <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
+                           )}
+                         </div>
+                         <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
+                         {activeBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D6", color: "#FF9500" }}>תפוס</span>}
+                       </div>
                         <div className="flex gap-2">
                           <button onClick={() => {
                             setAddDayIndex(b.dayIndex);
