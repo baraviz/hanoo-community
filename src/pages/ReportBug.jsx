@@ -13,11 +13,19 @@ export default function ReportBug() {
     if (!text.trim()) return;
     setSending(true);
     const user = await base44.auth.me().catch(() => null);
-    await base44.integrations.Core.SendEmail({
-      to: "Info@hanoo.co.il",
-      subject: `[Hanoo] דיווח תקלה מ-${user?.email || "משתמש לא מזוהה"}`,
-      body: `דיווח תקלה:\n\n${text}\n\nמשתמש: ${user?.full_name || ""} (${user?.email || ""})\nתאריך: ${new Date().toLocaleString("he-IL")}`,
-    });
+    await Promise.all([
+      base44.integrations.Core.SendEmail({
+        to: "Info@hanoo.co.il",
+        subject: `[Hanoo] דיווח תקלה מ-${user?.email || "משתמש לא מזוהה"}`,
+        body: `דיווח תקלה:\n\n${text}\n\nמשתמש: ${user?.full_name || ""} (${user?.email || ""})\nתאריך: ${new Date().toLocaleString("he-IL")}`,
+      }),
+      base44.entities.BugReport.create({
+        description: text.trim(),
+        user_email: user?.email || "unknown",
+        user_name: user?.full_name || "",
+        status: "open",
+      }),
+    ]);
     setSending(false);
     setSent(true);
   }
