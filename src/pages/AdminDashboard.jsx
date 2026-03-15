@@ -5,6 +5,7 @@ import AdminKPICards from "@/components/admin/AdminKPICards";
 import AdminBuildingsList from "@/components/admin/AdminBuildingsList";
 import AdminActiveBookings from "@/components/admin/AdminActiveBookings";
 import AdminWeeklyTimeline from "@/components/admin/AdminWeeklyTimeline";
+import AdminTicketing from "@/components/admin/AdminTicketing";
 
 const ADMIN_EMAIL = "bar.avizemer@gmail.com";
 
@@ -33,13 +34,14 @@ export default function AdminDashboard() {
 
   async function loadData() {
     setRefreshing(true);
-    const [buildings, residents, bookings, availability] = await Promise.all([
+    const [buildings, residents, bookings, availability, bugReports] = await Promise.all([
       base44.entities.Building.list(),
       base44.entities.Resident.list(),
       base44.entities.Booking.list(),
       base44.entities.WeeklyAvailability.list(),
+      base44.entities.BugReport.list("-created_date"),
     ]);
-    setData({ buildings, residents, bookings, availability });
+    setData({ buildings, residents, bookings, availability, bugReports });
     setRefreshing(false);
   }
 
@@ -88,6 +90,7 @@ export default function AdminDashboard() {
             <AdminBuildingsList data={data} />
             <AdminActiveBookings bookings={data.bookings} />
             <AdminWeeklyTimeline availability={data.availability} bookings={data.bookings} residents={data.residents} />
+            <AdminTicketing reports={data.bugReports || []} />
           </>
         )}
       </div>
