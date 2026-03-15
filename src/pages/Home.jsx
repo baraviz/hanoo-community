@@ -292,6 +292,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+      <DailyUpdateModal user={user} resident={resident} />
       {/* Status drawer */}
       {showStatusDrawer && (
         <div
