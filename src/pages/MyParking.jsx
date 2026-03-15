@@ -797,12 +797,22 @@ export default function MyParking() {
                   )}
                   {editingTempDate && (
                     <button
-                      onClick={async () => {
-                        await base44.entities.WeeklyAvailability.delete(editingTempDate);
-                        setTempBlocks(prev => prev.filter(x => x.id !== editingTempDate));
-                        setEditingTempDate(null);
+                      onClick={() => {
+                        const t = tempBlocks.find(x => x.id === editingTempDate);
                         setClosingAddDay(true);
-                        setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
+                        setTimeout(() => {
+                          setAddDaySheet(false);
+                          setClosingAddDay(false);
+                          setCancelSheet({
+                            blockInfo: { type: "temp", start_at: t?.start_at, end_at: t?.end_at },
+                            onConfirm: async () => {
+                              await base44.entities.WeeklyAvailability.delete(editingTempDate);
+                              setTempBlocks(prev => prev.filter(x => x.id !== editingTempDate));
+                              setEditingTempDate(null);
+                              setCancelSheet(null);
+                            }
+                          });
+                        }, 230);
                       }}
                       className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
                       style={{ background: "#FEE2E2", color: "#EF4444" }}
