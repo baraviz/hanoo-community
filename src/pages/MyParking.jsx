@@ -251,7 +251,7 @@ export default function MyParking() {
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <div className="flex-none pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between">
-          <div>
+          <div className="text-right">
             <h1 className="text-white text-xl font-bold">החניה שלי</h1>
             <p className="text-blue-200 text-xs mt-0.5">
               {viewMode === "list" ? "כל הזמינויות שלך" : (calendarEditMode ? "גרור לסימון שעות זמינות קבועות" : "תצוגת יומן")}
