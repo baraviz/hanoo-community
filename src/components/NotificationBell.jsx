@@ -59,7 +59,19 @@ export default function NotificationBell({ userEmail }) {
   const typeIcon = {
     booking_received: "🅿️",
     booking_ending_soon: "⏰",
+    booking_starting_soon: "🚗",
+    parking_cancelled: "⚠️",
   };
+
+  async function handleNotificationClick(n) {
+    await markRead(n.id);
+    if (n.type === "parking_cancelled" && n.action_url) {
+      setOpen(false);
+      // Navigate to FindParking with the deep link params
+      const url = new URL(n.action_url);
+      navigate(`/FindParking${url.search}`);
+    }
+  }
 
   return (
     <div className="relative" ref={panelRef}>
