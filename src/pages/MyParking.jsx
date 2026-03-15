@@ -248,6 +248,7 @@ export default function MyParking() {
       onTouchEnd={handleDragEnd}
     >
       {/* Header */}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <div className="flex-none pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between">
           <div>
@@ -268,6 +269,10 @@ export default function MyParking() {
                 <span className="text-xs font-bold" style={{ color: calendarEditMode ? "#007AFF" : "white" }}>עריכה</span>
               </button>
             )}
+            {/* Menu button */}
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
             {/* View toggle */}
             <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
               <button
