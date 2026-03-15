@@ -577,6 +577,22 @@ export default function MyParking() {
                     </div>
                   )}
 
+                  {/* Active bookings — orange overlay */}
+                  {dayActiveBookings.map(bk => (
+                    <div
+                      key={bk.id}
+                      className="absolute rounded pointer-events-none select-none z-10"
+                      style={{
+                        top: `${(bk.start / TOTAL_MINUTES) * 100}%`,
+                        height: `${((bk.end - bk.start) / TOTAL_MINUTES) * 100}%`,
+                        left: 1, right: 1,
+                        background: "rgba(255,149,0,0.55)",
+                        border: "1.5px solid rgba(255,149,0,0.8)",
+                        minHeight: 4,
+                      }}
+                    />
+                  ))}
+
                   {/* Temp blocks */}
                   {dayTempBlocks.map(b => (
                     <div
