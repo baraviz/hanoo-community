@@ -7,6 +7,7 @@ import SideMenu from "@/components/SideMenu";
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
