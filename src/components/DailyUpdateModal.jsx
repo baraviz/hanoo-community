@@ -95,18 +95,36 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Bookings received today */}
           {data.receivedToday.length > 0 && (
-            <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ background: "#E8F8EF" }}>
-              <span className="text-2xl">🎉</span>
-              <div className="flex-1">
+            <div className="p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xl">🎉</span>
                 <p className="font-bold text-gray-800 text-sm">
                   {data.receivedToday.length === 1
                     ? "הזמנה אחת נכנסה לחניה שלך"
                     : `${data.receivedToday.length} הזמנות נכנסו לחניה שלך`}
                 </p>
-                {data.receivedToday.map(b => (
-                  <p key={b.id} className="text-xs text-gray-500">{b.renter_name} · {b.start_time ? format(new Date(b.start_time), "HH:mm") : ""}</p>
-                ))}
               </div>
+              {data.receivedToday.map(b => {
+                const start = b.start_time ? new Date(b.start_time) : null;
+                const end = b.end_time ? new Date(b.end_time) : null;
+                const now = new Date();
+                const diffDays = start ? Math.round((start - now) / 86400000) : null;
+                let whenLabel = "";
+                if (diffDays !== null) {
+                  if (diffDays < 0) whenLabel = "היום";
+                  else if (diffDays === 0) whenLabel = "היום";
+                  else if (diffDays === 1) whenLabel = "מחר";
+                  else whenLabel = `בעוד ${diffDays} ימים`;
+                }
+                return (
+                  <div key={b.id} className="flex items-center justify-between text-xs mt-1">
+                    <span className="text-gray-500">{b.renter_name}</span>
+                    <span style={{ color: "#007AFF" }} className="font-medium">
+                      {whenLabel}{start ? ` · ${format(start, "HH:mm")}` : ""}{end ? `–${format(end, "HH:mm")}` : ""}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -125,19 +143,21 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Today's availability */}
           {(data.recurringToday.length > 0 || data.tempToday.length > 0) && (
-            <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ background: "#F5F5F5" }}>
-              <ParkingSquare size={20} style={{ color: "#007AFF" }} />
-              <div className="flex-1">
+            <div className="p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
+              <div className="flex items-center gap-2 mb-2">
+                <ParkingSquare size={18} style={{ color: "#007AFF" }} />
                 <p className="font-bold text-gray-800 text-sm">החניה שלך היום</p>
-                {data.recurringToday.map((s, i) => {
-                  const h1 = Math.floor(s.time_start / 60), m1 = s.time_start % 60;
-                  const h2 = Math.floor(s.time_end / 60), m2 = s.time_end % 60;
-                  return <p key={i} className="text-xs text-gray-500">{`${String(h1).padStart(2,"0")}:${String(m1).padStart(2,"0")} – ${String(h2).padStart(2,"0")}:${String(m2).padStart(2,"0")}`}</p>;
-                })}
-                {data.tempToday.map((s, i) => (
-                  <p key={i} className="text-xs text-gray-500">עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
-                ))}
               </div>
+              {data.recurringToday.map((s, i) => {
+                const h1 = Math.floor(s.time_start / 60), m1 = s.time_start % 60;
+                const h2 = Math.floor(s.time_end / 60), m2 = s.time_end % 60;
+                const t1 = `${String(h1).padStart(2,"0")}:${String(m1).padStart(2,"0")}`;
+                const t2 = `${String(h2).padStart(2,"0")}:${String(m2).padStart(2,"0")}`;
+                return <p key={i} className="text-xs" style={{ color: "#007AFF" }}>זמינה בין {t1} ל-{t2}</p>;
+              })}
+              {data.tempToday.map((s, i) => (
+                <p key={i} className="text-xs" style={{ color: "#007AFF" }}>זמינה עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
+              ))}
             </div>
           )}
         </div>
