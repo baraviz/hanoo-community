@@ -27,6 +27,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-gray-50 relative" dir="rtl">
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Heebo:wght@300;400;500;600;700;800&display=swap');
         * { font-family: 'Heebo', sans-serif; }
