@@ -79,7 +79,7 @@ export default function TermsOfService() {
 
         <section className="space-y-2">
           <h2 className="font-bold text-gray-900 text-base">10. יצירת קשר</h2>
-          <p>לכל שאלה בנוגע לתנאי שימוש אלה: <strong>bar.avizemer@gmail.com</strong></p>
+          <p>לכל שאלה בנוגע לתנאי שימוש אלה: <strong>Info@hanoo.co.il</strong></p>
         </section>
       </div>
     </div>

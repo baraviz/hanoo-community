@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Home, Car, CalendarDays, User, ParkingSquare, Menu } from "lucide-react";
+import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 
 export default function Layout({ children, currentPageName }) {

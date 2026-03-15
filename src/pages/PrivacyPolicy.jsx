@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
             <li>למחוק את חשבונך ומידעך</li>
             <li>להתנגד לעיבוד מסוים של המידע</li>
           </ul>
-          <p>לבקשות פנה אלינו: <strong>bar.avizemer@gmail.com</strong></p>
+          <p>לבקשות פנה אלינו: <strong>Info@hanoo.co.il</strong></p>
         </section>
 
         <section className="space-y-2">
