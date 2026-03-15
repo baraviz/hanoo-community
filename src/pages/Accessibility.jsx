@@ -61,7 +61,7 @@ export default function Accessibility() {
           <h2 className="font-bold text-gray-900 text-base">פנייה בנושא נגישות</h2>
           <p>נתקלת בבעיית נגישות? נשמח לשמוע ולתקן. ניתן לפנות אלינו:</p>
           <ul className="list-none space-y-1 text-gray-600">
-            <li><strong>אימייל:</strong> Info@hanoo.co.il</li>
+            <li><strong>אימייל:</strong> info@hanoo.co.il</li>
             <li><strong>נושא הפנייה:</strong> "בעיית נגישות – Hanoo"</li>
           </ul>
           <p>אנו מתחייבים לחזור תוך 5 ימי עסקים.</p>
