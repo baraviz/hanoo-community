@@ -39,6 +39,7 @@ export default function MyParking() {
   const [editingTempDate, setEditingTempDate] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [editingTempTime, setEditingTempTime] = useState({ sH: 0, sM: 0, eH: 0, eM: 0 });
+  const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
   const gridRef = useRef(null);
   const saveInProgress = useRef(false);
   const pendingSave = useRef(null);
