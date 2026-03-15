@@ -367,6 +367,9 @@ export default function FindParking() {
                   <div className="text-right">
                     <p className="font-bold text-lg" style={{ color: "#007AFF" }}>{cost}</p>
                     <p className="text-gray-400 text-xs">קרדיטים</p>
+                    {getDiscount() > 0 && (
+                      <p className="text-xs font-bold text-green-600">{getDiscount() * 100}% הנחה 🎟️</p>
+                    )}
                   </div>
                 </div>
                 <button onClick={() => handleBookSingle(slot)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "#007AFF" }}>
