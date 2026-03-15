@@ -260,7 +260,6 @@ export default function MyParking() {
           <div className="flex items-center gap-2">
             {/* Edit mode toggle - only in calendar view */}
             {viewMode === "calendar" && (
-
               <button
                 onClick={() => setCalendarEditMode(prev => !prev)}
                 className="rounded-2xl px-3 py-2 flex items-center gap-1.5 transition-all"
