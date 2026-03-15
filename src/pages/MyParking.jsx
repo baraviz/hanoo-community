@@ -287,6 +287,10 @@ export default function MyParking() {
                 <List size={16} style={{ color: viewMode === "list" ? "#007AFF" : "white" }} />
               </button>
             </div>
+            {/* Menu button */}
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
           </div>
         </div>
       </div>
