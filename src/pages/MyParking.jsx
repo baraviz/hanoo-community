@@ -425,10 +425,14 @@ export default function MyParking() {
                         }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
                             <Pencil size={12} style={{ color: "#007AFF" }} />
                           </button>
-                          <button onClick={async () => {
-                            await base44.entities.WeeklyAvailability.delete(t.id);
-                            setTempBlocks(prev => prev.filter(x => x.id !== t.id));
-                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
+                          <button onClick={() => setCancelSheet({
+                            blockInfo: { type: "temp", start_at: t.start_at, end_at: t.end_at },
+                            onConfirm: async () => {
+                              await base44.entities.WeeklyAvailability.delete(t.id);
+                              setTempBlocks(prev => prev.filter(x => x.id !== t.id));
+                              setCancelSheet(null);
+                            }
+                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
                             <Trash2 size={12} style={{ color: "#EF4444" }} />
                           </button>
                         </div>
