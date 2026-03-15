@@ -866,10 +866,21 @@ export default function MyParking() {
                   <button
                     onClick={async () => {
                       if (editingBlock) {
-                        // Update existing recurring block
+                        // Check for affected bookings before updating
                         const r = addDayRanges[0];
-                        updateBlock(editingBlock.id, r.sH * 60 + r.sM, r.eH * 60 + r.eM);
-                        setEditingBlock(null);
+                        const newStart = r.sH * 60 + r.sM;
+                        const newEnd = r.eH * 60 + r.eM;
+                        // Close the edit sheet first, then show cancel sheet
+                        setClosingAddDay(true);
+                        setTimeout(() => {
+                          setAddDaySheet(false);
+                          setClosingAddDay(false);
+                          setCancelSheet({
+                            blockInfo: { type: "recurring", dayIndex: editingBlock.dayIndex, start: editingBlock.start, end: editingBlock.end },
+                            onConfirm: () => { updateBlock(editingBlock.id, newStart, newEnd); setEditingBlock(null); setCancelSheet(null); }
+                          });
+                        }, 230);
+                        return;
                       } else if (editingTempDate) {
                         // Update existing temp block
                         const tempSlot = tempBlocks.find(t => t.id === editingTempDate);
