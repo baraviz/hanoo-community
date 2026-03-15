@@ -25,11 +25,21 @@ export default function FindParking() {
         if (res.length > 0) setResident(res[0]);
       });
     });
-    const now = new Date();
-    now.setMinutes(0, 0, 0);
-    const later = new Date(now.getTime() + 2 * 3600000);
-    setFromTime(toLocalInput(now));
-    setToTime(toLocalInput(later));
+
+    // Support pre-filled times from URL params (e.g. from WhatsApp apology link)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlFrom = urlParams.get("from");
+    const urlTo = urlParams.get("to");
+    if (urlFrom && urlTo) {
+      setFromTime(toLocalInput(new Date(urlFrom)));
+      setToTime(toLocalInput(new Date(urlTo)));
+    } else {
+      const now = new Date();
+      now.setMinutes(0, 0, 0);
+      const later = new Date(now.getTime() + 2 * 3600000);
+      setFromTime(toLocalInput(now));
+      setToTime(toLocalInput(later));
+    }
   }, []);
 
   function toLocalInput(d) {
