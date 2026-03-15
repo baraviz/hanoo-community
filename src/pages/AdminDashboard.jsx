@@ -92,6 +92,7 @@ export default function AdminDashboard() {
             <AdminBuildingsList data={data} />
             <AdminActiveBookings bookings={data.bookings} />
             <AdminWeeklyTimeline availability={data.availability} bookings={data.bookings} residents={data.residents} />
+            <AdminReferralFunnel referrals={data.referrals || []} residents={data.residents} />
             <AdminTicketing reports={data.bugReports || []} />
           </>
         )}
