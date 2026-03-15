@@ -3,6 +3,7 @@ import { Bell, X, Check } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 export default function NotificationBell({ userEmail }) {
   const [notifications, setNotifications] = useState([]);
