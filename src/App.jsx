@@ -9,6 +9,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import Accessibility from './pages/Accessibility'
 import ReportBug from './pages/ReportBug'
+import JoinViaLink from './pages/JoinViaLink'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
