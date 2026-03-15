@@ -8,6 +8,7 @@ import AdminDashboard from './pages/AdminDashboard'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import Accessibility from './pages/Accessibility'
+import ReportBug from './pages/ReportBug'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
       <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
       <Route path="/TermsOfService" element={<TermsOfService />} />
       <Route path="/Accessibility" element={<Accessibility />} />
+      <Route path="/ReportBug" element={<ReportBug />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
