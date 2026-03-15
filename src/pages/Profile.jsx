@@ -99,14 +99,11 @@ export default function Profile() {
 
       {/* Header */}
       <div className="pt-12 pb-5 px-5" style={{ background: "#007AFF" }}>
-        <div className="flex items-center justify-end mb-3">
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+        {/* Avatar + name + hamburger on same row */}
+        <div className="flex items-center gap-4 mb-4">
+          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl flex-none" style={{ background: "rgba(255,255,255,0.2)" }}>
             <Menu size={18} className="text-white" />
           </button>
-        </div>
-
-        {/* Avatar + name */}
-        <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-none">
             <span className="text-white text-2xl font-bold">{(user?.full_name || "?")[0]}</span>
           </div>
@@ -266,15 +263,15 @@ export default function Profile() {
               <p className="font-bold text-gray-800 mb-3">איך צוברים נקודות?</p>
               <div className="space-y-2">
                 {[
-                  { icon: "🚗", label: "השלמת הזמנה", pts: 15 },
-                  { icon: "🅿️", label: "שיתוף חניה (בעלים)", pts: 10 },
+                  { icon: "🚗", label: "השלמת הזמנה (שוכר)", pts: 5 },
+                  { icon: "🅿️", label: "שיתוף חניה (לשעה)", pts: 10 },
                   { icon: "🎉", label: "פרסום זמינות ראשון", pts: 20 },
-                  { icon: "⭐", label: "קבלת דירוג חיובי", pts: 25 },
+                  { icon: "💬", label: "שליחת תודה בוואטסאפ", pts: 10 },
                 ].map(({ icon, label, pts }) => (
                   <div key={label} className="flex items-center gap-3 py-1.5">
                     <span className="text-lg">{icon}</span>
                     <span className="flex-1 text-sm text-gray-700">{label}</span>
-                    <span className="text-sm font-bold text-green-600">+{pts}</span>
+                    <span className="text-sm font-bold" style={{ color: "#007AFF" }}>+{pts}</span>
                   </div>
                 ))}
               </div>
