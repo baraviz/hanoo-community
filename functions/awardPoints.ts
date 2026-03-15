@@ -39,6 +39,7 @@ Deno.serve(async (req) => {
     else if (reason === "availability_published_hours") pts = Math.round((hours || 0) * 5);
     else if (reason === "first_availability")      pts = 20;
     else if (reason === "whatsapp_thanks")         pts = 10;
+    else if (reason === "referral")               pts = 10;
     else if (reason === "manual")                  pts = custom_points || 0;
     else return Response.json({ error: "Unknown reason" }, { status: 400 });
 
