@@ -1,12 +1,12 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
 
-// League thresholds (must match LeagueConfig records)
+// Updated league thresholds — harder to advance
 const LEAGUES = [
-  { name: "Diamond",  min: 500 },
-  { name: "Platinum", min: 250 },
-  { name: "Gold",     min: 100 },
-  { name: "Silver",   min: 40  },
-  { name: "Bronze",   min: 0   },
+  { name: "Diamond",  min: 2000 },
+  { name: "Platinum", min: 900  },
+  { name: "Gold",     min: 400  },
+  { name: "Silver",   min: 150  },
+  { name: "Bronze",   min: 0    },
 ];
 
 function calcLeague(points) {
@@ -19,33 +19,29 @@ function calcLeague(points) {
 /**
  * Payload:
  *   user_email: string
- *   reason: "booking_completed" | "slot_shared" | "first_availability" | "positive_rating" | "manual"
- *   custom_points?: number  (only for "manual")
+ *   reason: "booking_completed" | "slot_shared_hours" | "availability_published_hours" | "first_availability" | "whatsapp_thanks" | "manual"
+ *   hours?: number        (for slot_shared_hours and availability_published_hours)
+ *   custom_points?: number (only for "manual")
  */
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: "Unauthorized" }, { status: 401 });
-
     const body = await req.json();
-    const { user_email, reason, custom_points } = body;
+    const { user_email, reason, hours, custom_points } = body;
 
     if (!user_email || !reason) {
       return Response.json({ error: "Missing user_email or reason" }, { status: 400 });
     }
 
-    // Point values per reason
-    const POINTS_MAP = {
-      booking_completed:    15,  // השלמת הזמנה
-      slot_shared:          10,  // שיתוף חניה (פרסום זמינות)
-      first_availability:   20,  // פרסום זמינות ראשון
-      positive_rating:      25,  // קבלת דירוג חיובי
-      manual:               custom_points || 0,
-    };
+    let pts = 0;
+    if (reason === "booking_completed")            pts = 5;
+    else if (reason === "slot_shared_hours")       pts = Math.round((hours || 0) * 10);
+    else if (reason === "availability_published_hours") pts = Math.round((hours || 0) * 5);
+    else if (reason === "first_availability")      pts = 20;
+    else if (reason === "whatsapp_thanks")         pts = 10;
+    else if (reason === "manual")                  pts = custom_points || 0;
+    else return Response.json({ error: "Unknown reason" }, { status: 400 });
 
-    const pts = POINTS_MAP[reason];
-    if (pts === undefined) return Response.json({ error: "Unknown reason" }, { status: 400 });
     if (pts === 0) return Response.json({ ok: true, message: "0 points, nothing to do" });
 
     const residents = await base44.asServiceRole.entities.Resident.filter({ user_email });
@@ -68,7 +64,7 @@ Deno.serve(async (req) => {
         user_email,
         title: `עלית ליגה! ברכות 🎉`,
         body: `עברת מ-${oldLeague} ל-${newLeague}! המשך כך וצבור עוד נקודות.`,
-        type: "booking_received", // reusing closest type
+        type: "booking_received",
         read: false,
       });
     }
