@@ -419,12 +419,16 @@ export default function MyParking() {
                     const e = new Date(t.end_at);
                     const startMin = s.getHours() * 60 + s.getMinutes();
                     const endMin = e.getHours() * 60 + e.getMinutes();
+                    const activeTempBooking = activeBookings.find(bk =>
+                      new Date(bk.start_time) < e && new Date(bk.end_time) > s
+                    );
                     return (
-                      <div key={t.id} className="flex items-center justify-between px-4 py-3">
+                      <div key={t.id} className="flex items-center justify-between px-4 py-3" style={activeTempBooking ? { background: "#FFF8F0" } : {}}>
                         <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: "#34C759" }} />
+                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeTempBooking ? "#FF9500" : "#34C759" }} />
                           <span className="text-gray-800 text-sm font-medium">{fmt(startMin)} עד {fmt(endMin)}</span>
                           <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">חד פעמי</span>
+                          {activeTempBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D6", color: "#FF9500" }}>תפוס</span>}
                         </div>
                         <div className="flex gap-2">
                           <button onClick={() => {
