@@ -189,7 +189,6 @@ export default function Home() {
   }
 
   async function confirmDeactivate() {
-    closeStatusDrawer();
     setRemovingSlot(true);
     // Always delete temp if exists
     if (myActiveSlot) {
