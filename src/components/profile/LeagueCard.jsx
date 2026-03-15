@@ -38,7 +38,7 @@ export default function LeagueCard({ resident }) {
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-gray-800">{points}</p>
-          <p className="text-xs text-gray-400">נקודות</p>
+          <p className="text-xs text-gray-500">נקודות</p>
         </div>
       </div>
 
@@ -46,17 +46,17 @@ export default function LeagueCard({ resident }) {
       <div className="px-4 pb-4">
         {nextLeague ? (
           <>
-            <div className="flex justify-between text-xs text-gray-400 mb-1">
+            <div className="flex justify-between text-xs text-gray-500 mb-1">
               <span>{leagueName} ({league.min})</span>
               <span>{nextLeague.icon} {nextLeague.name} ({nextLeague.min})</span>
             </div>
-            <div className="w-full h-2.5 rounded-full bg-white bg-opacity-60" style={{ border: `1px solid ${league.color}33` }}>
+            <div className="w-full h-2.5 rounded-full" style={{ background: `${league.color}33` }}>
               <div
                 className="h-full rounded-full transition-all duration-500"
                 style={{ width: `${progressPct}%`, background: league.bar }}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1.5 text-center">
+            <p className="text-xs text-gray-600 mt-1.5 text-center">
               עוד <span className="font-bold" style={{ color: league.color }}>{nextLeague.min - points}</span> נקודות לליגת {nextLeague.name} {nextLeague.icon}
             </p>
           </>
