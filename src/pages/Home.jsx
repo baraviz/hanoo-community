@@ -295,6 +295,14 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <DailyUpdateModal user={user} resident={resident} />
+      {cancelSheet && (
+        <CancelAvailabilitySheet
+          blockInfo={cancelSheet.blockInfo}
+          ownerEmail={user?.email}
+          onConfirm={cancelSheet.onConfirm}
+          onClose={() => setCancelSheet(null)}
+        />
+      )}
       {/* Status drawer */}
       {showStatusDrawer && (
         <div
