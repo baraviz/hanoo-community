@@ -297,6 +297,7 @@ export default function Profile() {
                   { icon: "🅿️", label: "שיתוף חניה (לשעה)", pts: 10 },
                   { icon: "🎉", label: "פרסום זמינות ראשון", pts: 20 },
                   { icon: "💬", label: "שליחת תודה בוואטסאפ", pts: 10 },
+                  { icon: "🔗", label: "הפניית שכן שהצטרף", pts: 10 },
                 ].map(({ icon, label, pts }) => (
                   <div key={label} className="flex items-center gap-3 py-1.5">
                     <span className="text-lg">{icon}</span>
