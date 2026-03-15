@@ -1,9 +1,9 @@
 const LEAGUES = [
-  { name: "Bronze",   min: 0,   next: 40,  icon: "🥉", color: "#CD7F32", bg: "#FDF3E7", bar: "#CD7F32" },
-  { name: "Silver",   min: 40,  next: 100, icon: "🥈", color: "#A8A8A8", bg: "#F5F5F5", bar: "#A8A8A8" },
-  { name: "Gold",     min: 100, next: 250, icon: "🥇", color: "#F0A500", bg: "#FFFBEB", bar: "#F0A500" },
-  { name: "Platinum", min: 250, next: 500, icon: "💎", color: "#5B9BD5", bg: "#EBF4FF", bar: "#5B9BD5" },
-  { name: "Diamond",  min: 500, next: null,icon: "👑", color: "#9B59B6", bg: "#F5EEFF", bar: "#9B59B6" },
+  { name: "Bronze",   min: 0,    next: 150,  icon: "🥉", color: "#CD7F32", bg: "#FDF3E7", bar: "#CD7F32",  discount: 0  },
+  { name: "Silver",   min: 150,  next: 400,  icon: "🥈", color: "#A8A8A8", bg: "#F5F5F5", bar: "#A8A8A8",  discount: 5  },
+  { name: "Gold",     min: 400,  next: 900,  icon: "🥇", color: "#F0A500", bg: "#FFFBEB", bar: "#F0A500",  discount: 10 },
+  { name: "Platinum", min: 900,  next: 2000, icon: "💎", color: "#5B9BD5", bg: "#EBF4FF", bar: "#5B9BD5",  discount: 15 },
+  { name: "Diamond",  min: 2000, next: null, icon: "👑", color: "#9B59B6", bg: "#F5EEFF", bar: "#9B59B6",  discount: 20 },
 ];
 
 const REASON_LABELS = {

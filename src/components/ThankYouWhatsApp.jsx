@@ -15,14 +15,11 @@ export default function ThankYouWhatsApp({ ownerName, ownerPhone, spotNumber, on
       : `https://wa.me/?text=${encoded}`;
     window.open(url, "_blank");
     
-    // Add 10 credits to user
-    const user = await base44.auth.me();
-    const residents = await base44.entities.Resident.filter({ user_email: user.email });
-    if (residents.length > 0) {
-      await base44.entities.Resident.update(residents[0].id, {
-        credits: (residents[0].credits || 0) + 10
-      });
-    }
+    // Award 10 points for sending thanks
+    await base44.functions.invoke("awardPoints", {
+      user_email: (await base44.auth.me()).email,
+      reason: "whatsapp_thanks",
+    });
     
     setSending(false);
     onClose();
@@ -79,7 +76,7 @@ export default function ThankYouWhatsApp({ ownerName, ownerPhone, spotNumber, on
             style={{ background: "#25D366", opacity: sending ? 0.6 : 1 }}
           >
             <Send size={16} />
-            {sending ? "שולח..." : "שלח בוואטסאפ +10"}
+            {sending ? "שולח..." : "שלח בוואטסאפ +10 נק'"}
           </button>
         </div>
       </div>
