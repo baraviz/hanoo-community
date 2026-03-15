@@ -66,6 +66,8 @@ export default function Onboarding() {
   const [parkingSpot, setParkingSpot] = useState("");
   const [joinFloor, setJoinFloor] = useState("");
   const [joinPhone, setJoinPhone] = useState("");
+  const [duplicateResident, setDuplicateResident] = useState(null); // existing resident with same spot/apt
+  const [joiningDuplicate, setJoiningDuplicate] = useState(false); // user chose to request join to same unit
 
   // Create flow
   const [buildingName, setBuildingName] = useState("");
@@ -78,7 +80,20 @@ export default function Onboarding() {
   const [ownerPhone, setOwnerPhone] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(u => {
+      setUser(u);
+      // Support direct link via /Onboarding?bid=...&ref=...
+      const params = new URLSearchParams(window.location.search);
+      const bid = params.get("bid");
+      if (bid && u) {
+        base44.entities.Building.filter({ id: bid }).then(buildings => {
+          if (buildings.length > 0) {
+            setFoundBuilding(buildings[0]);
+            setStep("join2");
+          }
+        }).catch(() => {});
+      }
+    }).catch(() => {});
   }, []);
 
   async function handleCheckCode() {
