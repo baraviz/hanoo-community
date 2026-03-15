@@ -391,7 +391,10 @@ export default function MyParking() {
                           }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
                             <Pencil size={12} style={{ color: "#007AFF" }} />
                           </button>
-                          <button onClick={() => deleteBlock(b.id)} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
+                          <button onClick={() => setCancelSheet({
+                            blockInfo: { type: "recurring", dayIndex: b.dayIndex, start: b.start, end: b.end },
+                            onConfirm: () => { deleteBlock(b.id); setCancelSheet(null); }
+                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
                             <Trash2 size={12} style={{ color: "#EF4444" }} />
                           </button>
                         </div>
