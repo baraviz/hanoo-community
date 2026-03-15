@@ -32,6 +32,9 @@ export default function LeagueCard({ resident }) {
         <div className="flex-1">
           <p className="text-xs font-bold uppercase tracking-wide" style={{ color: league.color }}>ליגה נוכחית</p>
           <p className="text-xl font-bold text-gray-800">{leagueName}</p>
+          {league.discount > 0 && (
+            <p className="text-xs font-bold mt-0.5" style={{ color: league.color }}>🎟️ {league.discount}% הנחה על חניות</p>
+          )}
         </div>
         <div className="text-right">
           <p className="text-2xl font-bold text-gray-800">{points}</p>
