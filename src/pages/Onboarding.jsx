@@ -327,14 +327,48 @@ export default function Onboarding() {
             <p className="text-gray-400 text-xs mt-1">לשימוש בתקשורת עם שכנים</p>
           </div>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          <button
-            onClick={completeJoin}
-            disabled={loading}
-            className="w-full py-4 rounded-2xl font-bold text-white text-base"
-            style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
-          >
-            {loading ? "מצטרף..." : "הצטרף לבניין"}
-          </button>
+
+          {/* Duplicate warning */}
+          {duplicateResident && !joiningDuplicate && (
+            <div className="rounded-2xl p-4 space-y-3" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
+              <p className="font-bold text-amber-800 text-sm">⚠️ קיים דייר עם אותה דירה/חניה</p>
+              <p className="text-amber-700 text-xs">
+                {duplicateResident.user_name} כבר רשום עם דירה {duplicateResident.apartment_number}
+                {duplicateResident.parking_spot ? `, חניה ${duplicateResident.parking_spot}` : ""}.
+                האם אתם גרים יחד? (בן/בת זוג, בן בית)
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => { setDuplicateResident(null); setApartment(""); setParkingSpot(""); }}
+                  className="flex-1 py-2 rounded-xl text-sm font-bold text-gray-700"
+                  style={{ background: "#F3F4F6" }}
+                >
+                  שנה פרטים
+                </button>
+                <button
+                  onClick={() => { setJoiningDuplicate(true); completeJoin(); }}
+                  className="flex-1 py-2 rounded-xl text-sm font-bold text-white"
+                  style={{ background: "#F59E0B" }}
+                >
+                  כן, בקש אישור
+                </button>
+              </div>
+            </div>
+          )}
+
+          {!duplicateResident && (
+            <button
+              onClick={async () => {
+                const hasDuplicate = await checkDuplicate();
+                if (!hasDuplicate) completeJoin();
+              }}
+              disabled={loading}
+              className="w-full py-4 rounded-2xl font-bold text-white text-base"
+              style={{ background: "#007AFF", opacity: loading ? 0.6 : 1 }}
+            >
+              {loading ? "מצטרף..." : "הצטרף לבניין"}
+            </button>
+          )}
         </div>
       </div>
     );
