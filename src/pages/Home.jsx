@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
+import DailyUpdateModal from "@/components/DailyUpdateModal";
 import { format, isAfter, isBefore, parseISO } from "date-fns";
 
 export default function Home() {
