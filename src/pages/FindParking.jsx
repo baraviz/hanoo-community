@@ -284,14 +284,20 @@ export default function FindParking() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-white text-xl font-bold">מצא חניה</h1>
             <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
           </div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Car size={28} className="text-white" />
+          <div className="flex items-center gap-2">
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Car size={22} className="text-white" />
+            </div>
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
           </div>
         </div>
       </div>

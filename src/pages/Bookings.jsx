@@ -118,6 +118,7 @@ export default function Bookings() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       {/* Header */}
       <div className="pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
         <div className="flex items-center justify-between mb-4">
@@ -125,8 +126,13 @@ export default function Bookings() {
             <h1 className="text-white text-xl font-bold">הזמנות</h1>
             <p className="text-blue-200 text-xs mt-0.5">היסטוריית החניות שלך</p>
           </div>
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <CalendarDays size={22} className="text-white" />
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <CalendarDays size={20} className="text-white" />
+            </div>
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
           </div>
         </div>
 

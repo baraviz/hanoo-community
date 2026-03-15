@@ -90,7 +90,13 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
+        <div className="flex items-center justify-between mb-4">
+          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Menu size={18} className="text-white" />
+          </button>
+        </div>
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
             <span className="text-white text-2xl font-bold">{(user?.full_name || "?")[0]}</span>
