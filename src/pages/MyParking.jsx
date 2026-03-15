@@ -861,6 +861,16 @@ export default function MyParking() {
         </div>
       )}
 
+      {/* Cancel availability confirmation sheet */}
+      {cancelSheet && (
+        <CancelAvailabilitySheet
+          blockInfo={cancelSheet.blockInfo}
+          ownerEmail={user?.email}
+          onConfirm={cancelSheet.onConfirm}
+          onClose={() => setCancelSheet(null)}
+        />
+      )}
+
       {/* Clear confirm */}
       {clearConfirm && (
         <div
