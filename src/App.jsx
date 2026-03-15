@@ -72,6 +72,7 @@ const AuthenticatedApp = () => {
       <Route path="/TermsOfService" element={<TermsOfService />} />
       <Route path="/Accessibility" element={<Accessibility />} />
       <Route path="/ReportBug" element={<ReportBug />} />
+      <Route path="/JoinViaLink" element={<JoinViaLink />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
