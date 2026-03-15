@@ -17,6 +17,7 @@ export default function FindParking() {
   const [bookingId, setBookingId] = useState(null);
   const [thankYouSlots, setThankYouSlots] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [autoSearch, setAutoSearch] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(u => {
