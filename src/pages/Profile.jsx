@@ -63,6 +63,22 @@ export default function Profile() {
     setMyBookings(bookings.sort((a, b) => new Date(b.start_time) - new Date(a.start_time)).slice(0, 10));
   }
 
+  function buildShareLink() {
+    if (!resident?.building_id || !user?.email) return "";
+    return `${window.location.origin}/JoinViaLink?bid=${resident.building_id}&ref=${encodeURIComponent(user.email)}`;
+  }
+
+  function handleShare() {
+    const link = buildShareLink();
+    if (navigator.share) {
+      navigator.share({ title: "הצטרף לחניה השיתופית שלנו!", text: "שכן שלך הזמין אותך להצטרף ל-Hanoo — שיתוף חניות חכם בין שכנים", url: link });
+    } else {
+      navigator.clipboard.writeText(link);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2500);
+    }
+  }
+
   async function savePhone() {
     if (!phone.trim()) return;
     setSavingPhone(true);
