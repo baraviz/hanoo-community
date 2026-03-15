@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Car, CheckCircle, Clock, ArrowLeft, Search } from "lucide-react";
+import { Car, CheckCircle, Clock, ArrowLeft, Search, Menu } from "lucide-react";
+import SideMenu from "@/components/SideMenu";
 import { format, differenceInMinutes } from "date-fns";
 import ThankYouWhatsApp from "@/components/ThankYouWhatsApp";
 

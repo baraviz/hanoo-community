@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare } from "lucide-react";
+import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
+import SideMenu from "@/components/SideMenu";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
 import { format, isAfter, isBefore, parseISO } from "date-fns";
 

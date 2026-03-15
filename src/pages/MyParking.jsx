@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { Check, Trash2, X, AlertTriangle, Clock, CalendarDays, List, Pencil } from "lucide-react";
+import { Check, Trash2, X, AlertTriangle, Clock, CalendarDays, List, Pencil, Menu } from "lucide-react";
+import SideMenu from "@/components/SideMenu";
 
 const DAYS = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"];
 const FULL_DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
