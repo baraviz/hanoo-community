@@ -166,7 +166,7 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
                   style={{ background: "#25D366", color: "white", opacity: sending ? 0.7 : 1 }}
                 >
                   <MessageCircle size={18} />
-                  שלח התנצלות ל{b.renter_name} בוואטסאפ
+                  שלח עדכון ל{b.renter_name} בוואטסאפ
                 </button>
               ))}
 
