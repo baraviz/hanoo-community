@@ -44,6 +44,14 @@ export default function FindParking() {
     }
   }, []);
 
+  // Auto-search when arriving from WhatsApp link (after resident loads)
+  useEffect(() => {
+    if (autoSearch && resident && fromTime && toTime) {
+      setAutoSearch(false);
+      searchParking();
+    }
+  }, [autoSearch, resident, fromTime, toTime]);
+
   function toLocalInput(d) {
     const off = d.getTimezoneOffset() * 60000;
     return new Date(d - off).toISOString().slice(0, 16);
