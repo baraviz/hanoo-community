@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { X, LogOut, AlertTriangle, Shield, FileText, Accessibility } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -9,25 +9,20 @@ export default function SideMenu({ onClose }) {
 
   function close() {
     setClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 250);
+    setTimeout(() => onClose(), 250);
   }
 
   function handleLinkClick(path) {
     setClosing(true);
-    setTimeout(() => {
-      onClose();
-      navigate(path);
-    }, 250);
+    setTimeout(() => { onClose(); navigate(path); }, 250);
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end" dir="rtl">
+    <div className="fixed inset-0 z-50 flex justify-start" dir="rtl">
       <style>{`
-        @keyframes slideInFromRight { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-        @keyframes slideOutToRight { from { transform: translateX(0); } to { transform: translateX(-100%); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInFromLeft  { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes slideOutToLeft   { from { transform: translateX(0); }   to { transform: translateX(100%); } }
+        @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
       `}</style>
 
@@ -38,17 +33,17 @@ export default function SideMenu({ onClose }) {
         onClick={close}
       />
 
-      {/* Drawer — slides from right */}
+      {/* Drawer — slides from the right edge (visually right side of screen) */}
       <div
-        className="relative w-64 h-full bg-white flex flex-col shadow-2xl"
-        style={{ animation: closing ? "slideOutToRight 0.25s ease-in forwards" : "slideInFromRight 0.25s ease-out" }}
+        className="absolute top-0 right-0 bottom-0 w-64 bg-white flex flex-col shadow-2xl"
+        style={{ animation: closing ? "slideOutToLeft 0.25s ease-in forwards" : "slideInFromLeft 0.25s ease-out" }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <h2 className="font-bold text-gray-800 text-base">תפריט</h2>
           <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
             <X size={16} className="text-gray-500" />
           </button>
-          <h2 className="font-bold text-gray-800 text-base">תפריט</h2>
         </div>
 
         {/* Menu items */}
@@ -86,8 +81,8 @@ export default function SideMenu({ onClose }) {
           </button>
         </div>
 
-        {/* Logout */}
-        <div className="px-4 py-4 border-t border-gray-100">
+        {/* Logout — sits above the bottom nav (80px) */}
+        <div className="px-4 border-t border-gray-100" style={{ paddingBottom: "calc(80px + 1rem)", paddingTop: "1rem" }}>
           <button
             onClick={() => base44.auth.logout()}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm"
