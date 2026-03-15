@@ -23,6 +23,7 @@ export default function Home() {
   const [availUntilMinutes, setAvailUntilMinutes] = useState(null);
   const [blockUntilHour, setBlockUntilHour] = useState(null);
   const [activeBlocks, setActiveBlocks] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   function closeStatusDrawer() {
     setClosingDrawer(true);

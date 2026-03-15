@@ -80,6 +80,7 @@ export default function Bookings() {
   const [myBookings, setMyBookings] = useState([]);
   const [theirBookings, setTheirBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     init();
