@@ -348,11 +348,25 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
                   <button
-                    onClick={confirmDeactivate}
-                    className="py-3 rounded-2xl font-bold text-white"
-                    style={{ background: "#FF3B30" }}
+                   onClick={() => {
+                     // Build blockInfo for the current active availability window
+                     const now = new Date();
+                     const effectiveEnd = blockUntilHour ?? getBlockUntilOptions()[0];
+                     const endDate = effectiveEnd != null
+                       ? (() => { const d = new Date(now); d.setHours(Math.floor(effectiveEnd / 60), effectiveEnd % 60, 0, 0); return d; })()
+                       : myActiveSlot ? new Date(myActiveSlot.end_at) : new Date(now.getTime() + 3600000);
+                     closeStatusDrawer();
+                     setTimeout(() => {
+                       setCancelSheet({
+                         blockInfo: { type: "temp", start_at: now.toISOString(), end_at: endDate.toISOString() },
+                         onConfirm: () => { setCancelSheet(null); confirmDeactivate(); }
+                       });
+                     }, 300);
+                   }}
+                   className="py-3 rounded-2xl font-bold text-white"
+                   style={{ background: "#FF3B30" }}
                   >
-                    השבת
+                   השבת
                   </button>
                 </div>
                 {(() => {
