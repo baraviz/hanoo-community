@@ -290,6 +290,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       {/* Status drawer */}
       {showStatusDrawer && (
         <div
@@ -429,7 +430,12 @@ export default function Home() {
             <p className="text-blue-200 text-sm">שלום,</p>
             <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"}</h1>
           </div>
-          <span className="pacifico text-white text-2xl" style={{ fontFamily: "Pacifico, cursive" }}>Hanoo</span>
+          <div className="flex items-center gap-3">
+            <span className="pacifico text-white text-2xl" style={{ fontFamily: "Pacifico, cursive" }}>Hanoo</span>
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
+          </div>
         </div>
 
         {/* Credits Card */}
