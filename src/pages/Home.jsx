@@ -431,9 +431,12 @@ export default function Home() {
             <p className="text-blue-200 text-sm">שלום,</p>
             <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"}</h1>
           </div>
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Menu size={18} className="text-white" />
-          </button>
+          <div className="flex items-center gap-2">
+            <NotificationBell userEmail={user?.email} />
+            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" />
+            </button>
+          </div>
         </div>
 
         {/* Credits Card */}
