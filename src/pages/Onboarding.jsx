@@ -106,9 +106,51 @@ export default function Onboarding() {
     setStep("join2");
   }
 
+  async function checkDuplicate() {
+    if (!foundBuilding || !apartment) return false;
+    // Check if another resident already has the same apartment or parking spot
+    const existingResidents = await base44.entities.Resident.filter({ building_id: foundBuilding.id });
+    const dup = existingResidents.find(r =>
+      r.user_email !== user.email && (
+        (apartment && r.apartment_number === apartment) ||
+        (parkingSpot && r.parking_spot === parkingSpot)
+      )
+    );
+    if (dup) {
+      setDuplicateResident(dup);
+      return true;
+    }
+    return false;
+  }
+
   async function completeJoin() {
     if (!foundBuilding) return;
     setLoading(true);
+
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+
+    // Record referral event if came via share link
+    if (ref) {
+      base44.entities.ReferralEvent.create({
+        referrer_email: ref,
+        referrer_name: "",
+        building_id: foundBuilding.id,
+        event_type: "joined",
+        new_resident_email: user.email,
+      }).catch(() => {});
+
+      // Award 10 points to the referrer
+      const referrers = await base44.entities.Resident.filter({ user_email: ref, building_id: foundBuilding.id });
+      if (referrers.length > 0) {
+        base44.functions.invoke("awardPoints", {
+          resident_id: referrers[0].id,
+          reason: "referral",
+          points: 10,
+        }).catch(() => {});
+      }
+    }
+
     await base44.entities.Resident.create({
       user_email: user.email,
       user_name: user.full_name,
@@ -119,6 +161,7 @@ export default function Onboarding() {
       phone: joinPhone,
       credits: 50,
       status: "approved",
+      referred_by: ref || "",
     });
     setLoading(false);
     navigate(createPageUrl("Home"));
