@@ -245,8 +245,8 @@ export default function MyParking() {
 
   return (
     <div
-      className="flex flex-col bg-gray-50"
-      style={{ height: "calc(100vh - 64px)" }}
+      className="flex flex-col"
+      style={{ height: "calc(100vh - 64px)", background: "var(--surface-page)" }}
       onMouseMove={handleMouseMove}
       onMouseUp={handleDragEnd}
       onTouchMove={handleTouchMove}

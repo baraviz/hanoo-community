@@ -23,54 +23,54 @@ function formatBookingTime(startTime, endTime) {
 }
 
 function BookingCard({ booking, isOwner }) {
-  const isPastBooking = isPast(new Date(booking.end_time));
-  const hours = Math.round(differenceInMinutes(new Date(booking.end_time), new Date(booking.start_time)) / 60 * 10) / 10;
-  
-  return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm">
-      <div className="flex items-center gap-3">
-        <div
-          className="w-11 h-11 rounded-2xl flex items-center justify-center flex-none"
-          style={{ background: isPastBooking ? "#F3F4F6" : "#EBF4FF" }}
-        >
-          <Car size={20} style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-gray-800 text-sm">
-            {isOwner ? `הזמין ${booking.renter_name || booking.renter_email}` : `הזמנתי חניה`}
-          </p>
-          <p className="text-gray-500 text-xs truncate">
-            {isOwner ? "חניה" : `של ${booking.owner_name || booking.owner_email}`} #{booking.spot_number || "?"}
-          </p>
-        </div>
-        <div className="text-left flex-none">
-          <p
-            className="text-sm font-bold"
-            style={{ color: isPastBooking ? "#9CA3AF" : "#007AFF" }}
-          >
-            {hours} שעות
-          </p>
-          <p className="text-xs text-gray-400">
-            {booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל"}
-          </p>
-        </div>
+const isPastBooking = isPast(new Date(booking.end_time));
+const hours = Math.round(differenceInMinutes(new Date(booking.end_time), new Date(booking.start_time)) / 60 * 10) / 10;
+
+return (
+  <div className="card p-4">
+    <div className="flex items-center gap-3">
+      <div
+        className="w-11 h-11 rounded-2xl flex items-center justify-center flex-none"
+        style={{ background: isPastBooking ? "var(--btn-secondary-bg)" : "var(--hanoo-blue-light)" }}
+      >
+        <Car size={20} style={{ color: isPastBooking ? "var(--text-tertiary)" : "var(--hanoo-blue)" }} />
       </div>
-      <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-400">
-        <Clock size={12} />
-        <span>{formatBookingTime(booking.start_time, booking.end_time)}</span>
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+          {isOwner ? `הזמין ${booking.renter_name || booking.renter_email}` : `הזמנתי חניה`}
+        </p>
+        <p className="text-xs truncate" style={{ color: "var(--text-secondary)" }}>
+          {isOwner ? "חניה" : `של ${booking.owner_name || booking.owner_email}`} #{booking.spot_number || "?"}
+        </p>
+      </div>
+      <div className="text-left flex-none">
+        <p
+          className="text-sm font-bold"
+          style={{ color: isPastBooking ? "var(--text-tertiary)" : "var(--hanoo-blue)" }}
+        >
+          {hours} שעות
+        </p>
+        <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
+          {booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל"}
+        </p>
       </div>
     </div>
-  );
+    <div className="mt-3 flex items-center gap-1.5 text-xs" style={{ color: "var(--text-tertiary)" }}>
+      <Clock size={12} />
+      <span>{formatBookingTime(booking.start_time, booking.end_time)}</span>
+    </div>
+  </div>
+);
 }
 
 function SectionLabel({ label }) {
-  return (
-    <div className="flex items-center gap-2 py-1">
-      <div className="flex-1 border-t border-gray-200" />
-      <span className="text-xs text-gray-400 font-medium px-1">{label}</span>
-      <div className="flex-1 border-t border-gray-200" />
-    </div>
-  );
+return (
+  <div className="flex items-center gap-2 py-1">
+    <div className="flex-1 border-t" style={{ borderColor: "var(--surface-card-border)" }} />
+    <span className="text-xs font-medium px-1" style={{ color: "var(--text-tertiary)" }}>{label}</span>
+    <div className="flex-1 border-t" style={{ borderColor: "var(--surface-card-border)" }} />
+  </div>
+);
 }
 
 export default function Bookings() {
