@@ -104,6 +104,20 @@ export default function Profile() {
     setAllResidents(prev => prev.map(x => x.id === r.id ? { ...x, status: "rejected" } : x));
   }
 
+  async function deleteAccount() {
+    setDeleting(true);
+    // Cancel active bookings as renter
+    const activeRenterBookings = await base44.entities.Booking.filter({ renter_email: user.email, status: "active" });
+    await Promise.all(activeRenterBookings.map(b => base44.entities.Booking.update(b.id, { status: "cancelled" })));
+    // Cancel active availability slots
+    const mySlots = await base44.entities.WeeklyAvailability.filter({ owner_email: user.email });
+    await Promise.all(mySlots.map(s => base44.entities.WeeklyAvailability.delete(s.id)));
+    // Delete resident record
+    if (resident) await base44.entities.Resident.delete(resident.id);
+    setDeleting(false);
+    base44.auth.logout("/");
+  }
+
   function copyCode() {
     if (building?.invite_code) {
       navigator.clipboard.writeText(building.invite_code);
