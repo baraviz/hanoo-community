@@ -34,8 +34,9 @@ export default function Profile() {
   const [shareLink, setShareLink] = useState("");
   const [shareCopied, setShareCopied] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteStep, setDeleteStep] = useState(1); // 1=confirm, 2=final
+  const [deleteStep, setDeleteStep] = useState(1); // 1=confirm, 2=final, 3=done
   const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => { loadData(); }, []);
 
@@ -107,16 +108,23 @@ export default function Profile() {
 
   async function deleteAccount() {
     setDeleting(true);
-    // Cancel active bookings as renter
+    setDeleteError(null);
+    // Step 1 — cancel active bookings where user is renter
     const activeRenterBookings = await base44.entities.Booking.filter({ renter_email: user.email, status: "active" });
     await Promise.all(activeRenterBookings.map(b => base44.entities.Booking.update(b.id, { status: "cancelled" })));
-    // Cancel active availability slots
+    // Step 2 — cancel active bookings where user is owner (notify renters implicitly via status)
+    const activeOwnerBookings = await base44.entities.Booking.filter({ owner_email: user.email, status: "active" });
+    await Promise.all(activeOwnerBookings.map(b => base44.entities.Booking.update(b.id, { status: "cancelled" })));
+    // Step 3 — delete all availability slots
     const mySlots = await base44.entities.WeeklyAvailability.filter({ owner_email: user.email });
     await Promise.all(mySlots.map(s => base44.entities.WeeklyAvailability.delete(s.id)));
-    // Delete resident record
+    // Step 4 — delete resident record
     if (resident) await base44.entities.Resident.delete(resident.id);
+    // Step 5 — show done state before logging out
     setDeleting(false);
-    base44.auth.logout("/");
+    setDeleteStep(3);
+    // Give the user 2s to see the confirmation, then logout
+    setTimeout(() => base44.auth.logout("/"), 2000);
   }
 
   function copyCode() {
