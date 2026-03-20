@@ -563,7 +563,7 @@ export default function MyParking() {
                 <div
                   key={dayIndex}
                   className={`flex-1 relative ${calendarEditMode ? "cursor-crosshair" : "cursor-default"}`}
-                  style={{ borderRight: "1px solid #e5e7eb", background: isToday ? "rgba(0,122,255,0.04)" : undefined }}
+                  style={{ borderRight: "1px solid var(--surface-card-border)", background: isToday ? "rgba(0,122,255,0.04)" : undefined }}
                   onMouseDown={(e) => calendarEditMode && handleMouseDown(e, dayIndex)}
                   onTouchStart={(e) => calendarEditMode && handleTouchStart(e, dayIndex)}
                 >
@@ -604,7 +604,7 @@ export default function MyParking() {
                         height: `${((b.end - b.start) / TOTAL_MINUTES) * 100}%`,
                         left: 1, right: 1,
                         background: "rgba(0,122,255,0.12)",
-                        border: "1.5px dashed #007AFF",
+                        border: "1.5px dashed var(--hanoo-blue)",
                         minHeight: 4,
                       }}
                     />
