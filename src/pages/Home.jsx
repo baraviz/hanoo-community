@@ -484,19 +484,19 @@ export default function Home() {
             onClick={() => navigate(createPageUrl("FindParking"))}
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
           >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
               <Car size={22} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-gray-700">מצא חניה</span>
+            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>מצא חניה</span>
           </button>
           <button
             onClick={() => navigate("/MyParking?view=list")}
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
           >
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#007AFF" }}>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
               <Plus size={22} className="text-white" />
             </div>
-            <span className="text-sm font-semibold text-gray-700">פרסם חניה</span>
+            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>פרסם חניה</span>
           </button>
         </div>
 
