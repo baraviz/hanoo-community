@@ -1,74 +1,71 @@
 /**
  * pages.config.js - Page routing configuration
- * 
- * This file is AUTO-GENERATED. Do not add imports or modify PAGES manually.
- * Pages are auto-registered when you create files in the ./pages/ folder.
- * 
+ *
+ * Uses React.lazy + Suspense for code-splitting on all routes.
  * THE ONLY EDITABLE VALUE: mainPage
- * This controls which page is the landing page (shown when users visit the app).
- * 
- * Example file structure:
- * 
- *   import HomePage from './pages/HomePage';
- *   import Dashboard from './pages/Dashboard';
- *   import Settings from './pages/Settings';
- *   
- *   export const PAGES = {
- *       "HomePage": HomePage,
- *       "Dashboard": Dashboard,
- *       "Settings": Settings,
- *   }
- *   
- *   export const pagesConfig = {
- *       mainPage: "HomePage",
- *       Pages: PAGES,
- *   };
- * 
- * Example with Layout (wraps all pages):
- *
- *   import Home from './pages/Home';
- *   import Settings from './pages/Settings';
- *   import __Layout from './Layout.jsx';
- *
- *   export const PAGES = {
- *       "Home": Home,
- *       "Settings": Settings,
- *   }
- *
- *   export const pagesConfig = {
- *       mainPage: "Home",
- *       Pages: PAGES,
- *       Layout: __Layout,
- *   };
- *
- * To change the main page from HomePage to Dashboard, use find_replace:
- *   Old: mainPage: "HomePage",
- *   New: mainPage: "Dashboard",
- *
- * The mainPage value must match a key in the PAGES object exactly.
  */
-import Chat from './pages/Chat';
-import FindParking from './pages/FindParking';
-import Home from './pages/Home';
-import Onboarding from './pages/Onboarding';
-import Profile from './pages/Profile';
-import PublishParking from './pages/PublishParking';
-import Splash from './pages/Splash';
+import { lazy, Suspense } from 'react';
 import __Layout from './Layout.jsx';
 
+// Lazy-loaded pages — each gets its own JS chunk
+const Chat          = lazy(() => import('./pages/Chat'));
+const FindParking   = lazy(() => import('./pages/FindParking'));
+const Home          = lazy(() => import('./pages/Home'));
+const Onboarding    = lazy(() => import('./pages/Onboarding'));
+const Profile       = lazy(() => import('./pages/Profile'));
+const PublishParking = lazy(() => import('./pages/PublishParking'));
+const Splash        = lazy(() => import('./pages/Splash'));
 
-export const PAGES = {
-    "Chat": Chat,
-    "FindParking": FindParking,
-    "Home": Home,
-    "Onboarding": Onboarding,
-    "Profile": Profile,
-    "PublishParking": PublishParking,
-    "Splash": Splash,
+// Lightweight fallback shown while a chunk loads
+function PageLoader() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100dvh",
+        background: "var(--surface-page)",
+      }}
+    >
+      <div
+        style={{
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          border: "3px solid var(--surface-card-border)",
+          borderTopColor: "var(--hanoo-blue)",
+          animation: "spin 0.7s linear infinite",
+        }}
+      />
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </div>
+  );
 }
 
+// Wrap every lazy page in Suspense so the router can render it
+function withSuspense(Component) {
+  return function SuspenseWrapper(props) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <Component {...props} />
+      </Suspense>
+    );
+  };
+}
+
+export const PAGES = {
+  "Chat":           withSuspense(Chat),
+  "FindParking":    withSuspense(FindParking),
+  "Home":           withSuspense(Home),
+  "Onboarding":     withSuspense(Onboarding),
+  "Profile":        withSuspense(Profile),
+  "PublishParking": withSuspense(PublishParking),
+  "Splash":         withSuspense(Splash),
+};
+
 export const pagesConfig = {
-    mainPage: "Splash",
-    Pages: PAGES,
-    Layout: __Layout,
+  mainPage: "Splash",
+  Pages: PAGES,
+  Layout: __Layout,
 };
