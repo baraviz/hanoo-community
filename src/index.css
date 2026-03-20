@@ -200,6 +200,28 @@
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  /* pt-safe: replaces hard-coded pt-12 in page headers */
+  .pt-safe {
+    padding-top: calc(env(safe-area-inset-top) + 1rem);
+  }
+
+  /* user-select: none on all interactive UI chrome */
+  button,
+  [role="button"],
+  a,
+  label,
+  nav,
+  .select-none {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Always allow selection in text content areas */
+  p, span, h1, h2, h3, h4, li, td, th, .selectable {
+    user-select: text;
+    -webkit-user-select: text;
+  }
 }
 
 /* ── Utility classes using brand tokens ── */
