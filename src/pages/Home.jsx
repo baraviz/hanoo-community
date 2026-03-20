@@ -590,7 +590,7 @@ export default function Home() {
                 onClick={() => { setBlockUntilHour(null); const opts = (() => { const now = new Date(); const cur = now.getHours() * 60 + now.getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
                 disabled={removingSlot}
                 className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
-                style={{ background: available ? "#FEE2E2" : "#EBF4FF", color: available ? "#DC2626" : "#007AFF", opacity: removingSlot ? 0.6 : 1 }}
+                style={{ background: available ? "var(--hanoo-red-light)" : "var(--hanoo-blue-light)", color: available ? "var(--hanoo-red)" : "var(--hanoo-blue)", opacity: removingSlot ? 0.6 : 1 }}
               >
                 {removingSlot
                   ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
