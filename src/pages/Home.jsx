@@ -474,7 +474,8 @@ export default function Home() {
         </div>
       </div>
 
-      <PullToRefreshWrapper onRefresh={loadData} className="px-5 py-5 space-y-4">
+      <PullToRefreshWrapper onRefresh={loadData}>
+      <div className="px-5 py-5 space-y-4">
         {/* Action buttons — TOP */}
         <div className="grid grid-cols-2 gap-3">
           <button
