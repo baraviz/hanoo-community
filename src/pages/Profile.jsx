@@ -359,25 +359,39 @@ export default function Profile() {
                     </button>
                   </div>
                 </>
+              ) : deleteStep === 3 ? (
+                <div className="flex flex-col items-center gap-4 py-2">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: "#D1FAE5" }}>
+                    <CheckCircle size={28} style={{ color: "#059669" }} />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-800 text-center">החשבון נמחק</h2>
+                  <p className="text-gray-500 text-sm text-center">כל הנתונים שלך הוסרו בהצלחה. מתנתק...</p>
+                  <div className="w-6 h-6 border-2 border-gray-300 border-t-green-500 rounded-full animate-spin" />
+                </div>
               ) : (
                 <>
                   <h2 className="text-xl font-bold text-gray-800 text-center">אתה בטוח לחלוטין?</h2>
                   <p className="text-gray-500 text-sm text-center">
                     כל ה-<span className="font-bold text-gray-700">{resident?.credits || 0} קרדיטים</span> והנתונים שלך יימחקו לצמיתות.
                   </p>
+                  {deleteError && (
+                    <p className="text-red-500 text-xs text-center bg-red-50 rounded-xl p-2">{deleteError}</p>
+                  )}
                   <button
+                    aria-label="אשר מחיקת חשבון לצמיתות"
                     onClick={deleteAccount}
                     disabled={deleting}
                     className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
                     style={{ background: "#EF4444", opacity: deleting ? 0.6 : 1 }}
                   >
                     {deleting ? (
-                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> מוחק...</>
+                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" /> מוחק נתונים...</>
                     ) : (
-                      <><Trash2 size={16} /> כן, מחק את החשבון שלי</>
+                      <><Trash2 size={16} aria-hidden="true" /> כן, מחק את החשבון שלי</>
                     )}
                   </button>
                   <button
+                    aria-label="בטל מחיקת חשבון"
                     onClick={() => setShowDeleteConfirm(false)}
                     className="w-full py-3 rounded-2xl font-bold text-gray-600"
                     style={{ background: "#F3F4F6" }}
