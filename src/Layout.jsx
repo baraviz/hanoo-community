@@ -37,7 +37,14 @@ export default function Layout({ children, currentPageName }) {
       dir="rtl"
       style={{ background: "var(--surface-page)", color: "var(--text-primary)" }}
     >
-      <div className={showNav ? "pb-20" : ""} style={{ position: "relative", overflow: "hidden" }}>
+      <div
+        className={showNav ? "" : ""}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          paddingBottom: showNav ? "calc(64px + env(safe-area-inset-bottom))" : 0,
+        }}
+      >
         <PageTransition>
           {children}
         </PageTransition>
