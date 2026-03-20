@@ -376,23 +376,23 @@ export default function FindParking() {
             return (
               <div key={slot.id} className="card p-4">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                    <Car size={24} style={{ color: "#007AFF" }} />
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-800">חניה #{owner?.parking_spot || "?"}</p>
-                    <p className="text-gray-500 text-sm">של {owner?.user_name || slot.owner_email}</p>
-                    {owner?.parking_floor && <p className="text-gray-400 text-xs">קומה {owner.parking_floor}</p>}
+                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{owner?.parking_spot || "?"}</p>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {owner?.user_name || slot.owner_email}</p>
+                    {owner?.parking_floor && <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קומה {owner.parking_floor}</p>}
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg" style={{ color: "#007AFF" }}>{cost}</p>
-                    <p className="text-gray-400 text-xs">קרדיטים</p>
+                    <p className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{cost}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
                     {getDiscount() > 0 && (
-                      <p className="text-xs font-bold text-green-600">{getDiscount() * 100}% הנחה 🎟️</p>
+                      <p className="text-xs font-bold" style={{ color: "var(--hanoo-green)" }}>{getDiscount() * 100}% הנחה 🎟️</p>
                     )}
                   </div>
                 </div>
-                <button onClick={() => handleBookSingle(slot)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "#007AFF" }}>
+                <button onClick={() => handleBookSingle(slot)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
                   הזמן עכשיו
                 </button>
               </div>

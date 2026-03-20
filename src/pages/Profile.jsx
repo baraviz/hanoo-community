@@ -293,7 +293,7 @@ export default function Profile() {
             <button
               onClick={() => base44.auth.logout()}
               className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2"
-              style={{ background: "#FFE5E5", color: "#FF3B30" }}
+              style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
             >
               <LogOut size={18} />
               התנתק
