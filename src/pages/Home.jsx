@@ -523,23 +523,23 @@ export default function Home() {
           <div className="card p-4">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-              <p className="font-bold text-gray-800">חניה פעילה</p>
+              <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה פעילה</p>
             </div>
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                <Car size={24} style={{ color: "#007AFF" }} />
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
               </div>
               <div>
-                <p className="font-bold text-gray-800">חניה #{activeBooking.spot_number}</p>
-                <p className="text-gray-500 text-sm">של {activeBooking.owner_name}</p>
-                <p className="text-gray-400 text-xs">עד {format(parseISO(activeBooking.end_time), "HH:mm")}</p>
+                <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{activeBooking.spot_number}</p>
+                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {activeBooking.owner_name}</p>
+                <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>עד {format(parseISO(activeBooking.end_time), "HH:mm")}</p>
               </div>
             </div>
             <button
               onClick={() => endBooking(activeBooking)}
               disabled={endingBooking}
               className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
-              style={{ background: "#FF3B30", opacity: endingBooking ? 0.6 : 1 }}
+              style={{ background: "var(--hanoo-red)", opacity: endingBooking ? 0.6 : 1 }}
             >
               {endingBooking ? (
                 <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />מסיים...</>
