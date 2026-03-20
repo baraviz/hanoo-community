@@ -174,7 +174,7 @@ export default function Onboarding() {
       }).catch(() => {});
     }
     setLoading(false);
-    navigate(createPageUrl("Home"));
+    push(createPageUrl("Home"));
   }
 
   async function handleCreateBuilding() {
@@ -206,7 +206,7 @@ export default function Onboarding() {
       status: "approved",
     });
     setLoading(false);
-    navigate(createPageUrl("Home"));
+    push(createPageUrl("Home"));
   }
 
   // ── CHOOSE ──

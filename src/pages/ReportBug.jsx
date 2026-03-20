@@ -33,7 +33,7 @@ export default function ReportBug() {
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-4 flex items-center gap-3 z-10">
-        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+        <button onClick={() => back()} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
           <ChevronRight size={18} className="text-gray-600" />
         </button>
         <h1 className="font-bold text-gray-800 text-base">דיווח על תקלה</h1>
@@ -46,7 +46,7 @@ export default function ReportBug() {
             <h2 className="text-xl font-bold text-gray-800">הדיווח נשלח, תודה!</h2>
             <p className="text-gray-500 text-sm">נחזור אליך בהקדם.</p>
             <button
-              onClick={() => navigate(-1)}
+              onClick={() => back()}
               className="mt-4 px-8 py-3 rounded-2xl font-bold text-white text-sm"
               style={{ background: "#007AFF" }}
             >

@@ -74,7 +74,7 @@ export default function PublishParking() {
         <p className="text-gray-500 mb-2">החניה שלך זמינה לשכנים</p>
         {resident && !resident.bonus_credits_received && <p className="text-green-600 font-bold mb-6">+100 קרדיטים בונוס נוספו לחשבונך!</p>}
         <button
-          onClick={() => navigate(createPageUrl("Home"))}
+          onClick={() => push(createPageUrl("Home"))}
           className="w-full py-4 rounded-2xl font-bold text-white"
           style={{ background: "#007AFF" }}
         >
@@ -87,7 +87,7 @@ export default function PublishParking() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
-        <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-white opacity-80 mb-3">
+        <button onClick={() => back()} className="flex items-center gap-1 text-white opacity-80 mb-3">
           <ChevronRight size={20} />
           <span className="text-sm">חזרה</span>
         </button>
