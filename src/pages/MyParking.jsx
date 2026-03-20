@@ -515,15 +515,15 @@ export default function MyParking() {
 
             {/* Columns */}
             <div
-              ref={gridRef}
-              className="flex-1 flex relative border border-gray-200 rounded-xl overflow-hidden bg-white"
-              style={{ touchAction: "none" }}
+            ref={gridRef}
+            className="flex-1 flex relative rounded-xl overflow-hidden"
+            style={{ touchAction: "none", border: "1px solid var(--surface-card-border)", background: "var(--surface-card)" }}
             >
               {/* Hour lines */}
               {Array.from({ length: HOURS + 1 }).map((_, i) => (
                 <div
                   key={i}
-                  className="absolute left-0 right-0 border-t border-gray-100 pointer-events-none"
+                  className="absolute left-0 right-0 pointer-events-none" style={{ borderTop: "1px solid var(--surface-card-border)" }}
                   style={{ top: `${(i / HOURS) * 100}%` }}
                 />
               ))}
