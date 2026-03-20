@@ -483,17 +483,17 @@ export default function Home() {
         {/* Action buttons — TOP */}
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={() => navigate(createPageUrl("FindParking"))}
-            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
+            onClick={() => push("/FindParking")}
+            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform select-none"
           >
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
               <Car size={22} className="text-white" />
             </div>
-            <span className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>מצא חניה</span>
+            <span className="text-sm font-semibold select-none" style={{ color: "var(--text-primary)" }}>מצא חניה</span>
           </button>
           <button
-            onClick={() => navigate("/MyParking?view=list")}
-            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform"
+            onClick={() => push("/MyParking")}
+            className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform select-none"
           >
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
               <Plus size={22} className="text-white" />
