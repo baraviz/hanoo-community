@@ -334,8 +334,8 @@ export default function Home() {
                   </div>
                 )}
                 {myActiveSlot && new Date(myActiveSlot.start_at) <= new Date() && new Date(myActiveSlot.end_at) > new Date() ? (
-                  <p className="text-gray-500 text-center text-sm">
-                    הזמינות שנקבעה עד השעה <span className="font-bold text-gray-700">{format(parseISO(myActiveSlot.end_at), "HH:mm")}</span> תוסר
+                  <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                    הזמינות שנקבעה עד השעה <span className="font-bold" style={{ color: "var(--text-primary)" }}>{format(parseISO(myActiveSlot.end_at), "HH:mm")}</span> תוסר
                   </p>
                 ) : null}
                 {isRecurringActiveNow() && (() => {
