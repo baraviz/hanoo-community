@@ -372,10 +372,10 @@ export default function Home() {
                      }, 300);
                    }}
                    className="py-3 rounded-2xl font-bold text-white"
-                   style={{ background: "#FF3B30" }}
-                  >
-                   השבת
-                  </button>
+                   style={{ background: "var(--hanoo-red)" }}
+                   >
+                    השבת
+                   </button>
                 </div>
                 {(() => {
                   const nextText = getNextAvailableText();
