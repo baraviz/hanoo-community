@@ -155,7 +155,7 @@ export default function Bookings() {
         {upcoming.length === 0 && past.length === 0 && (
           <div className="text-center py-20">
             <div className="text-5xl mb-3">🅿️</div>
-            <p className="text-gray-500 font-medium">אין הזמנות עדיין</p>
+            <p className="font-medium" style={{ color: "var(--text-secondary)" }}>אין הזמנות עדיין</p>
           </div>
         )}
 
