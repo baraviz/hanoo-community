@@ -426,11 +426,11 @@ export default function Home() {
               </>
             ) : (
               <>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#EBF4FF" }}>
-                  <ParkingSquare size={24} style={{ color: "#007AFF" }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "var(--hanoo-blue-light)" }}>
+                  <ParkingSquare size={24} style={{ color: "var(--hanoo-blue)" }} />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800 text-center">הפוך את החניה לזמינה</h2>
-                <p className="text-gray-500 text-center text-sm">עד איזו שעה?</p>
+                <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>הפוך את החניה לזמינה</h2>
+                <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>עד איזו שעה?</p>
                 <TimeWheelPicker
                   options={getAvailUntilOptions()}
                   value={availUntilMinutes}
