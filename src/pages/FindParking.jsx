@@ -294,15 +294,15 @@ export default function FindParking() {
             onClose={() => setThankYouSlots(prev => prev.filter((_, idx) => idx !== i))}
           />
         ))}
-        <div className="w-24 h-24 rounded-full flex items-center justify-center mb-6" style={{ background: "#E8F8EF" }}>
-          <CheckCircle size={44} style={{ color: "#34C759" }} />
+        <div className="w-24 h-24 rounded-full flex items-center justify-center mb-6" style={{ background: "var(--hanoo-green-light)" }}>
+          <CheckCircle size={44} style={{ color: "var(--hanoo-green)" }} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">הוזמן! 🎉</h2>
-        <p className="text-gray-500 mb-6">החניה שלך מוכנה מ-{format(new Date(fromTime), "HH:mm")} עד {format(new Date(toTime), "HH:mm")}</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>הוזמן! 🎉</h2>
+        <p className="mb-6" style={{ color: "var(--text-secondary)" }}>החניה שלך מוכנה מ-{format(new Date(fromTime), "HH:mm")} עד {format(new Date(toTime), "HH:mm")}</p>
         <button
           onClick={() => { setBookingId(null); setSearched(false); setResults([]); setCombos([]); }}
           className="w-full py-4 rounded-2xl font-bold text-white"
-          style={{ background: "#007AFF" }}
+          style={{ background: "var(--hanoo-blue)" }}
         >
           חזור לחיפוש
         </button>

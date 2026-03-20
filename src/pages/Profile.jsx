@@ -249,20 +249,20 @@ export default function Profile() {
             {/* Recent bookings */}
             {myBookings.length > 0 && (
               <div className="card p-4">
-                <p className="font-bold text-gray-800 mb-3">הזמנות אחרונות</p>
+                <p className="font-bold mb-3" style={{ color: "var(--text-primary)" }}>הזמנות אחרונות</p>
                 <div className="space-y-1">
                   {myBookings.slice(0, 5).map(b => (
-                    <div key={b.id} className="flex items-center gap-3 py-2 border-b border-gray-50 last:border-0">
-                      <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-none" style={{ background: b.status === "active" ? "#EBF4FF" : "#F5F5F5" }}>
-                        <Car size={15} style={{ color: b.status === "active" ? "#007AFF" : "#999" }} />
+                    <div key={b.id} className="flex items-center gap-3 py-2 last:border-0" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-none" style={{ background: b.status === "active" ? "var(--hanoo-blue-light)" : "var(--btn-secondary-bg)" }}>
+                        <Car size={15} style={{ color: b.status === "active" ? "var(--hanoo-blue)" : "var(--text-tertiary)" }} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-700">חניה #{b.spot_number}</p>
-                        <p className="text-xs text-gray-400">{b.start_time ? format(new Date(b.start_time), "dd/MM HH:mm") : ""}</p>
+                        <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>חניה #{b.spot_number}</p>
+                        <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{b.start_time ? format(new Date(b.start_time), "dd/MM HH:mm") : ""}</p>
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-bold" style={{ color: "#007AFF" }}>-{b.total_credits}</p>
-                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${b.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                        <p className="text-sm font-bold" style={{ color: "var(--hanoo-blue)" }}>-{b.total_credits}</p>
+                        <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ background: b.status === "active" ? "var(--hanoo-green-light)" : "var(--btn-secondary-bg)", color: b.status === "active" ? "var(--hanoo-green)" : "var(--text-tertiary)" }}>
                           {b.status === "active" ? "פעיל" : "הושלם"}
                         </span>
                       </div>
