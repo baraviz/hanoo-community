@@ -362,7 +362,7 @@ export default function MyParking() {
                     + טווח נוסף
                   </button>
                 </div>
-                <div className="divide-y divide-gray-50">
+                <div className="divide-y" style={{ borderColor: "var(--surface-card-border)" }}>
                   {(recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start).map(b => {
                     const activeBlock = blockSlots.find(bs => {
                       const bsDay = new Date(bs.start_at).getDay();
@@ -379,20 +379,20 @@ export default function MyParking() {
                       return bkDay === dayIndex && bkStartMins < b.end && bkEndMins > b.start;
                     });
                     return (
-                     <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "#FFF8F0" } : {}}>
+                     <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "var(--hanoo-orange-light)" } : {}}>
                        <div className="flex items-center gap-2">
-                         <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeBooking ? "#FF9500" : blockEndTime ? "#EF4444" : "#007AFF" }} />
+                         <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeBooking ? "var(--hanoo-orange)" : blockEndTime ? "var(--hanoo-red)" : "var(--hanoo-blue)" }} />
                          <div className="flex flex-col">
-                           <span className="text-gray-800 text-sm font-medium">{fmt(b.start)} עד {fmt(b.end)}</span>
+                           <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{fmt(b.start)} עד {fmt(b.end)}</span>
                            {activeBooking && (
-                             <span className="text-xs font-medium" style={{ color: "#FF9500" }}>תפוס ע״י {activeBooking.renter_name}</span>
+                             <span className="text-xs font-medium" style={{ color: "var(--hanoo-orange)" }}>תפוס ע״י {activeBooking.renter_name}</span>
                            )}
                            {!activeBooking && blockEndTime && (
-                             <span className="text-xs text-red-400 font-medium">חסום עד {blockEndTime}</span>
+                             <span className="text-xs font-medium" style={{ color: "var(--hanoo-red)" }}>חסום עד {blockEndTime}</span>
                            )}
                          </div>
-                         <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">קבוע</span>
-                         {activeBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D6", color: "#FF9500" }}>תפוס</span>}
+                         <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "var(--hanoo-blue)", background: "var(--hanoo-blue-light)" }}>קבוע</span>
+                         {activeBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" }}>תפוס</span>}
                        </div>
                         <div className="flex gap-2">
                           <button onClick={() => {
@@ -402,14 +402,14 @@ export default function MyParking() {
                             setClosingAddDay(false);
                             setEditingBlock(b);
                             setAddDaySheet(true);
-                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                            <Pencil size={12} style={{ color: "#007AFF" }} />
+                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                            <Pencil size={12} style={{ color: "var(--hanoo-blue)" }} />
                           </button>
                           <button onClick={() => setCancelSheet({
                             blockInfo: { type: "recurring", dayIndex: b.dayIndex, start: b.start, end: b.end },
                             onConfirm: () => { deleteBlock(b.id); setCancelSheet(null); }
-                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
-                            <Trash2 size={12} style={{ color: "#EF4444" }} />
+                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
+                            <Trash2 size={12} style={{ color: "var(--hanoo-red)" }} />
                           </button>
                         </div>
                       </div>
