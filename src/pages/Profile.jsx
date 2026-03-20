@@ -274,16 +274,16 @@ export default function Profile() {
 
             {/* Share invite card */}
             {resident?.building_id && (
-              <div className="card p-4" style={{ background: "linear-gradient(135deg, #EBF4FF 0%, #F0F4FF 100%)", border: "1px solid #C7DCFF" }}>
+              <div className="card p-4" style={{ background: "var(--hanoo-blue-light)", border: "1px solid var(--hanoo-blue-dark)" }}>
                 <div className="flex items-center gap-2 mb-2">
-                  <Share2 size={16} style={{ color: "#007AFF" }} />
-                  <p className="font-bold text-gray-800 text-sm">הזמן שכן לבניין</p>
+                  <Share2 size={16} style={{ color: "var(--hanoo-blue)" }} />
+                  <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>הזמן שכן לבניין</p>
                 </div>
-                <p className="text-gray-500 text-xs mb-3">שתף קישור ישיר לדף ההצטרפות לבניין שלך. כשהם מצטרפים — אתה מקבל <span className="font-bold text-blue-600">+10 נקודות</span>! 🎁</p>
+                <p className="text-xs mb-3" style={{ color: "var(--text-secondary)" }}>שתף קישור ישיר לדף ההצטרפות לבניין שלך. כשהם מצטרפים — אתה מקבל <span className="font-bold" style={{ color: "var(--hanoo-blue)" }}>+10 נקודות</span>! 🎁</p>
                 <button
                   onClick={handleShare}
                   className="w-full py-2.5 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2"
-                  style={{ background: "#007AFF" }}
+                  style={{ background: "var(--hanoo-blue)" }}
                 >
                   {shareCopied ? <><CheckCircle size={16} /> הקישור הועתק!</> : <><Share2 size={16} /> שתף קישור הצטרפות</>}
                 </button>

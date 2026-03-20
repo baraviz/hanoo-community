@@ -359,11 +359,11 @@ export default function FindParking() {
         </button>
 
         {searched && !loading && !hasAnyResults && (
-          <div className="text-center py-12">
-            <div className="text-5xl mb-4">🅿️</div>
-            <p className="text-gray-500 font-medium">אין חניות פנויות בזמן זה</p>
-            <p className="text-gray-400 text-sm mt-1">נסה שעה אחרת</p>
-          </div>
+        <div className="text-center py-12">
+          <div className="text-5xl mb-4">🅿️</div>
+          <p className="font-medium" style={{ color: "var(--text-secondary)" }}>אין חניות פנויות בזמן זה</p>
+          <p className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>נסה שעה אחרת</p>
+        </div>
         )}
 
         {/* Single-slot results */}
