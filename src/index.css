@@ -84,5 +84,21 @@
 
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior: none;
+  }
+
+  html {
+    overscroll-behavior: none;
+  }
+
+  /* Ensure all interactive elements meet 44px minimum tap target */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Safe area support for fixed bottom elements */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
