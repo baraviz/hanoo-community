@@ -409,18 +409,19 @@ export default function Home() {
                     </p>
                   ) : null;
                 })()}
-                <p className="text-gray-400 text-center text-xs pt-1">
+                <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
                   לפי{" "}
                   <span
-                    className="underline cursor-pointer text-blue-500"
+                    className="underline cursor-pointer"
+                    style={{ color: "var(--hanoo-blue)" }}
                     onClick={() => { closeStatusDrawer(); navigate(createPageUrl("MyParking")); }}
                   >
                     יומן הזמינות
                   </span>
                 </p>
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#007AFF" }}>פתח חניה</button>
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold" style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-text)" }}>ביטול</button>
+                  <button onClick={makeAvailable} className="py-3 rounded-2xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>פתח חניה</button>
                 </div>
               </>
             ) : (
