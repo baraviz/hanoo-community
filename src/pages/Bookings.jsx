@@ -110,17 +110,17 @@ export default function Bookings() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--surface-header)" }}>
         <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       {/* Header */}
-      <div className="pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
+      <div className="pt-12 pb-4 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">הזמנות</h1>

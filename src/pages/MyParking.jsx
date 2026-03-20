@@ -237,7 +237,7 @@ export default function MyParking() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--surface-header)" }}>
         <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin" />
       </div>
     );
