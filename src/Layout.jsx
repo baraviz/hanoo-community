@@ -3,6 +3,15 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
+import PageTransition from "@/components/PageTransition";
+import ThemeToggle from "@/components/ThemeToggle";
+
+// Apply saved theme before first render
+if (typeof window !== "undefined") {
+  const saved = localStorage.getItem("hanoo-theme");
+  if (saved === "dark") document.documentElement.classList.add("dark");
+}
+
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const location = useLocation();
@@ -15,32 +24,42 @@ export default function Layout({ children, currentPageName }) {
   const showNav = !noNavPages.includes(currentPageName);
 
   const navItems = [
-    { name: "Home", label: "בית", icon: Home },
+    { name: "Home",        label: "בית",      icon: Home },
     { name: "FindParking", label: "מצא חניה", icon: Car },
-    { name: "MyParking", label: "החניה שלי", icon: ParkingSquare },
-    { name: "Bookings", label: "הזמנות", icon: CalendarDays },
-    { name: "Profile", label: "פרופיל", icon: User },
+    { name: "MyParking",   label: "החניה שלי", icon: ParkingSquare },
+    { name: "Bookings",    label: "הזמנות",   icon: CalendarDays },
+    { name: "Profile",     label: "פרופיל",   icon: User },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 relative" dir="rtl">
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Heebo:wght@300;400;500;600;700;800&display=swap');
-        * { font-family: 'Heebo', sans-serif; }
-        .pacifico { font-family: 'Pacifico', cursive !important; }
-        body { background: #F5F7FA; }
-      `}</style>
-
-      <div className={showNav ? "pb-20" : ""}>
-        {children}
+    <div
+      className="min-h-screen relative"
+      dir="rtl"
+      style={{ background: "var(--surface-page)", color: "var(--text-primary)" }}
+    >
+      <div className={showNav ? "pb-20" : ""} style={{ position: "relative", overflow: "hidden" }}>
+        <PageTransition>
+          {children}
+        </PageTransition>
       </div>
 
       {showNav && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-50" style={{maxWidth: 430, margin: "0 auto", paddingBottom: "env(safe-area-inset-bottom)"}}>
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 border-t"
+          style={{
+            maxWidth: 430,
+            margin: "0 auto",
+            paddingBottom: "env(safe-area-inset-bottom)",
+            background: "var(--surface-nav)",
+            borderColor: "var(--surface-nav-border)",
+          }}
+        >
           <div className="flex items-center justify-around py-2">
             {navItems.map(({ name, label, icon: Icon }) => {
-              const isActive = currentPageName === name;
+              const path = name === "Home" ? "/" : `/${name}`;
+              const isActive = name === "Home"
+                ? location.pathname === "/"
+                : location.pathname.startsWith(`/${name}`);
               return (
                 <Link
                   key={name}
@@ -49,12 +68,11 @@ export default function Layout({ children, currentPageName }) {
                 >
                   <Icon
                     size={22}
-                    className={isActive ? "text-blue-500" : "text-gray-400"}
-                    style={isActive ? { color: "#007AFF" } : {}}
+                    style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
                   />
                   <span
-                    className={`text-xs font-medium ${isActive ? "text-blue-500" : "text-gray-400"}`}
-                    style={isActive ? { color: "#007AFF" } : {}}
+                    className="text-xs font-medium"
+                    style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
                   >
                     {label}
                   </span>
