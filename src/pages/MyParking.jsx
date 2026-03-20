@@ -766,15 +766,15 @@ export default function MyParking() {
 
                 <div className="space-y-3">
                   {(editingTempDate ? [editingTempTime] : addDayRanges).map((range, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-2xl p-3 space-y-2">
+                    <div key={idx} className="rounded-2xl p-3 space-y-2" style={{ background: "var(--btn-secondary-bg)" }}>
                       {!editingTempDate && (
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-gray-500">טווח {idx + 1}</span>
+                          <span className="text-xs font-bold" style={{ color: "var(--text-secondary)" }}>טווח {idx + 1}</span>
                           {addDayRanges.length > 1 && (
                             <button
                               onClick={() => setAddDayRanges(prev => prev.filter((_, i) => i !== idx))}
                               className="w-6 h-6 flex items-center justify-center rounded-full"
-                              style={{ background: "#FEE2E2", color: "#EF4444" }}
+                              style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
                             >
                               <X size={12} />
                             </button>
@@ -786,8 +786,8 @@ export default function MyParking() {
                         { label: "עד שעה", fH: "eH", fM: "eM" },
                       ].map(({ label, fH, fM }) => (
                         <div key={label} className="flex items-center gap-2">
-                          <Clock size={15} className="text-gray-400 flex-none" />
-                          <span className="text-sm text-gray-500 flex-none w-14">{label}</span>
+                          <Clock size={15} className="flex-none" style={{ color: "var(--text-tertiary)" }} />
+                          <span className="text-sm flex-none w-14" style={{ color: "var(--text-secondary)" }}>{label}</span>
                           <input
                             type="time"
                             value={`${String(range[fH]).padStart(2,"0")}:${String(range[fM]).padStart(2,"0")}`}
@@ -799,7 +799,8 @@ export default function MyParking() {
                                 setAddDayRanges(prev => prev.map((r, i) => i === idx ? { ...r, [fH]: h, [fM]: m } : r));
                               }
                             }}
-                            className="flex-1 bg-white rounded-xl px-3 py-2 text-sm font-bold text-gray-800 outline-none border border-gray-200"
+                            className="flex-1 rounded-xl px-3 py-2 text-sm font-bold outline-none"
+                            style={{ background: "var(--surface-card)", color: "var(--text-primary)", border: "1px solid var(--surface-card-border)" }}
                           />
                         </div>
                       ))}
