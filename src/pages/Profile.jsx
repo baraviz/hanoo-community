@@ -32,6 +32,9 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("personal");
   const [shareLink, setShareLink] = useState("");
   const [shareCopied, setShareCopied] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteStep, setDeleteStep] = useState(1); // 1=confirm, 2=final
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
