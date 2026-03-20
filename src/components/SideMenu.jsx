@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, LogOut, AlertTriangle, Shield, FileText, Accessibility } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function SideMenu({ onClose }) {
   const [closing, setClosing] = useState(false);
@@ -33,60 +34,67 @@ export default function SideMenu({ onClose }) {
         onClick={close}
       />
 
-      {/* Drawer — slides from the right edge (visually right side of screen) */}
+      {/* Drawer */}
       <div
-        className="absolute top-0 left-0 bottom-0 w-64 bg-white flex flex-col shadow-2xl"
-        style={{ animation: closing ? "slideOutToLeft 0.25s ease-in forwards" : "slideInFromLeft 0.25s ease-out" }}
+        className="absolute top-0 left-0 bottom-0 w-64 flex flex-col shadow-2xl"
+        style={{
+          background: "var(--surface-card)",
+          animation: closing ? "slideOutToLeft 0.25s ease-in forwards" : "slideInFromLeft 0.25s ease-out",
+        }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-gray-800 text-base">תפריט</h2>
-          <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-            <X size={16} className="text-gray-500" />
-          </button>
+        <div
+          className="flex items-center justify-between px-5 py-4 border-b"
+          style={{ borderColor: "var(--surface-card-border)" }}
+        >
+          <h2 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>תפריט</h2>
+          <div className="flex items-center gap-2">
+            <ThemeToggle className="!bg-transparent" />
+            <button
+              onClick={close}
+              className="w-8 h-8 flex items-center justify-center rounded-full"
+              style={{ background: "var(--btn-secondary-bg)" }}
+            >
+              <X size={16} style={{ color: "var(--text-secondary)" }} />
+            </button>
+          </div>
         </div>
 
         {/* Menu items */}
         <div className="flex-1 overflow-y-auto py-2">
-          <button
-            onClick={() => handleLinkClick("/ReportBug")}
-            className="w-full flex items-center justify-end gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-right"
-          >
-            <span className="text-gray-700 font-medium text-sm">דיווח על תקלה</span>
-            <AlertTriangle size={17} className="text-gray-800 flex-none" />
-          </button>
-
-          <button
-            onClick={() => handleLinkClick("/PrivacyPolicy")}
-            className="w-full flex items-center justify-end gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-right"
-          >
-            <span className="text-gray-700 font-medium text-sm">מדיניות פרטיות</span>
-            <Shield size={17} className="text-gray-800 flex-none" />
-          </button>
-
-          <button
-            onClick={() => handleLinkClick("/TermsOfService")}
-            className="w-full flex items-center justify-end gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-right"
-          >
-            <span className="text-gray-700 font-medium text-sm">תנאי שימוש</span>
-            <FileText size={17} className="text-gray-800 flex-none" />
-          </button>
-
-          <button
-            onClick={() => handleLinkClick("/Accessibility")}
-            className="w-full flex items-center justify-end gap-3 px-5 py-3 hover:bg-gray-50 transition-colors text-right"
-          >
-            <span className="text-gray-700 font-medium text-sm">הצהרת נגישות</span>
-            <Accessibility size={17} className="text-gray-800 flex-none" />
-          </button>
+          {[
+            { label: "דיווח על תקלה",    icon: AlertTriangle, path: "/ReportBug" },
+            { label: "מדיניות פרטיות",   icon: Shield,        path: "/PrivacyPolicy" },
+            { label: "תנאי שימוש",       icon: FileText,      path: "/TermsOfService" },
+            { label: "הצהרת נגישות",     icon: Accessibility, path: "/Accessibility" },
+          ].map(({ label, icon: Icon, path }) => (
+            <button
+              key={path}
+              onClick={() => handleLinkClick(path)}
+              className="w-full flex items-center justify-end gap-3 px-5 py-3 transition-colors text-right"
+              style={{ color: "var(--text-primary)" }}
+              onMouseEnter={e => e.currentTarget.style.background = "var(--btn-secondary-bg)"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+            >
+              <span className="font-medium text-sm">{label}</span>
+              <Icon size={17} style={{ color: "var(--text-primary)" }} className="flex-none" />
+            </button>
+          ))}
         </div>
 
-        {/* Logout — sits above the bottom nav (80px) */}
-        <div className="px-4 border-t border-gray-100" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1rem)", paddingTop: "1rem" }}>
+        {/* Logout */}
+        <div
+          className="px-4 border-t"
+          style={{
+            paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1rem)",
+            paddingTop: "1rem",
+            borderColor: "var(--surface-card-border)",
+          }}
+        >
           <button
             onClick={() => base44.auth.logout()}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm"
-            style={{ background: "#FFE5E5", color: "#FF3B30" }}
+            style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
           >
             <LogOut size={16} />
             התנתק
