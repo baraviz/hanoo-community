@@ -343,7 +343,7 @@ export default function Home() {
                   if (opts.length === 0) return null;
                   return (
                     <div>
-                      <p className="text-gray-500 text-center text-sm mb-2">עד מתי להשבית?</p>
+                      <p className="text-center text-sm mb-2" style={{ color: "var(--text-secondary)" }}>עד מתי להשבית?</p>
                       <TimeWheelPicker
                         options={opts}
                         value={blockUntilHour ?? opts[0]}
