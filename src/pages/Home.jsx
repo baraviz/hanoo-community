@@ -452,7 +452,7 @@ export default function Home() {
         </div>
       )}
       {/* Header */}
-      <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
+      <div className="pt-12 pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
           <div className="text-right">
             <p className="text-blue-200 text-sm">שלום,</p>
