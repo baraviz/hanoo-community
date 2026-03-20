@@ -270,8 +270,8 @@ export default function MyParking() {
                 className="rounded-2xl px-3 py-2 flex items-center gap-1.5 transition-all"
                 style={{ background: calendarEditMode ? "white" : "rgba(255,255,255,0.2)" }}
               >
-                <Pencil size={14} style={{ color: calendarEditMode ? "#007AFF" : "white" }} />
-                <span className="text-xs font-bold" style={{ color: calendarEditMode ? "#007AFF" : "white" }}>עריכה</span>
+                <Pencil size={14} style={{ color: calendarEditMode ? "var(--hanoo-blue)" : "white" }} />
+                <span className="text-xs font-bold" style={{ color: calendarEditMode ? "var(--hanoo-blue)" : "white" }}>עריכה</span>
               </button>
             )}
             {/* View toggle */}
@@ -282,14 +282,14 @@ export default function MyParking() {
                 className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
                 style={{ background: viewMode === "calendar" ? "white" : "transparent" }}
               >
-                <CalendarDays size={16} style={{ color: viewMode === "calendar" ? "#007AFF" : "white" }} />
+                <CalendarDays size={16} style={{ color: viewMode === "calendar" ? "var(--hanoo-blue)" : "white" }} />
               </button>
               <button
                 onClick={() => setViewMode("list")}
                 className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
                 style={{ background: viewMode === "list" ? "white" : "transparent" }}
               >
-                <List size={16} style={{ color: viewMode === "list" ? "#007AFF" : "white" }} />
+                <List size={16} style={{ color: viewMode === "list" ? "var(--hanoo-blue)" : "white" }} />
               </button>
             </div>
             {/* Menu button */}
