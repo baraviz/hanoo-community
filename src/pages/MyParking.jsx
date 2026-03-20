@@ -719,8 +719,8 @@ export default function MyParking() {
           onClick={() => { setEditingBlock(null); setClosingAddDay(true); setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220); }}
         >
           <div
-            className="bg-white rounded-t-3xl p-6 space-y-5"
-            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingAddDay ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
+            className="rounded-t-3xl p-6 space-y-5"
+            style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closingAddDay ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
             onClick={e => e.stopPropagation()}
           >
             <style>{`
@@ -729,11 +729,11 @@ export default function MyParking() {
               @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
               @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
             `}</style>
-            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
+            <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
 
             {addDayStep === "day" && !editingTempDate ? (
               <>
-                <h2 className="text-xl font-bold text-gray-800 text-center">בחר יום</h2>
+                <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>בחר יום</h2>
                 <div className="grid grid-cols-4 gap-2">
                   {[0,1,2,3,4,5,6].map(d => {
                     const hasDay = blocks.some(b => b.dayIndex === d);
