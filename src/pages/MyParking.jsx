@@ -934,19 +934,19 @@ export default function MyParking() {
           onClick={() => setClearConfirm(false)}
         >
           <div
-            className="bg-white rounded-t-3xl p-6 space-y-4"
-            style={{ paddingBottom: "calc(80px + 1.5rem)" }}
+            className="rounded-t-3xl p-6 space-y-4"
+            style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)" }}
             onClick={e => e.stopPropagation()}
           >
-            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
-              <AlertTriangle size={24} style={{ color: "#EF4444" }} />
+            <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "var(--hanoo-red-light)" }}>
+              <AlertTriangle size={24} style={{ color: "var(--hanoo-red)" }} />
             </div>
-            <h2 className="text-xl font-bold text-gray-800 text-center">נקה לוח זמינות?</h2>
-            <p className="text-gray-500 text-center text-sm">כל השעות שסימנת יימחקו</p>
+            <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>נקה לוח זמינות?</h2>
+            <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>כל השעות שסימנת יימחקו</p>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setClearConfirm(false)} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-              <button onClick={() => { setBlocks([]); setClearConfirm(false); }} className="py-3 rounded-2xl font-bold text-white" style={{ background: "#EF4444" }}>נקה</button>
+              <button onClick={() => setClearConfirm(false)} className="py-3 rounded-2xl font-bold" style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-text)" }}>ביטול</button>
+              <button onClick={() => { setBlocks([]); setClearConfirm(false); }} className="py-3 rounded-2xl font-bold text-white" style={{ background: "var(--hanoo-red)" }}>נקה</button>
             </div>
           </div>
         </div>
