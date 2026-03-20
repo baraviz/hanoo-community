@@ -7,6 +7,7 @@ import SideMenu from "@/components/SideMenu";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
 import DailyUpdateModal from "@/components/DailyUpdateModal";
 import CancelAvailabilitySheet from "@/components/CancelAvailabilitySheet";
+import PullToRefreshWrapper from "@/components/PullToRefreshWrapper";
 import { format, isAfter, isBefore, parseISO } from "date-fns";
 
 export default function Home() {
