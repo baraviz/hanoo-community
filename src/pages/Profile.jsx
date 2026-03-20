@@ -388,7 +388,7 @@ export default function Profile() {
 
             {/* How to earn */}
             <div className="card p-4">
-              <p className="font-bold text-gray-800 mb-3">איך צוברים נקודות?</p>
+              <p className="font-bold mb-3" style={{ color: "var(--text-primary)" }}>איך צוברים נקודות?</p>
               <div className="space-y-2">
                 {[
                   { icon: "🚗", label: "השלמת הזמנה (שוכר)", pts: 5 },
@@ -399,8 +399,8 @@ export default function Profile() {
                 ].map(({ icon, label, pts }) => (
                   <div key={label} className="flex items-center gap-3 py-1.5">
                     <span className="text-lg">{icon}</span>
-                    <span className="flex-1 text-sm text-gray-700">{label}</span>
-                    <span className="text-sm font-bold" style={{ color: "#007AFF" }}>+{pts}</span>
+                    <span className="flex-1 text-sm" style={{ color: "var(--text-primary)" }}>{label}</span>
+                    <span className="text-sm font-bold" style={{ color: "var(--hanoo-blue)" }}>+{pts}</span>
                   </div>
                 ))}
               </div>
