@@ -397,15 +397,15 @@ export default function Home() {
               </>
             ) : getActiveBlock() && isRecurringActiveNow() ? (
               <>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#EBF4FF" }}>
-                  <ParkingSquare size={24} style={{ color: "#007AFF" }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "var(--hanoo-blue-light)" }}>
+                  <ParkingSquare size={24} style={{ color: "var(--hanoo-blue)" }} />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800 text-center">פתיחת חניה מחדש</h2>
+                <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>פתיחת חניה מחדש</h2>
                 {(() => {
                   const until = getResumeUntilText();
                   return until ? (
-                    <p className="text-gray-500 text-center text-sm">
-                      החניה תהיה זמינה עד השעה <span className="font-bold text-gray-700">{until}</span>
+                    <p className="text-center text-sm" style={{ color: "var(--text-secondary)" }}>
+                      החניה תהיה זמינה עד השעה <span className="font-bold" style={{ color: "var(--text-primary)" }}>{until}</span>
                     </p>
                   ) : null;
                 })()}
