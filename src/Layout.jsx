@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+import { useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useAppNavigation } from "@/lib/NavigationContext";
 
 // Apply saved theme before first render
 if (typeof window !== "undefined") {
@@ -15,6 +15,7 @@ if (typeof window !== "undefined") {
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const location = useLocation();
+  const { switchTab } = useAppNavigation();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -24,11 +25,11 @@ export default function Layout({ children, currentPageName }) {
   const showNav = !noNavPages.includes(currentPageName);
 
   const navItems = [
-    { name: "Home",        label: "בית",      icon: Home },
-    { name: "FindParking", label: "מצא חניה", icon: Car },
-    { name: "MyParking",   label: "החניה שלי", icon: ParkingSquare },
-    { name: "Bookings",    label: "הזמנות",   icon: CalendarDays },
-    { name: "Profile",     label: "פרופיל",   icon: User },
+    { name: "Home",        label: "בית",       icon: Home,          path: "/" },
+    { name: "FindParking", label: "מצא חניה",  icon: Car,           path: "/FindParking" },
+    { name: "MyParking",   label: "החניה שלי", icon: ParkingSquare, path: "/MyParking" },
+    { name: "Bookings",    label: "הזמנות",    icon: CalendarDays,  path: "/Bookings" },
+    { name: "Profile",     label: "פרופיל",    icon: User,          path: "/Profile" },
   ];
 
   return (
@@ -65,28 +66,28 @@ export default function Layout({ children, currentPageName }) {
           }}
         >
           <div className="flex items-center justify-around py-2">
-            {navItems.map(({ name, label, icon: Icon }) => {
-              const path = name === "Home" ? "/" : `/${name}`;
+            {navItems.map(({ name, label, icon: Icon, path }) => {
               const isActive = name === "Home"
                 ? location.pathname === "/"
                 : location.pathname.startsWith(`/${name}`);
               return (
-                <Link
+                <button
                   key={name}
-                  to={createPageUrl(name)}
-                  className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all"
+                  onClick={() => switchTab(path)}
+                  className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all select-none"
+                  style={{ minWidth: 44, minHeight: 44, background: "transparent", border: "none" }}
                 >
                   <Icon
                     size={22}
                     style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
                   />
                   <span
-                    className="text-xs font-medium"
+                    className="text-xs font-medium select-none"
                     style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
                   >
                     {label}
                   </span>
-                </Link>
+                </button>
               );
             })}
           </div>
