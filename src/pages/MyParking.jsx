@@ -424,12 +424,12 @@ export default function MyParking() {
                       new Date(bk.start_time) < e && new Date(bk.end_time) > s
                     );
                     return (
-                      <div key={t.id} className="flex items-center justify-between px-4 py-3" style={activeTempBooking ? { background: "#FFF8F0" } : {}}>
+                      <div key={t.id} className="flex items-center justify-between px-4 py-3" style={activeTempBooking ? { background: "var(--hanoo-orange-light)" } : {}}>
                         <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeTempBooking ? "#FF9500" : "#34C759" }} />
-                          <span className="text-gray-800 text-sm font-medium">{fmt(startMin)} עד {fmt(endMin)}</span>
-                          <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">חד פעמי</span>
-                          {activeTempBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#FFF0D6", color: "#FF9500" }}>תפוס</span>}
+                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeTempBooking ? "var(--hanoo-orange)" : "var(--hanoo-green)" }} />
+                          <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{fmt(startMin)} עד {fmt(endMin)}</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "var(--hanoo-green)", background: "var(--hanoo-green-light)" }}>חד פעמי</span>
+                          {activeTempBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" }}>תפוס</span>}
                         </div>
                         <div className="flex gap-2">
                           <button onClick={() => {
@@ -440,8 +440,8 @@ export default function MyParking() {
                           setAddDayStep("times");
                           setClosingAddDay(false);
                           setAddDaySheet(true);
-                        }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                            <Pencil size={12} style={{ color: "#007AFF" }} />
+                        }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                            <Pencil size={12} style={{ color: "var(--hanoo-blue)" }} />
                           </button>
                           <button onClick={() => setCancelSheet({
                             blockInfo: { type: "temp", start_at: t.start_at, end_at: t.end_at },
@@ -450,8 +450,8 @@ export default function MyParking() {
                               setTempBlocks(prev => prev.filter(x => x.id !== t.id));
                               setCancelSheet(null);
                             }
-                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "#FEE2E2" }}>
-                            <Trash2 size={12} style={{ color: "#EF4444" }} />
+                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
+                            <Trash2 size={12} style={{ color: "var(--hanoo-red)" }} />
                           </button>
                         </div>
                       </div>
