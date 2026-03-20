@@ -65,7 +65,7 @@ export default function Layout({ children, currentPageName }) {
             WebkitBackdropFilter: "blur(12px)",
           }}
         >
-          <div className="flex items-center justify-around py-2">
+          <div className="flex items-center justify-around py-2" role="tablist" aria-label="ניווט ראשי">
             {navItems.map(({ name, label, icon: Icon, path }) => {
               const isActive = name === "Home"
                 ? location.pathname === "/"
@@ -73,6 +73,9 @@ export default function Layout({ children, currentPageName }) {
               return (
                 <button
                   key={name}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={label}
                   onClick={() => switchTab(path)}
                   className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all select-none"
                   style={{ minWidth: 44, minHeight: 44, background: "transparent", border: "none" }}
