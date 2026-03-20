@@ -52,6 +52,9 @@ export default function Layout({ children, currentPageName }) {
             paddingBottom: "env(safe-area-inset-bottom)",
             background: "var(--surface-nav)",
             borderColor: "var(--surface-nav-border)",
+            /* Blur effect for native feel */
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
           }}
         >
           <div className="flex items-center justify-around py-2">
