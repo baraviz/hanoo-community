@@ -597,6 +597,7 @@ export default function Home() {
             </div>
           );
         })()}
+      </div>
       </PullToRefreshWrapper>
     </div>
   );
