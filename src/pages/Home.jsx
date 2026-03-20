@@ -324,10 +324,10 @@ export default function Home() {
             <div className="w-10 h-1 rounded-full mx-auto mb-2" style={{ background: "var(--sheet-handle)" }} />
             {isAvailableNow() ? (
               <>
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
-                  <AlertTriangle size={24} style={{ color: "#EF4444" }} />
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "var(--hanoo-red-light)" }}>
+                  <AlertTriangle size={24} style={{ color: "var(--hanoo-red)" }} />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800 text-center">השבתת זמינות</h2>
+                <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>השבתת זמינות</h2>
                 {!resident?.bonus_credits_received && (
                   <div className="rounded-2xl p-3 text-center" style={{ background: "#FFF8E7", border: "1px solid #FFD700" }}>
                     <p className="text-amber-700 text-sm font-medium">⚠️ זהו הפרסום הראשון שלך — הסרה תמנע ממך לקבל 100 קרדיטים בונוס</p>
