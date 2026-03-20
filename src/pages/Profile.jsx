@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Users, Building2, Share2 } from "lucide-react";
+import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Users, Building2, Share2, Trash2, AlertTriangle } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import LeagueCard from "@/components/profile/LeagueCard";
 import ActivityHistory from "@/components/profile/ActivityHistory";
