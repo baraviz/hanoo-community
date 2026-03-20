@@ -460,8 +460,8 @@ export default function Home() {
             <p className="text-blue-200 text-sm">שלום,</p>
             <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"}</h1>
           </div>
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
-            <Menu size={18} className="text-white" />
+          <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
+            <Menu size={18} className="text-white" aria-hidden="true" />
           </button>
         </div>
 
@@ -483,15 +483,17 @@ export default function Home() {
         {/* Action buttons — TOP */}
         <div className="grid grid-cols-2 gap-3">
           <button
+            aria-label="מצא חניה פנויה"
             onClick={() => push("/FindParking")}
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform select-none"
           >
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
-              <Car size={22} className="text-white" />
+              <Car size={22} className="text-white" aria-hidden="true" />
             </div>
             <span className="text-sm font-semibold select-none" style={{ color: "var(--text-primary)" }}>מצא חניה</span>
           </button>
           <button
+            aria-label="פרסם את החניה שלך"
             onClick={() => push("/MyParking")}
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform select-none"
           >
@@ -538,6 +540,7 @@ export default function Home() {
               </div>
             </div>
             <button
+              aria-label="סיים שימוש בחניה הפעילה"
               onClick={() => endBooking(activeBooking)}
               disabled={endingBooking}
               className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
