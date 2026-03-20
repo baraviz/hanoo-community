@@ -311,8 +311,8 @@ export default function Home() {
           onClick={closeStatusDrawer}
         >
           <div
-            className="bg-white rounded-t-3xl w-full p-6 space-y-4"
-            style={{ paddingBottom: "calc(80px + 1.5rem)", animation: closingDrawer ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
+            className="rounded-t-3xl w-full p-6 space-y-4"
+            style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closingDrawer ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
             onClick={e => e.stopPropagation()}
           >
             <style>{`
