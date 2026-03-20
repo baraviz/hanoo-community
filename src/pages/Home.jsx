@@ -321,7 +321,7 @@ export default function Home() {
               @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
               @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
             `}</style>
-            <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-2" />
+            <div className="w-10 h-1 rounded-full mx-auto mb-2" style={{ background: "var(--sheet-handle)" }} />
             {isAvailableNow() ? (
               <>
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
