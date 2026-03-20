@@ -315,7 +315,7 @@ export default function FindParking() {
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
-      <div className="pt-12 pb-6 px-5" style={{ background: "var(--surface-header)" }}>
+      <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between">
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">מצא חניה</h1>

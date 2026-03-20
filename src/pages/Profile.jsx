@@ -133,7 +133,7 @@ export default function Profile() {
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
 
       {/* Header */}
-      <div className="pt-12 pb-5 px-5" style={{ background: "var(--surface-header)" }}>
+      <div className="pt-safe pb-5 px-5" style={{ background: "var(--surface-header)" }}>
         {/* Avatar + name + hamburger on same row */}
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-none">

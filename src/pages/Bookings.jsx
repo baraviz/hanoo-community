@@ -120,7 +120,7 @@ export default function Bookings() {
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       {/* Header */}
-      <div className="pt-12 pb-4 px-5" style={{ background: "var(--surface-header)" }}>
+      <div className="pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">הזמנות</h1>

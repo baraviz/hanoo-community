@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
+import { useAppNavigation } from "@/lib/NavigationContext";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
 import DailyUpdateModal from "@/components/DailyUpdateModal";
 import CancelAvailabilitySheet from "@/components/CancelAvailabilitySheet";
@@ -452,7 +453,7 @@ export default function Home() {
         </div>
       )}
       {/* Header */}
-      <div className="pt-12 pb-6 px-5" style={{ background: "var(--surface-header)" }}>
+      <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
           <div className="text-right">
             <p className="text-blue-200 text-sm">שלום,</p>
