@@ -53,7 +53,7 @@ function SummaryCard({ icon: Icon, title, onEdit, children }) {
 }
 
 export default function Onboarding() {
-  const navigate = useNavigate();
+  const { push } = useAppNavigation();
   const [user, setUser] = useState(null);
   const [step, setStep] = useState("choose");
   const [loading, setLoading] = useState(false);

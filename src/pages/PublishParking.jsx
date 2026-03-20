@@ -5,7 +5,7 @@ import { useAppNavigation } from "@/lib/NavigationContext";
 import { Car, CheckCircle, ChevronRight, Gift, ParkingSquare } from "lucide-react";
 
 export default function PublishParking() {
-  const navigate = useNavigate();
+  const { push, back } = useAppNavigation();
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
   const [fromTime, setFromTime] = useState("");

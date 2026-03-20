@@ -4,7 +4,7 @@ import { ChevronRight, Send, CheckCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 export default function ReportBug() {
-  const navigate = useNavigate();
+  const { back } = useAppNavigation();
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
