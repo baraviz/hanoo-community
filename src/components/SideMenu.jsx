@@ -82,7 +82,7 @@ export default function SideMenu({ onClose }) {
         </div>
 
         {/* Logout — sits above the bottom nav (80px) */}
-        <div className="px-4 border-t border-gray-100" style={{ paddingBottom: "calc(80px + 1rem)", paddingTop: "1rem" }}>
+        <div className="px-4 border-t border-gray-100" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1rem)", paddingTop: "1rem" }}>
           <button
             onClick={() => base44.auth.logout()}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm"
