@@ -110,7 +110,7 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
 
       <div
         className="bg-white rounded-t-3xl p-6 space-y-5 max-w-[430px] w-full"
-        style={{ paddingBottom: "calc(80px + 1.5rem)", animation: anim.sheet }}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1.5rem)", animation: anim.sheet }}
         onClick={e => e.stopPropagation()}
       >
         <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
