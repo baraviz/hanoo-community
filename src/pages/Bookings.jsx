@@ -136,14 +136,14 @@ export default function Bookings() {
           <button
             onClick={() => setTab("mine")}
             className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
-            style={{ background: tab === "mine" ? "white" : "transparent", color: tab === "mine" ? "#007AFF" : "white" }}
+            style={{ background: tab === "mine" ? "white" : "transparent", color: tab === "mine" ? "var(--hanoo-blue)" : "white" }}
           >
             אני הזמנתי
           </button>
           <button
             onClick={() => setTab("theirs")}
             className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
-            style={{ background: tab === "theirs" ? "white" : "transparent", color: tab === "theirs" ? "#007AFF" : "white" }}
+            style={{ background: tab === "theirs" ? "white" : "transparent", color: tab === "theirs" ? "var(--hanoo-blue)" : "white" }}
           >
             הזמינו ממני
           </button>

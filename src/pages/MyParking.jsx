@@ -254,7 +254,7 @@ export default function MyParking() {
     >
       {/* Header */}
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
-      <div className="flex-none pt-12 pb-4 px-5" style={{ background: "#007AFF" }}>
+      <div className="flex-none pt-12 pb-4 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between">
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">החניה שלי</h1>
