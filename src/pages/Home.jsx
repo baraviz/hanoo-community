@@ -270,10 +270,10 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#007AFF" }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--surface-header)" }}>
         <div className="text-white text-center">
           <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="pacifico text-2xl" style={{ fontFamily: "Pacifico, cursive" }}>Hanoo</p>
+          <p className="pacifico text-2xl">Hanoo</p>
         </div>
       </div>
     );
@@ -281,12 +281,12 @@ export default function Home() {
 
   if (resident?.status === "pending") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-4" style={{ background: "#EBF4FF" }}>
-          <Clock size={36} style={{ color: "#007AFF" }} />
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center" style={{ background: "var(--surface-page)" }}>
+        <div className="w-20 h-20 rounded-full flex items-center justify-center mb-4" style={{ background: "var(--hanoo-blue-light)" }}>
+          <Clock size={36} style={{ color: "var(--hanoo-blue)" }} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">ממתין לאישור</h2>
-        <p className="text-gray-500">בעל הבניין עדיין לא אישר את בקשתך. נעדכן אותך ברגע שיאושר!</p>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>ממתין לאישור</h2>
+        <p style={{ color: "var(--text-secondary)" }}>בעל הבניין עדיין לא אישר את בקשתך. נעדכן אותך ברגע שיאושר!</p>
       </div>
     );
   }
