@@ -13,6 +13,7 @@ import { format, isAfter, isBefore, parseISO } from "date-fns";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { push } = useAppNavigation();
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
   const [building, setBuilding] = useState(null);
