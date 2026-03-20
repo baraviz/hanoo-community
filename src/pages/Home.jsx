@@ -438,12 +438,12 @@ export default function Home() {
                   color="#007AFF"
                 />
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold" style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-text)" }}>ביטול</button>
                   <button
                     onClick={makeAvailable}
                     disabled={availUntilMinutes === null}
                     className="py-3 rounded-2xl font-bold text-white"
-                    style={{ background: "#007AFF", opacity: availUntilMinutes === null ? 0.4 : 1 }}
+                    style={{ background: "var(--hanoo-blue)", opacity: availUntilMinutes === null ? 0.4 : 1 }}
                   >פתח חניה</button>
                 </div>
               </>
