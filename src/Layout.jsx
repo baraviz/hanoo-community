@@ -37,7 +37,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {showNav && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-50" style={{maxWidth: 430, margin: "0 auto"}}>
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-lg z-50" style={{maxWidth: 430, margin: "0 auto", paddingBottom: "env(safe-area-inset-bottom)"}}>
           <div className="flex items-center justify-around py-2">
             {navItems.map(({ name, label, icon: Icon }) => {
               const isActive = currentPageName === name;
