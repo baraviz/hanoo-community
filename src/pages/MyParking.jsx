@@ -697,12 +697,12 @@ export default function MyParking() {
       {(saving || saved) && (
         <div className="flex-none px-4 pb-2 flex justify-center">
           {saving ? (
-            <div className="flex items-center gap-2 text-xs text-gray-400">
-              <div className="w-3 h-3 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+            <div className="flex items-center gap-2 text-xs" style={{ color: "var(--text-tertiary)" }}>
+              <div className="w-3 h-3 border-2 rounded-full animate-spin" style={{ borderColor: "var(--surface-card-border)", borderTopColor: "var(--hanoo-blue)" }} />
               שומר...
             </div>
           ) : (
-            <div className="flex items-center gap-1 text-xs text-green-500">
+            <div className="flex items-center gap-1 text-xs" style={{ color: "var(--hanoo-green)" }}>
               <Check size={12} /> נשמר
             </div>
           )}
