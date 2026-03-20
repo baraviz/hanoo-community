@@ -859,7 +859,7 @@ export default function MyParking() {
                         }, 230);
                       }}
                       className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
-                      style={{ background: "#FEE2E2", color: "#EF4444" }}
+                      style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
                     >
                       <Trash2 size={20} />
                     </button>
@@ -905,7 +905,7 @@ export default function MyParking() {
                       setTimeout(() => { setAddDaySheet(false); setClosingAddDay(false); }, 220);
                     }}
                     className="flex-1 py-3 rounded-2xl font-bold text-white text-base"
-                    style={{ background: "#007AFF" }}
+                    style={{ background: "var(--hanoo-blue)" }}
                   >
                     שמור
                   </button>
