@@ -292,7 +292,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
       <DailyUpdateModal user={user} resident={resident} />
       {cancelSheet && (
