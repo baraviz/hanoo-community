@@ -155,6 +155,13 @@
     font-family: 'Heebo', sans-serif;
   }
 
+  html {
+    overscroll-behavior: none;
+    /* Prevent iOS font size boost in landscape */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     background-color: var(--surface-page);
@@ -164,22 +171,33 @@
     max-width: 430px;
     margin: 0 auto;
     min-height: 100vh;
+    min-height: 100dvh; /* dynamic viewport height on mobile */
     position: relative;
     overflow-x: hidden;
+    /* iOS rubber-band scroll fix */
+    -webkit-overflow-scrolling: touch;
   }
 
-  html {
-    overscroll-behavior: none;
-  }
-
-  /* 44px minimum tap target */
+  /* 44px minimum tap target (Apple HIG) */
   button, a, [role="button"] {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* Safe area */
+  /* Disable iOS tap highlight */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Safe area utilities */
   .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-area-full {
+    padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
   }
 }

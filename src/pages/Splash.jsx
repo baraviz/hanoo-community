@@ -20,8 +20,13 @@ export default function Splash() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-between py-16"
-      style={{ background: "#007AFF" }}
+      className="flex flex-col items-center justify-between"
+      style={{
+        background: "var(--hanoo-blue)",
+        minHeight: "100dvh",
+        paddingTop: "calc(env(safe-area-inset-top) + 4rem)",
+        paddingBottom: "calc(env(safe-area-inset-bottom) + 4rem)",
+      }}
     >
       <div className="flex-1 flex flex-col items-center justify-center gap-6">
         <h1
