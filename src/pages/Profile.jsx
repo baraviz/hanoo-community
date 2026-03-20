@@ -408,7 +408,7 @@ export default function Profile() {
 
             {/* Activity history */}
             <div className="card p-4">
-              <p className="font-bold text-gray-800 mb-1">היסטוריית פעילות</p>
+              <p className="font-bold mb-1" style={{ color: "var(--text-primary)" }}>היסטוריית פעילות</p>
               <ActivityHistory bookings={myBookings} />
             </div>
           </>
@@ -420,14 +420,14 @@ export default function Profile() {
             {/* Building info + invite code */}
             {building && (
               <div className="card p-4">
-                <p className="text-xs font-bold text-gray-400 mb-1">הבניין שלי</p>
-                <p className="font-bold text-gray-800">{building.name}</p>
-                <p className="text-gray-500 text-sm mb-3">{building.address}, {building.city}</p>
-                <p className="text-xs text-gray-400 mb-1">קוד הצטרפות לשכנים</p>
+                <p className="text-xs font-bold mb-1" style={{ color: "var(--text-tertiary)" }}>הבניין שלי</p>
+                <p className="font-bold" style={{ color: "var(--text-primary)" }}>{building.name}</p>
+                <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>{building.address}, {building.city}</p>
+                <p className="text-xs mb-1" style={{ color: "var(--text-tertiary)" }}>קוד הצטרפות לשכנים</p>
                 <button
                   onClick={copyCode}
                   className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold tracking-widest"
-                  style={{ background: "#EBF4FF", color: "#007AFF" }}
+                  style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
                 >
                   {copied ? <CheckCircle size={16} /> : <Copy size={16} />}
                   {building.invite_code}
