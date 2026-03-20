@@ -581,10 +581,10 @@ export default function Home() {
                 </div>
               </div>
               {available && activeUntil && (
-                <p className="text-gray-500 text-sm mb-3">זמין עד {activeUntil}</p>
+                <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>זמין עד {activeUntil}</p>
               )}
               {!available && nextText && (
-                <p className="text-gray-400 text-sm mb-3">{nextText}</p>
+                <p className="text-sm mb-3" style={{ color: "var(--text-tertiary)" }}>{nextText}</p>
               )}
               <button
                 onClick={() => { setBlockUntilHour(null); const opts = (() => { const now = new Date(); const cur = now.getHours() * 60 + now.getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
