@@ -193,25 +193,26 @@ export default function Profile() {
             {/* Phone */}
             {resident && (
               <div className="card p-4">
-                <p className="text-xs font-bold text-gray-400 mb-2">מספר טלפון</p>
+                <p className="text-xs font-bold mb-2" style={{ color: "var(--text-tertiary)" }}>מספר טלפון</p>
                 {resident.phone && !editingPhone ? (
                   <div className="flex items-center gap-2">
-                    <Phone size={16} className="text-gray-400 flex-none" />
-                    <span className="flex-1 text-sm font-medium text-gray-800" dir="ltr">{resident.phone}</span>
-                    <button onClick={() => setEditingPhone(true)} className="w-8 h-8 flex items-center justify-center rounded-xl" style={{ background: "#EBF4FF" }}>
-                      <Pencil size={14} style={{ color: "#007AFF" }} />
+                    <Phone size={16} style={{ color: "var(--text-tertiary)" }} className="flex-none" />
+                    <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-primary)" }} dir="ltr">{resident.phone}</span>
+                    <button onClick={() => setEditingPhone(true)} className="w-8 h-8 flex items-center justify-center rounded-xl" style={{ background: "var(--hanoo-blue-light)" }}>
+                      <Pencil size={14} style={{ color: "var(--hanoo-blue)" }} />
                     </button>
                   </div>
                 ) : (
                   <div className="flex gap-2">
-                    <div className="flex-1 flex items-center gap-2 border border-gray-200 rounded-xl px-3 py-2">
-                      <Phone size={16} className="text-gray-400 flex-none" />
+                    <div className="flex-1 flex items-center gap-2 rounded-xl px-3 py-2" style={{ border: "1px solid var(--surface-card-border)" }}>
+                      <Phone size={16} style={{ color: "var(--text-tertiary)" }} className="flex-none" />
                       <input
                         type="tel"
                         value={phone}
                         onChange={e => setPhone(e.target.value)}
                         placeholder="050-0000000"
-                        className="flex-1 text-sm font-medium text-gray-800 outline-none bg-transparent"
+                        className="flex-1 text-sm font-medium outline-none bg-transparent"
+                        style={{ color: "var(--text-primary)" }}
                         dir="ltr"
                         autoFocus={!!resident.phone}
                       />
@@ -220,7 +221,7 @@ export default function Profile() {
                       onClick={async () => { await savePhone(); setResident(prev => ({ ...prev, phone: phone.trim() })); setEditingPhone(false); }}
                       disabled={savingPhone}
                       className="px-4 py-2 rounded-xl text-sm font-bold text-white"
-                      style={{ background: phoneSaved ? "#34C759" : "#007AFF", opacity: savingPhone ? 0.6 : 1 }}
+                      style={{ background: phoneSaved ? "var(--hanoo-green)" : "var(--hanoo-blue)", opacity: savingPhone ? 0.6 : 1 }}
                     >
                       {phoneSaved ? "✓" : "שמור"}
                     </button>
