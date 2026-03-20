@@ -811,7 +811,7 @@ export default function MyParking() {
                     <button
                       onClick={() => setAddDayRanges(prev => [...prev, { sH: 12, sM: 0, eH: 14, eM: 0 }])}
                       className="w-full py-2 rounded-2xl text-sm font-bold"
-                      style={{ color: "#007AFF", background: "#EBF4FF" }}
+                      style={{ color: "var(--hanoo-blue)", background: "var(--hanoo-blue-light)" }}
                     >
                       + הוסף טווח נוסף
                     </button>
@@ -834,7 +834,7 @@ export default function MyParking() {
                         }, 230);
                       }}
                       className="w-14 h-14 flex-none rounded-2xl flex items-center justify-center"
-                      style={{ background: "#FEE2E2", color: "#EF4444" }}
+                      style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
                     >
                       <Trash2 size={20} />
                     </button>
