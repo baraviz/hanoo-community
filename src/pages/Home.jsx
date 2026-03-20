@@ -381,10 +381,11 @@ export default function Home() {
                   const nextText = getNextAvailableText();
                   if (!nextText) return null;
                   return (
-                    <p className="text-gray-400 text-center text-xs pt-1">
+                    <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
                       לפי{" "}
                       <span
-                        className="underline cursor-pointer text-blue-500"
+                        className="underline cursor-pointer"
+                        style={{ color: "var(--hanoo-blue)" }}
                         onClick={() => { closeStatusDrawer(); navigate(createPageUrl("MyParking")); }}
                       >
                         יומן הזמינות
