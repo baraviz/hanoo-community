@@ -438,8 +438,8 @@ export default function Profile() {
             {/* Residents list */}
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
-                <p className="font-bold text-gray-800">דיירים בבניין</p>
-                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">{allResidents.length}</span>
+                <p className="font-bold" style={{ color: "var(--text-primary)" }}>דיירים בבניין</p>
+                <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "var(--text-tertiary)", background: "var(--btn-secondary-bg)" }}>{allResidents.length}</span>
               </div>
               <ResidentsManager
                 residents={allResidents}
