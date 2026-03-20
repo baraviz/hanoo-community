@@ -412,53 +412,53 @@ export default function FindParking() {
             return (
               <div key={idx} className="card overflow-hidden">
                 {/* Header */}
-                <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-gray-100">
-                  <span className="text-xs font-bold text-gray-500">שילוב חניות</span>
+                <div className="px-4 pt-3 pb-2 flex items-center justify-between" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+                  <span className="text-xs font-bold" style={{ color: "var(--text-tertiary)" }}>שילוב חניות</span>
                   <div className="text-right">
-                    <span className="font-bold text-lg" style={{ color: "#007AFF" }}>{totalCost}</span>
-                    <span className="text-gray-400 text-xs"> קרדיטים</span>
+                    <span className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{totalCost}</span>
+                    <span className="text-xs" style={{ color: "var(--text-tertiary)" }}> קרדיטים</span>
                   </div>
                 </div>
 
                 {/* First slot */}
                 <div className="px-4 py-3 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "#EBF4FF" }}>
-                    <Car size={18} style={{ color: "#007AFF" }} />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-800 text-sm">חניה #{first.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-gray-500 text-xs">של {first.ownerResident?.user_name || first.owner_email}</p>
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{first.ownerResident?.parking_spot || "?"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {first.ownerResident?.user_name || first.owner_email}</p>
                   </div>
                   <div className="text-left flex-none">
-                    <p className="text-sm font-bold text-gray-700">{fmtMins(fromMins)} – {fmtMins(splitPoint)}</p>
-                    <p className="text-xs text-gray-400">{cost1} קרדיטים</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(fromMins)} – {fmtMins(splitPoint)}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost1} קרדיטים</p>
                   </div>
                 </div>
 
                 {/* Arrow divider */}
                 <div className="flex items-center gap-2 px-4 py-1">
-                  <div className="flex-1 border-t border-dashed border-gray-200" />
-                  <ArrowLeft size={12} className="text-gray-300" />
-                  <div className="flex-1 border-t border-dashed border-gray-200" />
+                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
+                  <ArrowLeft size={12} style={{ color: "var(--text-tertiary)" }} />
+                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
                 </div>
 
                 {/* Second slot */}
                 <div className="px-4 py-3 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "#EBF4FF" }}>
-                    <Car size={18} style={{ color: "#007AFF" }} />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-gray-800 text-sm">חניה #{second.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-gray-500 text-xs">של {second.ownerResident?.user_name || second.owner_email}</p>
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{second.ownerResident?.parking_spot || "?"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {second.ownerResident?.user_name || second.owner_email}</p>
                   </div>
                   <div className="text-left flex-none">
-                    <p className="text-sm font-bold text-gray-700">{fmtMins(splitPoint)} – {fmtMins(toMins)}</p>
-                    <p className="text-xs text-gray-400">{cost2} קרדיטים</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(splitPoint)} – {fmtMins(toMins)}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost2} קרדיטים</p>
                   </div>
                 </div>
 
                 <div className="px-4 pb-4">
-                  <button onClick={() => handleBookCombo(combo)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "#007AFF" }}>
+                  <button onClick={() => handleBookCombo(combo)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
                     הזמן את השילוב
                   </button>
                 </div>

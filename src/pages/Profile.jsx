@@ -302,7 +302,7 @@ export default function Profile() {
             <button
               onClick={() => { setDeleteStep(1); setShowDeleteConfirm(true); }}
               className="w-full py-3 rounded-2xl font-medium flex items-center justify-center gap-2 text-sm"
-              style={{ background: "transparent", color: "#9CA3AF", border: "1px solid #E5E7EB" }}
+              style={{ background: "transparent", color: "var(--text-tertiary)", border: "1px solid var(--surface-card-border)" }}
             >
               <Trash2 size={15} />
               מחק חשבון
