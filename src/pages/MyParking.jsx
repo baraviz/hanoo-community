@@ -743,13 +743,13 @@ export default function MyParking() {
                         onClick={() => { setAddDayIndex(d); setAddDayStep("times"); }}
                         className="py-3 rounded-2xl text-sm font-bold transition-all"
                         style={{
-                          background: hasDay ? "#F3F4F6" : "#EBF4FF",
-                          color: hasDay ? "#9CA3AF" : "#007AFF",
-                          border: hasDay ? "1px solid #E5E7EB" : "none",
+                          background: hasDay ? "var(--btn-secondary-bg)" : "var(--hanoo-blue-light)",
+                          color: hasDay ? "var(--text-tertiary)" : "var(--hanoo-blue)",
+                          border: hasDay ? "1px solid var(--surface-card-border)" : "none",
                         }}
                       >
                         {FULL_DAYS[d]}
-                        {hasDay && <span className="block text-[10px] text-gray-400">קיים</span>}
+                        {hasDay && <span className="block text-[10px]" style={{ color: "var(--text-tertiary)" }}>קיים</span>}
                       </button>
                     );
                   })}
@@ -758,10 +758,10 @@ export default function MyParking() {
             ) : (
               <>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => setAddDayStep("day")} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-                    <span style={{ fontSize: 16 }}>‹</span>
+                  <button onClick={() => setAddDayStep("day")} className="w-8 h-8 flex items-center justify-center rounded-full" style={{ background: "var(--btn-secondary-bg)" }}>
+                    <span style={{ fontSize: 16, color: "var(--text-primary)" }}>‹</span>
                   </button>
-                  <h2 className="text-xl font-bold text-gray-800">יום {FULL_DAYS[addDayIndex]}</h2>
+                  <h2 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>יום {FULL_DAYS[addDayIndex]}</h2>
                 </div>
 
                 <div className="space-y-3">
