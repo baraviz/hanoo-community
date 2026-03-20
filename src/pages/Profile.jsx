@@ -129,7 +129,7 @@ export default function Profile() {
   const tabs = isOwner ? TABS : TABS.filter(t => t.id !== "building");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
 
       {/* Header */}
