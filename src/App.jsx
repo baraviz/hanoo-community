@@ -15,19 +15,23 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { NavigationProvider } from '@/lib/NavigationContext';
+import PageTransition from '@/components/PageTransition';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
-const LayoutWrapper = ({ children, currentPageName }) => Layout ?
-  <Layout currentPageName={currentPageName}>{children}</Layout>
-  : <>{children}</>;
+// Wraps every route with the shared Layout + PageTransition animation
+const LayoutWrapper = ({ children, currentPageName }) => {
+  const inner = <PageTransition>{children}</PageTransition>;
+  return Layout
+    ? <Layout currentPageName={currentPageName}>{inner}</Layout>
+    : inner;
+};
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
-  // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -36,25 +40,21 @@ const AuthenticatedApp = () => {
     );
   }
 
-  // Handle authentication errors
   if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
-      navigateToLogin();
-      return null;
-    }
+    if (authError.type === 'user_not_registered') return <UserNotRegisteredError />;
+    if (authError.type === 'auth_required') { navigateToLogin(); return null; }
   }
 
-  // Render the main app
   return (
     <Routes>
+      {/* Main/splash route */}
       <Route path="/" element={
         <LayoutWrapper currentPageName={mainPageKey}>
           <MainPage />
         </LayoutWrapper>
       } />
+
+      {/* pagesConfig lazy-loaded pages */}
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
@@ -66,22 +66,22 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
-      <Route path="/MyParking" element={<LayoutWrapper currentPageName="MyParking"><MyParking /></LayoutWrapper>} />
-      <Route path="/Bookings" element={<LayoutWrapper currentPageName="Bookings"><Bookings /></LayoutWrapper>} />
-      <Route path="/AdminDashboard" element={<AdminDashboard />} />
-      <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-      <Route path="/TermsOfService" element={<TermsOfService />} />
-      <Route path="/Accessibility" element={<Accessibility />} />
-      <Route path="/ReportBug" element={<ReportBug />} />
-      <Route path="/JoinViaLink" element={<JoinViaLink />} />
-      <Route path="*" element={<PageNotFound />} />
+
+      {/* Explicit routes for pages not in pagesConfig */}
+      <Route path="/MyParking"      element={<LayoutWrapper currentPageName="MyParking"><MyParking /></LayoutWrapper>} />
+      <Route path="/Bookings"       element={<LayoutWrapper currentPageName="Bookings"><Bookings /></LayoutWrapper>} />
+      <Route path="/AdminDashboard" element={<LayoutWrapper currentPageName="AdminDashboard"><AdminDashboard /></LayoutWrapper>} />
+      <Route path="/PrivacyPolicy"  element={<LayoutWrapper currentPageName="PrivacyPolicy"><PrivacyPolicy /></LayoutWrapper>} />
+      <Route path="/TermsOfService" element={<LayoutWrapper currentPageName="TermsOfService"><TermsOfService /></LayoutWrapper>} />
+      <Route path="/Accessibility"  element={<LayoutWrapper currentPageName="Accessibility"><Accessibility /></LayoutWrapper>} />
+      <Route path="/ReportBug"      element={<LayoutWrapper currentPageName="ReportBug"><ReportBug /></LayoutWrapper>} />
+      <Route path="/JoinViaLink"    element={<LayoutWrapper currentPageName="JoinViaLink"><JoinViaLink /></LayoutWrapper>} />
+      <Route path="*"               element={<PageNotFound />} />
     </Routes>
   );
 };
 
-
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
+import { useAppNavigation } from "@/lib/NavigationContext";
 import { Car, CheckCircle, ChevronRight, Gift, ParkingSquare } from "lucide-react";
 
 export default function PublishParking() {

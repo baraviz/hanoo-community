@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNavigation } from "@/lib/NavigationContext";
 import { ChevronRight, Send, CheckCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
