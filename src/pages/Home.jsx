@@ -354,8 +354,8 @@ export default function Home() {
                   );
                 })()}
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold text-gray-700" style={{ background: "#F3F4F6" }}>ביטול</button>
-                  <button
+                  <button onClick={closeStatusDrawer} className="py-3 rounded-2xl font-bold" style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-text)" }}>ביטול</button>
+                   <button
                    onClick={() => {
                      // Build blockInfo for the current active availability window
                      const now = new Date();
