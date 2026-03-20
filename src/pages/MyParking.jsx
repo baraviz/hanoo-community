@@ -326,11 +326,11 @@ export default function MyParking() {
             if (allDays.length === 0) {
               return (
                 <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-                  <p className="text-gray-500 text-sm">אין זמינויות עדיין</p>
+                  <p className="text-sm" style={{ color: "var(--text-secondary)" }}>אין זמינויות עדיין</p>
                   <button
                     onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setClosingAddDay(false); setAddDaySheet(true); }}
                     className="px-6 py-3 rounded-2xl font-bold text-white text-sm"
-                    style={{ background: "#007AFF" }}
+                    style={{ background: "var(--hanoo-blue)" }}
                   >
                     הוסף זמינות
                   </button>
@@ -344,9 +344,9 @@ export default function MyParking() {
             return (
               <div className="space-y-5">
               {allDays.map(dayIndex => (
-              <div key={dayIndex} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                  <h3 className="font-bold text-gray-800">יום {FULL_DAYS[dayIndex]}</h3>
+              <div key={dayIndex} className="app-card overflow-hidden">
+                <div className="px-4 py-3 flex items-center justify-between" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+                  <h3 className="font-bold" style={{ color: "var(--text-primary)" }}>יום {FULL_DAYS[dayIndex]}</h3>
                   <button
                     onClick={() => {
                       const existing = (recurringByDay[dayIndex] || []).sort((a,b) => a.start - b.start);
@@ -357,7 +357,7 @@ export default function MyParking() {
                       setTimeout(() => triggerSave(), 100);
                     }}
                     className="text-xs font-bold px-3 py-1 rounded-xl"
-                    style={{ color: "#007AFF", background: "#EBF4FF" }}
+                    style={{ color: "var(--hanoo-blue)", background: "var(--hanoo-blue-light)" }}
                   >
                     + טווח נוסף
                   </button>
