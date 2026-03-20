@@ -465,7 +465,7 @@ export default function MyParking() {
                 <button
                   onClick={() => { setAddDayStep("day"); setAddDayIndex(null); setAddDayRanges([{ sH: 8, sM: 0, eH: 10, eM: 0 }]); setClosingAddDay(false); setAddDaySheet(true); }}
                   className="text-sm font-regular"
-                  style={{ color: "#007AFF", textDecoration: "underline", textUnderlineOffset: 3 }}
+                  style={{ color: "var(--hanoo-blue)", textDecoration: "underline", textUnderlineOffset: 3 }}
                 >
                   הגדר זמינות ליום נוסף +
                 </button>
@@ -487,7 +487,7 @@ export default function MyParking() {
                 <div key={i} className="flex-1 flex justify-center">
                   <div
                     className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold"
-                    style={isToday ? { background: "#007AFF", color: "white" } : { color: "#6B7280" }}
+                    style={isToday ? { background: "var(--hanoo-blue)", color: "white" } : { color: "var(--text-tertiary)" }}
                   >
                     {d}
                   </div>
