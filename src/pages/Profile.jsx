@@ -233,14 +233,14 @@ export default function Profile() {
             {/* My parking */}
             {resident && (resident.parking_spot || resident.parking_floor) && (
               <div className="card p-4">
-                <p className="text-xs font-bold text-gray-400 mb-2">החניה שלי</p>
+                <p className="text-xs font-bold mb-2" style={{ color: "var(--text-tertiary)" }}>החניה שלי</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EBF4FF" }}>
-                    <Car size={20} style={{ color: "#007AFF" }} />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={20} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-800">חניה {resident.parking_spot || "—"}</p>
-                    {resident.parking_floor && <p className="text-gray-500 text-sm">קומה {resident.parking_floor}</p>}
+                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה {resident.parking_spot || "—"}</p>
+                    {resident.parking_floor && <p className="text-sm" style={{ color: "var(--text-secondary)" }}>קומה {resident.parking_floor}</p>}
                   </div>
                 </div>
               </div>

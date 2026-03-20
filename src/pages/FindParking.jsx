@@ -329,19 +329,19 @@ export default function FindParking() {
 
       <div className="px-5 py-5">
         <div className="card p-3 mb-4 space-y-2">
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "#E8EAED" }}>
-            <Clock size={16} className="text-gray-500 flex-none" />
-            <span className="text-xs font-bold text-gray-500 flex-none">ממתי?</span>
-            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "var(--btn-secondary-bg)" }}>
+            <Clock size={16} style={{ color: "var(--text-secondary)" }} className="flex-none" />
+            <span className="text-xs font-bold flex-none" style={{ color: "var(--text-secondary)" }}>ממתי?</span>
+            <span className="flex-1 text-sm font-medium text-left" style={{ color: "var(--text-primary)" }}>
               {fromTime ? new Date(fromTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input type="datetime-local" value={fromTime} onChange={e => setFromTime(e.target.value)} className="absolute inset-0 w-full h-full cursor-pointer" style={{ opacity: 0 }} />
           </label>
-          <div className="border-t border-gray-200 mx-3" />
-          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "#E8EAED" }}>
-            <Clock size={16} className="text-gray-500 flex-none" />
-            <span className="text-xs font-bold text-gray-500 flex-none">עד מתי?</span>
-            <span className="flex-1 text-sm font-medium text-gray-800 text-left">
+          <div className="border-t mx-3" style={{ borderColor: "var(--surface-card-border)" }} />
+          <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "var(--btn-secondary-bg)" }}>
+            <Clock size={16} style={{ color: "var(--text-secondary)" }} className="flex-none" />
+            <span className="text-xs font-bold flex-none" style={{ color: "var(--text-secondary)" }}>עד מתי?</span>
+            <span className="flex-1 text-sm font-medium text-left" style={{ color: "var(--text-primary)" }}>
               {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
             </span>
             <input type="datetime-local" value={toTime} onChange={e => setToTime(e.target.value)} className="absolute inset-0 w-full h-full cursor-pointer" style={{ opacity: 0 }} />
@@ -352,7 +352,7 @@ export default function FindParking() {
           onClick={searchParking}
           disabled={loading || !resident}
           className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2 mb-4"
-          style={{ background: "#007AFF", opacity: loading ? 0.7 : 1 }}
+          style={{ background: "var(--hanoo-blue)", opacity: loading ? 0.7 : 1 }}
         >
           <Search size={18} />
           {loading ? "מחפש..." : "חפש חניה"}
