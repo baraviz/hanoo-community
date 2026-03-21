@@ -78,33 +78,35 @@ export default function DailyUpdateModal({ user, resident }) {
       className="fixed inset-0 z-50 flex items-end justify-center"
       style={{ background: "rgba(0,0,0,0.45)" }}
     >
-      <div className="bg-white rounded-t-3xl w-full p-6 max-w-[430px]" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
+      <div className="rounded-t-3xl w-full p-6 max-w-[430px]" style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)" }}>
+        {/* Handle */}
+        <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "var(--sheet-handle)" }} />
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
-          <h2 id="daily-modal-title" className="text-xl font-bold text-gray-800">בוקר טוב! ☀️</h2>
-          <button onClick={dismiss} aria-label="סגור עדכון יומי" className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-            <X size={16} className="text-gray-500" aria-hidden="true" />
+          <h2 id="daily-modal-title" className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>בוקר טוב! ☀️</h2>
+          <button onClick={dismiss} aria-label="סגור עדכון יומי" className="w-11 h-11 flex items-center justify-center rounded-full" style={{ background: "var(--btn-secondary-bg)" }}>
+            <X size={16} style={{ color: "var(--text-secondary)" }} aria-hidden="true" />
           </button>
         </div>
-        <p className="text-gray-400 text-sm mb-5">הנה מה שקרה מאז הביקור האחרון שלך</p>
+        <p className="text-sm mb-5" style={{ color: "var(--text-tertiary)" }}>הנה מה שקרה מאז הביקור האחרון שלך</p>
 
         <div className="space-y-3">
           {/* Points & League */}
-          <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
+          <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
             <span className="text-2xl">{leagueIcon}</span>
             <div className="flex-1">
-              <p className="font-bold text-gray-800 text-sm">ליגת {data.league}</p>
-              <p className="text-xs text-gray-500">יש לך {data.points} נקודות</p>
+              <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>ליגת {data.league}</p>
+              <p className="text-xs" style={{ color: "var(--text-secondary)" }}>יש לך {data.points} נקודות</p>
             </div>
-            <Star size={18} style={{ color: "#007AFF" }} />
+            <Star size={18} style={{ color: "var(--hanoo-blue)" }} />
           </div>
 
           {/* Bookings received today */}
           {data.receivedToday.length > 0 && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
+            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
               <span className="text-2xl mt-0.5">🎉</span>
               <div className="flex-1">
-                <p className="font-bold text-gray-800 text-sm">
+                <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                   {data.receivedToday.length === 1
                     ? "הזמנה אחת נכנסה לחניה שלך"
                     : `${data.receivedToday.length} הזמנות נכנסו לחניה שלך`}
@@ -117,7 +119,7 @@ export default function DailyUpdateModal({ user, resident }) {
                   let whenLabel = diffDays === null ? "" : diffDays <= 0 ? "היום" : diffDays === 1 ? "מחר" : `בעוד ${diffDays} ימים`;
                   const timeRange = [start ? format(start, "HH:mm") : "", end ? format(end, "HH:mm") : ""].filter(Boolean).join("–");
                   return (
-                    <p key={b.id} className="text-xs text-gray-500 mt-0.5">
+                    <p key={b.id} className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
                       {b.renter_name} · {whenLabel}{timeRange ? `, ${timeRange}` : ""}
                     </p>
                   );
@@ -128,32 +130,32 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Completed bookings */}
           {data.completedToday.length > 0 && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
-              <Car size={20} className="mt-0.5 flex-none" style={{ color: "#007AFF" }} />
+            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+              <Car size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
-                <p className="font-bold text-gray-800 text-sm">
+                <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                   {data.completedToday.length === 1 ? "הזמנה אחת הושלמה" : `${data.completedToday.length} הזמנות הושלמו`}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">+{data.completedToday.length * 5} נקודות נצברו</p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>+{data.completedToday.length * 5} נקודות נצברו</p>
               </div>
             </div>
           )}
 
           {/* Today's availability */}
           {(data.recurringToday.length > 0 || data.tempToday.length > 0) && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "#EBF4FF" }}>
-              <ParkingSquare size={20} className="mt-0.5 flex-none" style={{ color: "#007AFF" }} />
+            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+              <ParkingSquare size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
-                <p className="font-bold text-gray-800 text-sm">החניה שלך היום</p>
+                <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>החניה שלך היום</p>
                 {data.recurringToday.map((s, i) => {
                   const h1 = Math.floor(s.time_start / 60), m1 = s.time_start % 60;
                   const h2 = Math.floor(s.time_end / 60), m2 = s.time_end % 60;
                   const t1 = `${String(h1).padStart(2,"0")}:${String(m1).padStart(2,"0")}`;
                   const t2 = `${String(h2).padStart(2,"0")}:${String(m2).padStart(2,"0")}`;
-                  return <p key={i} className="text-xs text-gray-500 mt-0.5">זמינה בין {t1} ל-{t2}</p>;
+                  return <p key={i} className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>זמינה בין {t1} ל-{t2}</p>;
                 })}
                 {data.tempToday.map((s, i) => (
-                  <p key={i} className="text-xs text-gray-500 mt-0.5">זמינה עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
+                  <p key={i} className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>זמינה עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
                 ))}
               </div>
             </div>
@@ -163,7 +165,7 @@ export default function DailyUpdateModal({ user, resident }) {
         <button
           onClick={dismiss}
           className="mt-5 w-full py-3 rounded-2xl font-bold text-white"
-          style={{ background: "#007AFF" }}
+          style={{ background: "var(--hanoo-blue)" }}
         >
           בואו נתחיל!
         </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { Send, ChevronRight, MessageCircle } from "lucide-react";
 import { format, parseISO } from "date-fns";
@@ -12,25 +12,37 @@ export default function Chat() {
   const [newMsg, setNewMsg] = useState("");
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     loadInit();
   }, []);
 
   useEffect(() => {
-    if (selectedNeighbor) loadMessages(selectedNeighbor);
+    if (selectedNeighbor && user) loadMessages(selectedNeighbor);
   }, [selectedNeighbor]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Poll messages every 5s
+  // Real-time subscription instead of polling
   useEffect(() => {
-    if (!selectedNeighbor) return;
-    const interval = setInterval(() => loadMessages(selectedNeighbor), 5000);
-    return () => clearInterval(interval);
-  }, [selectedNeighbor]);
+    if (!selectedNeighbor || !user) return;
+    const unsub = base44.entities.Message.subscribe((event) => {
+      const convId = getConversationId(user.email, selectedNeighbor.user_email);
+      if (event.type === "create" && event.data?.conversation_id === convId) {
+        setMessages(prev => {
+          if (prev.some(m => m.id === event.data.id)) return prev;
+          return [...prev, event.data];
+        });
+        if (event.data.receiver_email === user.email) {
+          base44.entities.Message.update(event.data.id, { read: true });
+        }
+      }
+    });
+    return () => unsub();
+  }, [selectedNeighbor, user]);
 
   async function loadInit() {
     const u = await base44.auth.me();
@@ -57,15 +69,17 @@ export default function Chat() {
     const msgs = await base44.entities.Message.filter({ conversation_id: convId });
     msgs.sort((a, b) => new Date(a.created_date) - new Date(b.created_date));
     setMessages(msgs);
-    // Mark as read
+    // Mark as read in batch
     const unread = msgs.filter(m => m.receiver_email === user.email && !m.read);
-    for (const m of unread) {
-      base44.entities.Message.update(m.id, { read: true });
+    if (unread.length > 0) {
+      Promise.all(unread.map(m => base44.entities.Message.update(m.id, { read: true })));
     }
   }
 
   async function sendMessage() {
     if (!newMsg.trim() || !selectedNeighbor) return;
+    const text = newMsg.trim();
+    setNewMsg("");
     const convId = getConversationId(user.email, selectedNeighbor.user_email);
     const msg = await base44.entities.Message.create({
       building_id: resident.building_id,
@@ -73,41 +87,50 @@ export default function Chat() {
       sender_name: user.full_name,
       receiver_email: selectedNeighbor.user_email,
       receiver_name: selectedNeighbor.user_name,
-      content: newMsg.trim(),
+      content: text,
       read: false,
       conversation_id: convId,
     });
     setMessages(prev => [...prev, msg]);
-    setNewMsg("");
+    inputRef.current?.focus();
   }
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--surface-page)" }}>
+        <div className="w-8 h-8 border-4 rounded-full animate-spin" style={{ borderColor: "var(--surface-card-border)", borderTopColor: "var(--hanoo-blue)" }} />
+      </div>
+    );
   }
 
   if (selectedNeighbor) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="flex flex-col" style={{ height: "calc(100vh - 64px)", background: "var(--surface-page)" }}>
         {/* Header */}
-        <div className="pt-12 pb-4 px-5 flex items-center gap-3" style={{ background: "#007AFF" }}>
-          <button onClick={() => setSelectedNeighbor(null)} className="text-white">
-            <ChevronRight size={24} />
+        <div className="flex-none pt-safe pb-4 px-5 flex items-center gap-3" style={{ background: "var(--surface-header)" }}>
+          <button
+            onClick={() => { setSelectedNeighbor(null); setMessages([]); }}
+            aria-label="חזור לרשימת שכנים"
+            className="w-11 h-11 flex items-center justify-center rounded-2xl flex-none"
+            style={{ background: "rgba(255,255,255,0.2)" }}
+          >
+            <ChevronRight size={22} className="text-white" aria-hidden="true" />
           </button>
-          <div className="w-10 h-10 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
-            <span className="text-white font-bold">{(selectedNeighbor.user_name || "?")[0]}</span>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center flex-none" style={{ background: "rgba(255,255,255,0.3)" }}>
+            <span className="text-white font-bold text-base">{(selectedNeighbor.user_name || "?")[0]}</span>
           </div>
           <div>
-            <p className="text-white font-bold">{selectedNeighbor.user_name}</p>
-            <p className="text-blue-200 text-xs">דירה {selectedNeighbor.apartment_number}</p>
+            <p className="text-white font-bold text-sm">{selectedNeighbor.user_name}</p>
+            <p className="text-xs" style={{ color: "var(--surface-header-sub)" }}>דירה {selectedNeighbor.apartment_number}</p>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ paddingBottom: 80 }}>
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ paddingBottom: 16 }}>
           {messages.length === 0 && (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center py-8" style={{ color: "var(--text-tertiary)" }}>
               <MessageCircle size={40} className="mx-auto mb-2 opacity-30" />
-              <p>שלח הודעה ראשונה!</p>
+              <p className="text-sm">שלח הודעה ראשונה!</p>
             </div>
           )}
           {messages.map(msg => {
@@ -115,11 +138,14 @@ export default function Chat() {
             return (
               <div key={msg.id} className={`flex ${isMe ? "justify-start" : "justify-end"}`}>
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-2xl text-sm ${isMe ? "text-white" : "bg-white text-gray-800 shadow-sm"}`}
-                  style={isMe ? { background: "#007AFF", borderBottomRightRadius: 4 } : { borderBottomLeftRadius: 4 }}
+                  className="max-w-xs px-4 py-2 rounded-2xl text-sm"
+                  style={isMe
+                    ? { background: "var(--hanoo-blue)", color: "white", borderBottomRightRadius: 4 }
+                    : { background: "var(--surface-card)", color: "var(--text-primary)", borderBottomLeftRadius: 4, border: "1px solid var(--surface-card-border)" }
+                  }
                 >
                   <p>{msg.content}</p>
-                  <p className={`text-xs mt-1 ${isMe ? "text-blue-200" : "text-gray-400"}`}>
+                  <p className="text-xs mt-1" style={{ color: isMe ? "rgba(255,255,255,0.6)" : "var(--text-tertiary)" }}>
                     {msg.created_date ? format(parseISO(msg.created_date), "HH:mm") : ""}
                   </p>
                 </div>
@@ -129,21 +155,38 @@ export default function Chat() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 flex gap-2" style={{ maxWidth: 430, margin: "0 auto" }}>
+        {/* Input — pinned above nav bar */}
+        <div
+          className="flex-none px-4 py-3 flex gap-2 border-t"
+          style={{
+            background: "var(--surface-card)",
+            borderColor: "var(--surface-nav-border)",
+            paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)",
+          }}
+        >
           <input
+            ref={inputRef}
             value={newMsg}
             onChange={e => setNewMsg(e.target.value)}
             onKeyDown={e => e.key === "Enter" && sendMessage()}
             placeholder="הקלד הודעה..."
-            className="flex-1 border border-gray-200 rounded-full px-4 py-2 outline-none focus:border-blue-400 text-sm"
+            aria-label="הודעה חדשה"
+            className="flex-1 rounded-full px-4 py-2 text-sm outline-none"
+            style={{
+              background: "var(--btn-secondary-bg)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--surface-card-border)",
+              minHeight: 44,
+            }}
           />
           <button
             onClick={sendMessage}
-            className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: "#007AFF" }}
+            aria-label="שלח הודעה"
+            disabled={!newMsg.trim()}
+            className="w-11 h-11 rounded-full flex items-center justify-center flex-none"
+            style={{ background: "var(--hanoo-blue)", opacity: newMsg.trim() ? 1 : 0.4 }}
           >
-            <Send size={16} className="text-white" style={{ transform: "scaleX(-1)" }} />
+            <Send size={16} className="text-white" style={{ transform: "scaleX(-1)" }} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -151,17 +194,17 @@ export default function Chat() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="pt-12 pb-6 px-5" style={{ background: "#007AFF" }}>
+    <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
+      <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <h1 className="text-white text-xl font-bold">צ'אט שכנים 💬</h1>
-        <p className="text-blue-200 text-sm">דבר עם השכנים בבניין</p>
+        <p className="text-sm" style={{ color: "var(--surface-header-sub)" }}>דבר עם השכנים בבניין</p>
       </div>
 
       <div className="px-5 py-4">
         {neighbors.length === 0 ? (
-          <div className="text-center py-16">
-            <MessageCircle size={48} className="mx-auto mb-3 text-gray-300" />
-            <p className="text-gray-500">אין שכנים מאושרים בבניין עדיין</p>
+          <div className="text-center py-16" style={{ color: "var(--text-tertiary)" }}>
+            <MessageCircle size={48} className="mx-auto mb-3 opacity-30" />
+            <p className="text-sm">אין שכנים מאושרים בבניין עדיין</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -169,16 +212,20 @@ export default function Chat() {
               <button
                 key={n.id}
                 onClick={() => setSelectedNeighbor(n)}
-                className="card w-full p-4 flex items-center gap-3 active:scale-98 transition-transform text-right"
+                aria-label={`פתח שיחה עם ${n.user_name}`}
+                className="app-card w-full p-4 flex items-center gap-3 active:scale-95 transition-transform text-right"
               >
-                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{ background: "#007AFF" }}>
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-none"
+                  style={{ background: "var(--hanoo-blue)" }}
+                >
                   {(n.user_name || "?")[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-bold text-gray-800">{n.user_name}</p>
-                  <p className="text-gray-500 text-sm">דירה {n.apartment_number || "?"}</p>
+                  <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{n.user_name}</p>
+                  <p className="text-sm" style={{ color: "var(--text-secondary)" }}>דירה {n.apartment_number || "?"}</p>
                 </div>
-                <ChevronRight size={18} className="text-gray-300" style={{ transform: "scaleX(-1)" }} />
+                <ChevronRight size={18} style={{ color: "var(--text-tertiary)", transform: "scaleX(-1)" }} aria-hidden="true" />
               </button>
             ))}
           </div>

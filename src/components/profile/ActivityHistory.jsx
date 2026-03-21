@@ -26,25 +26,25 @@ export default function ActivityHistory({ bookings }) {
     return (
       <div className="text-center py-8">
         <p className="text-4xl mb-2">🏆</p>
-        <p className="text-gray-400 text-sm">עדיין אין פעילות — השלם הזמנה ראשונה לצבור נקודות!</p>
+        <p className="text-sm" style={{ color: "var(--text-tertiary)" }}>עדיין אין פעילות — השלם הזמנה ראשונה לצבור נקודות!</p>
       </div>
     );
   }
 
   return (
-    <div className="divide-y divide-gray-50">
+    <div className="divide-y" style={{ borderColor: "var(--surface-card-border)" }}>
       {activities.map(a => (
         <div key={a.id} className="flex items-center gap-3 py-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg bg-gray-50 flex-none">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg flex-none" style={{ background: "var(--btn-secondary-bg)" }}>
             {a.icon}
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-800">{a.label}</p>
-            <p className="text-xs text-gray-400">
+            <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{a.label}</p>
+            <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>
               {a.sub} · {a.date ? format(new Date(a.date), "dd/MM HH:mm") : ""}
             </p>
           </div>
-          <span className="text-sm font-bold text-green-600">+{a.points}</span>
+          <span className="text-sm font-bold" style={{ color: "var(--hanoo-green)" }}>+{a.points}</span>
         </div>
       ))}
     </div>
