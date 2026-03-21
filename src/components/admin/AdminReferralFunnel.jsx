@@ -30,7 +30,7 @@ export default function AdminReferralFunnel({ referrals, residents }) {
         aria-expanded={expanded}
         aria-controls="referral-funnel-body"
         aria-label={expanded ? "כווץ פאנל הפניות" : "הרחב פאנל הפניות"}
-        className="w-full px-6 py-4 min-h-[56px] flex items-center justify-between"
+        className="w-full px-6 py-4 min-h-[56px] flex items-center justify-between focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded-2xl"
       >
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "rgba(16,185,129,0.15)" }}>

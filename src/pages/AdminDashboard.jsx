@@ -79,7 +79,7 @@ export default function AdminDashboard() {
           onClick={loadData}
           disabled={refreshing}
           aria-label="רענן נתונים"
-          className="flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-medium transition-colors"
+          className="flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 text-sm font-medium transition-colors"
         >
           <RefreshCw size={15} className={refreshing ? "animate-spin" : ""} />
           רענן
