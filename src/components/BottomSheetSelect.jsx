@@ -125,7 +125,9 @@ export default function BottomSheetSelect({
 
           <div
             ref={sheetRef}
-            role="listbox"
+            id={sheetId.current}
+            role="dialog"
+            aria-modal="true"
             aria-label={label}
             tabIndex={-1}
             onClick={e => e.stopPropagation()}
@@ -139,14 +141,26 @@ export default function BottomSheetSelect({
               flexDirection: "column",
             }}
           >
-            {/* Handle */}
-            <div className="flex-none pt-4 pb-2 px-6">
+            {/* Handle + close button */}
+            <div className="flex-none pt-4 pb-2 px-6 flex items-center justify-center relative">
               <div
                 className="w-10 h-1 rounded-full mx-auto"
                 style={{ background: "var(--sheet-handle)" }}
                 aria-hidden="true"
               />
+              <button
+                type="button"
+                onClick={closeSheet}
+                aria-label="סגור"
+                className="absolute left-4 flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold"
+                style={{ background: "var(--btn-secondary-bg)", color: "var(--text-secondary)", minHeight: "unset", minWidth: "unset" }}
+              >
+                ✕
+              </button>
             </div>
+
+            {/* Accessible listbox wrapper */}
+            <div role="listbox" aria-label={label} className="flex-1 overflow-y-auto px-4 pb-2">
 
             {/* Scrollable options */}
             <div className="flex-1 overflow-y-auto px-4 pb-2">
