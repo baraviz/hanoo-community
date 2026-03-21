@@ -322,8 +322,8 @@ export default function FindParking() {
             <h1 className="text-white text-xl font-bold">מצא חניה</h1>
             <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
           </div>
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Menu size={18} className="text-white" />
+          <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-11 h-11 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Menu size={18} className="text-white" aria-hidden="true" />
           </button>
         </div>
       </div>

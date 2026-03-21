@@ -275,21 +275,24 @@ export default function MyParking() {
               </button>
             )}
             {/* View toggle */}
-            <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1">
-
+            <div className="bg-white bg-opacity-20 rounded-2xl p-1 flex gap-1" role="group" aria-label="בחר תצוגה">
               <button
                 onClick={() => setViewMode("calendar")}
-                className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
+                aria-label="תצוגת יומן"
+                aria-pressed={viewMode === "calendar"}
+                className="w-11 h-11 rounded-xl flex items-center justify-center transition-all"
                 style={{ background: viewMode === "calendar" ? "white" : "transparent" }}
               >
-                <CalendarDays size={16} style={{ color: viewMode === "calendar" ? "var(--hanoo-blue)" : "white" }} />
+                <CalendarDays size={16} style={{ color: viewMode === "calendar" ? "var(--hanoo-blue)" : "white" }} aria-hidden="true" />
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className="w-8 h-8 rounded-xl flex items-center justify-center transition-all"
+                aria-label="תצוגת רשימה"
+                aria-pressed={viewMode === "list"}
+                className="w-11 h-11 rounded-xl flex items-center justify-center transition-all"
                 style={{ background: viewMode === "list" ? "white" : "transparent" }}
               >
-                <List size={16} style={{ color: viewMode === "list" ? "var(--hanoo-blue)" : "white" }} />
+                <List size={16} style={{ color: viewMode === "list" ? "var(--hanoo-blue)" : "white" }} aria-hidden="true" />
               </button>
             </div>
             {/* Menu button */}
@@ -395,21 +398,21 @@ export default function MyParking() {
                          {activeBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" }}>תפוס</span>}
                        </div>
                         <div className="flex gap-2">
-                          <button onClick={() => {
+                          <button aria-label={`ערוך זמינות ${fmt(b.start)}–${fmt(b.end)}`} onClick={() => {
                             setAddDayIndex(b.dayIndex);
                             setAddDayRanges([{ sH: Math.floor(b.start / 60), sM: b.start % 60, eH: Math.floor(b.end / 60), eM: b.end % 60 }]);
                             setAddDayStep("times");
                             setClosingAddDay(false);
                             setEditingBlock(b);
                             setAddDaySheet(true);
-                          }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
-                            <Pencil size={12} style={{ color: "var(--hanoo-blue)" }} />
+                          }} className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                            <Pencil size={14} style={{ color: "var(--hanoo-blue)" }} aria-hidden="true" />
                           </button>
-                          <button onClick={() => setCancelSheet({
+                          <button aria-label={`מחק זמינות ${fmt(b.start)}–${fmt(b.end)}`} onClick={() => setCancelSheet({
                             blockInfo: { type: "recurring", dayIndex: b.dayIndex, start: b.start, end: b.end },
                             onConfirm: () => { deleteBlock(b.id); setCancelSheet(null); }
-                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
-                            <Trash2 size={12} style={{ color: "var(--hanoo-red)" }} />
+                          })} className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
+                            <Trash2 size={14} style={{ color: "var(--hanoo-red)" }} aria-hidden="true" />
                           </button>
                         </div>
                       </div>
@@ -432,28 +435,28 @@ export default function MyParking() {
                           {activeTempBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" }}>תפוס</span>}
                         </div>
                         <div className="flex gap-2">
-                          <button onClick={() => {
-                          const s = new Date(t.start_at);
-                          setEditingTempDate(t.id);
-                          setEditingTempTime({ sH: s.getHours(), sM: s.getMinutes(), eH: new Date(t.end_at).getHours(), eM: new Date(t.end_at).getMinutes() });
-                          setEditingBlock(null);
-                          setAddDayStep("times");
-                          setClosingAddDay(false);
-                          setAddDaySheet(true);
-                        }} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
-                            <Pencil size={12} style={{ color: "var(--hanoo-blue)" }} />
-                          </button>
-                          <button onClick={() => setCancelSheet({
-                            blockInfo: { type: "temp", start_at: t.start_at, end_at: t.end_at },
-                            onConfirm: async () => {
-                              await base44.entities.WeeklyAvailability.delete(t.id);
-                              setTempBlocks(prev => prev.filter(x => x.id !== t.id));
-                              setCancelSheet(null);
-                            }
-                          })} className="w-7 h-7 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
-                            <Trash2 size={12} style={{ color: "var(--hanoo-red)" }} />
-                          </button>
-                        </div>
+                           <button aria-label="ערוך זמינות חד פעמית" onClick={() => {
+                           const s = new Date(t.start_at);
+                           setEditingTempDate(t.id);
+                           setEditingTempTime({ sH: s.getHours(), sM: s.getMinutes(), eH: new Date(t.end_at).getHours(), eM: new Date(t.end_at).getMinutes() });
+                           setEditingBlock(null);
+                           setAddDayStep("times");
+                           setClosingAddDay(false);
+                           setAddDaySheet(true);
+                         }} className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                             <Pencil size={14} style={{ color: "var(--hanoo-blue)" }} aria-hidden="true" />
+                           </button>
+                           <button aria-label="מחק זמינות חד פעמית" onClick={() => setCancelSheet({
+                             blockInfo: { type: "temp", start_at: t.start_at, end_at: t.end_at },
+                             onConfirm: async () => {
+                               await base44.entities.WeeklyAvailability.delete(t.id);
+                               setTempBlocks(prev => prev.filter(x => x.id !== t.id));
+                               setCancelSheet(null);
+                             }
+                           })} className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-red-light)" }}>
+                             <Trash2 size={14} style={{ color: "var(--hanoo-red)" }} aria-hidden="true" />
+                           </button>
+                         </div>
                       </div>
                     );
                   })}
@@ -516,6 +519,8 @@ export default function MyParking() {
             {/* Columns */}
             <div
             ref={gridRef}
+            role="grid"
+            aria-label="לוח זמינות שבועי — גרור לסימון שעות"
             className="flex-1 flex relative rounded-xl overflow-hidden"
             style={{ touchAction: "none", border: "1px solid var(--surface-card-border)", background: "var(--surface-card)" }}
             >
@@ -562,6 +567,8 @@ export default function MyParking() {
               return (
                 <div
                   key={dayIndex}
+                  role="gridcell"
+                  aria-label={`${FULL_DAYS[dayIndex]}${isToday ? " (היום)" : ""}${calendarEditMode ? " — גרור לסימון זמינות" : ""}`}
                   className={`flex-1 relative ${calendarEditMode ? "cursor-crosshair" : "cursor-default"}`}
                   style={{ borderRight: "1px solid var(--surface-card-border)", background: isToday ? "rgba(0,122,255,0.04)" : undefined }}
                   onMouseDown={(e) => calendarEditMode && handleMouseDown(e, dayIndex)}

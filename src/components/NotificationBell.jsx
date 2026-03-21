@@ -77,10 +77,13 @@ export default function NotificationBell({ userEmail }) {
     <div className="relative" ref={panelRef}>
       <button
         onClick={() => setOpen(prev => !prev)}
-        className="relative w-9 h-9 flex items-center justify-center rounded-2xl"
+        aria-label={`התראות${unreadCount > 0 ? `, ${unreadCount} לא נקראו` : ""}`}
+        aria-expanded={open}
+        aria-haspopup="true"
+        className="relative w-11 h-11 flex items-center justify-center rounded-2xl"
         style={{ background: "rgba(255,255,255,0.2)" }}
       >
-        <Bell size={18} className="text-white" />
+        <Bell size={18} className="text-white" aria-hidden="true" />
         {unreadCount > 0 && (
           <span
             className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-white font-bold"
@@ -103,14 +106,14 @@ export default function NotificationBell({ userEmail }) {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
-                  className="text-xs font-medium px-2 py-1 rounded-lg"
+                  className="text-xs font-medium px-3 py-2 rounded-lg min-h-[44px]"
                   style={{ color: "#007AFF", background: "#EBF4FF" }}
                 >
                   סמן הכל כנקרא
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="w-6 h-6 flex items-center justify-center rounded-full bg-gray-100">
-                <X size={13} className="text-gray-500" />
+              <button onClick={() => setOpen(false)} aria-label="סגור התראות" className="w-11 h-11 flex items-center justify-center rounded-full bg-gray-100">
+                <X size={13} className="text-gray-500" aria-hidden="true" />
               </button>
             </div>
           </div>
