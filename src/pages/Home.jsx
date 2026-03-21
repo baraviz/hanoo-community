@@ -1,4 +1,4 @@
-// Home page
+// Home page — cache bust 2
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
