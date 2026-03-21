@@ -37,11 +37,11 @@ export default function AdminBuildingsList({ data }) {
                 <p className="text-gray-400 text-[11px]">דיירים</p>
               </div>
               <div className="text-center border-x border-gray-800">
-                <p className="text-lg font-bold" style={{ color: b.activeBookings > 0 ? "#F59E0B" : "#6B7280" }}>{b.activeBookings}</p>
+                <p className="text-lg font-bold" style={{ color: b.activeBookings > 0 ? "var(--hanoo-orange)" : "var(--text-tertiary)" }}>{b.activeBookings}</p>
                 <p className="text-gray-400 text-[11px]">הזמנות פעילות</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold" style={{ color: b.availableOwners > 0 ? "#10B981" : "#6B7280" }}>{b.availableOwners}</p>
+                <p className="text-lg font-bold" style={{ color: b.availableOwners > 0 ? "var(--hanoo-green)" : "var(--text-tertiary)" }}>{b.availableOwners}</p>
                 <p className="text-gray-400 text-[11px]">חניות זמינות</p>
               </div>
             </div>
