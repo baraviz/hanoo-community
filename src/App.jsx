@@ -1,15 +1,8 @@
+import { lazy, Suspense } from 'react';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { pagesConfig } from './pages.config.jsx'
-import MyParking from './pages/MyParking'
-import Bookings from './pages/Bookings'
-import AdminDashboard from './pages/AdminDashboard'
-import PrivacyPolicy from './pages/PrivacyPolicy'
-import TermsOfService from './pages/TermsOfService'
-import Accessibility from './pages/Accessibility'
-import ReportBug from './pages/ReportBug'
-import JoinViaLink from './pages/JoinViaLink'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -18,13 +11,36 @@ import { NavigationProvider } from '@/lib/NavigationContext';
 import PageTransition from '@/components/PageTransition';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
+// ── Lazy-load all explicit page bundles ──────────────────────────────────────
+const MyParking      = lazy(() => import('./pages/MyParking'));
+const Bookings       = lazy(() => import('./pages/Bookings'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const PrivacyPolicy  = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const Accessibility  = lazy(() => import('./pages/Accessibility'));
+const ReportBug      = lazy(() => import('./pages/ReportBug'));
+const JoinViaLink    = lazy(() => import('./pages/JoinViaLink'));
+
+// ── Shared page-load fallback ─────────────────────────────────────────────────
+const PageFallback = () => (
+  <div className="fixed inset-0 flex items-center justify-center" style={{ background: "var(--surface-page)" }}>
+    <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin" />
+  </div>
+);
+
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
-const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
+const MainPage = mainPageKey ? Pages[mainPageKey] : null;
 
-// Wraps every route with the shared Layout + PageTransition animation
+// ── Per-route wrapper: Layout → Suspense → ErrorBoundary → PageTransition ────
 const LayoutWrapper = ({ children, currentPageName }) => {
-  const inner = <PageTransition><ErrorBoundary>{children}</ErrorBoundary></PageTransition>;
+  const inner = (
+    <Suspense fallback={<PageFallback />}>
+      <PageTransition>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </PageTransition>
+    </Suspense>
+  );
   return Layout
     ? <Layout currentPageName={currentPageName}>{inner}</Layout>
     : inner;
@@ -34,11 +50,7 @@ const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <PageFallback />;
   }
 
   if (authError) {
@@ -49,13 +61,15 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       {/* Main/splash route */}
-      <Route path="/" element={
-        <LayoutWrapper currentPageName={mainPageKey}>
-          <MainPage />
-        </LayoutWrapper>
-      } />
+      {MainPage && (
+        <Route path="/" element={
+          <LayoutWrapper currentPageName={mainPageKey}>
+            <MainPage />
+          </LayoutWrapper>
+        } />
+      )}
 
-      {/* pagesConfig lazy-loaded pages */}
+      {/* pagesConfig pages (already lazy by the platform) */}
       {Object.entries(Pages).map(([path, Page]) => (
         <Route
           key={path}
@@ -68,7 +82,7 @@ const AuthenticatedApp = () => {
         />
       ))}
 
-      {/* Explicit routes for pages not in pagesConfig */}
+      {/* Explicit routes — now lazy-loaded */}
       <Route path="/MyParking"      element={<LayoutWrapper currentPageName="MyParking"><MyParking /></LayoutWrapper>} />
       <Route path="/Bookings"       element={<LayoutWrapper currentPageName="Bookings"><Bookings /></LayoutWrapper>} />
       <Route path="/AdminDashboard" element={<LayoutWrapper currentPageName="AdminDashboard"><AdminDashboard /></LayoutWrapper>} />
@@ -94,7 +108,7 @@ function App() {
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;
