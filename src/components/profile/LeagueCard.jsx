@@ -12,7 +12,7 @@ const LEAGUES = [
 function LeagueInfoModal({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgba(0,0,0,0.4)" }} onClick={onClose}>
-      <div className="bg-white rounded-t-3xl w-full p-6 pb-10 max-w-[430px]" onClick={e => e.stopPropagation()}>
+      <div className="bg-white rounded-t-3xl w-full p-6 max-w-[430px]" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1.5rem)" }} onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-gray-800 text-lg">הטבות לפי ליגה</h3>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
