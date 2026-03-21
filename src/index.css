@@ -189,6 +189,35 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /*
+   * ── Global focus-visible ring ──────────────────────────────────────────
+   * Applied only on keyboard / sequential focus (not on mouse/touch).
+   * Uses a 2px solid ring in the brand blue with a white offset so it
+   * reads clearly on any background colour (light or dark).
+   * The `[data-focus-visible-added]` selector covers the focus-visible polyfill
+   * if it is ever added; the native :focus-visible covers modern browsers.
+   */
+  :focus-visible,
+  [data-focus-visible-added] {
+    outline: 2px solid var(--hanoo-blue) !important;
+    outline-offset: 3px !important;
+    border-radius: 6px;
+  }
+
+  /* Inputs get an inset ring so the outline doesn't push layout */
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 2px var(--hanoo-blue) !important;
+    border-color: var(--hanoo-blue) !important;
+  }
+
+  /* Dark mode: use a lighter blue so the ring still has sufficient contrast */
+  .dark :focus-visible,
+  .dark [data-focus-visible-added] {
+    outline-color: var(--hanoo-blue) !important;
+  }
+
   /* Safe area utilities */
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);

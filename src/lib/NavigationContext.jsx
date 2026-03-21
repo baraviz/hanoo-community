@@ -1,44 +1,45 @@
 /**
- * NavigationContext — per-tab history stacks for bottom-tab navigation.
+ * NavigationContext — isolated per-tab history stacks for bottom-tab navigation.
  *
- * Each bottom tab maintains its own stack so pressing Back inside a tab
- * pops only within that tab, and switching tabs restores its last position.
+ * Rules:
+ *   - Each tab owns an independent stack: ["/tab", "/tab/sub", ...]
+ *   - push()      → pushes to the current tab's stack
+ *   - back()      → pops the current tab's stack (stays within tab)
+ *   - switchTab() → if switching to a DIFFERENT tab, restore its last position
+ *                   if tapping the ALREADY ACTIVE tab, reset it to root
  *
- * System back gestures (Android hardware back / iOS swipe-back in WebView)
- * are intercepted via the `popstate` event and routed through our stack logic.
- *
- * Strategy:
- *   - On mount we inject ONE sentinel entry above the real entry using pushState.
- *   - When `popstate` fires (user pressed hardware back), the browser has already
- *     popped back to the real entry. We immediately call `history.go(+1)` to
- *     restore the sentinel, then run our own back-stack logic — so the WebView
- *     never "exits" the app and the browser URL never changes unexpectedly.
- *   - We guard against re-entrant / double-fire with a `handling` ref flag.
+ * Android/iOS WebView hardware back:
+ *   - One sentinel entry is pushed above the real entry on mount.
+ *   - popstate fires → we go(+1) to restore the sentinel, then delegate
+ *     to our own back() logic. A `handlingBack` guard prevents re-entrance.
  */
 import { createContext, useContext, useCallback, useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const NAV_TABS = ["/", "/FindParking", "/MyParking", "/Bookings", "/Profile"];
+export const NAV_TABS = ["/", "/FindParking", "/MyParking", "/Bookings", "/Profile"];
 
 const NavigationContext = createContext(null);
 
 export function NavigationProvider({ children }) {
   // stacks[tabRoot] = ["/path", "/path/sub", ...]
   const stacksRef = useRef({});
-  const [activeTab, setActiveTab] = useState("/");
   const navigate = useNavigate();
   const location = useLocation();
   const sentinelInjected = useRef(false);
   const handlingBack = useRef(false);
 
-  // Determine which tab root owns the current path
+  // Derive the tab that owns a given path
   function tabForPath(path) {
     if (path === "/") return "/";
     const match = NAV_TABS.find(t => t !== "/" && path.startsWith(t));
     return match || "/";
   }
 
-  // Navigate within the current tab (pushes to that tab's stack)
+  // The tab the current URL belongs to
+  const currentTab = tabForPath(location.pathname);
+
+  // ── push ──────────────────────────────────────────────────────────────────
+  // Navigate within the active tab (adds to that tab's stack)
   const push = useCallback((path) => {
     const tab = tabForPath(path);
     const stacks = stacksRef.current;
@@ -46,7 +47,8 @@ export function NavigationProvider({ children }) {
     navigate(path);
   }, [navigate]);
 
-  // Go back within the current tab's stack
+  // ── back ──────────────────────────────────────────────────────────────────
+  // Pop the current tab's stack
   const back = useCallback(() => {
     const tab = tabForPath(location.pathname);
     const stacks = stacksRef.current;
@@ -56,40 +58,38 @@ export function NavigationProvider({ children }) {
       stacks[tab] = newStack;
       navigate(newStack[newStack.length - 1]);
     } else {
-      navigate(tab === "/" ? "/" : tab);
+      navigate(tab);
     }
   }, [location.pathname, navigate]);
 
-  // Switch to a tab (restores its last known position)
+  // ── switchTab ─────────────────────────────────────────────────────────────
+  // Called by the bottom nav bar buttons.
+  // • Tapping a DIFFERENT tab  → restore last position in that tab's stack
+  // • Tapping the ACTIVE tab   → reset that tab's stack to its root
   const switchTab = useCallback((tab) => {
-    setActiveTab(tab);
     const stacks = stacksRef.current;
-    const stack = stacks[tab];
-    const dest = stack?.length ? stack[stack.length - 1] : tab;
-    stacks[tab] = [dest];
-    navigate(dest);
-  }, [navigate]);
+    const isSameTab = tabForPath(location.pathname) === tab;
 
-  // Can we go back in the current tab?
+    if (isSameTab) {
+      // Reset to root
+      stacks[tab] = [tab];
+      navigate(tab);
+    } else {
+      // Restore last known position (or default to root)
+      const stack = stacks[tab];
+      const dest = stack?.length ? stack[stack.length - 1] : tab;
+      stacks[tab] = stack?.length ? stack : [tab];
+      navigate(dest);
+    }
+  }, [location.pathname, navigate]);
+
+  // ── canGoBack ─────────────────────────────────────────────────────────────
   const canGoBack = useCallback(() => {
     const tab = tabForPath(location.pathname);
-    const stack = stacksRef.current[tab] || [];
-    return stack.length > 1;
+    return (stacksRef.current[tab] || []).length > 1;
   }, [location.pathname]);
 
-  /**
-   * Android/iOS WebView back-gesture support.
-   *
-   * We push exactly ONE sentinel entry above the current history entry so
-   * there is always something for the system "back" to pop without leaving
-   * the WebView. When `popstate` fires we:
-   *   1. Set a guard flag to prevent re-entrance.
-   *   2. Immediately go forward (+1) to restore the sentinel position.
-   *   3. Delegate the logical navigation to our own stack via `back()`.
-   *
-   * Using `replaceState` for the sentinel avoids inflating the browser
-   * history on every render and prevents double-fire on rapid presses.
-   */
+  // ── Hardware back gesture (Android WebView / iOS swipe) ───────────────────
   useEffect(() => {
     if (!sentinelInjected.current) {
       window.history.pushState({ __hanoo_sentinel: true }, "");
@@ -97,17 +97,15 @@ export function NavigationProvider({ children }) {
     }
 
     function handlePopState(e) {
-      // Ignore if we triggered this ourselves
       if (handlingBack.current) return;
-      // Only handle real user-initiated back gestures (sentinel gets popped)
-      if (e.state && e.state.__hanoo_sentinel) return;
+      // The sentinel itself popping is a no-op (shouldn't happen, but guard it)
+      if (e.state?.__hanoo_sentinel) return;
 
       handlingBack.current = true;
 
-      // Restore the sentinel so the next back gesture is also caught
+      // Re-push the sentinel so the next back gesture is also intercepted
       window.history.go(+1);
 
-      // Run our in-app back logic after the history restoration settles
       setTimeout(() => {
         const tab = tabForPath(window.location.pathname);
         const stacks = stacksRef.current;
@@ -118,7 +116,7 @@ export function NavigationProvider({ children }) {
           stacks[tab] = newStack;
           navigate(newStack[newStack.length - 1]);
         }
-        // If at tab root → swallow (stay in app, don't exit WebView)
+        // At tab root → swallow the gesture (keep user in app)
 
         handlingBack.current = false;
       }, 50);
@@ -128,10 +126,8 @@ export function NavigationProvider({ children }) {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const currentTab = tabForPath(location.pathname);
-
   return (
-    <NavigationContext.Provider value={{ push, back, switchTab, canGoBack, currentTab, activeTab }}>
+    <NavigationContext.Provider value={{ push, back, switchTab, canGoBack, currentTab }}>
       {children}
     </NavigationContext.Provider>
   );
