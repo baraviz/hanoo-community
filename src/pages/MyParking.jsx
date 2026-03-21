@@ -267,7 +267,9 @@ export default function MyParking() {
             {viewMode === "calendar" && (
               <button
                 onClick={() => setCalendarEditMode(prev => !prev)}
-                className="rounded-2xl px-3 py-2 flex items-center gap-1.5 transition-all"
+                aria-label={calendarEditMode ? "יציאה ממצב עריכה" : "כניסה למצב עריכה"}
+                aria-pressed={calendarEditMode}
+                className="rounded-2xl px-3 min-h-[44px] flex items-center gap-1.5 transition-all"
                 style={{ background: calendarEditMode ? "white" : "rgba(255,255,255,0.2)" }}
               >
                 <Pencil size={14} style={{ color: calendarEditMode ? "var(--hanoo-blue)" : "white" }} />
@@ -296,8 +298,8 @@ export default function MyParking() {
               </button>
             </div>
             {/* Menu button */}
-            <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-              <Menu size={18} className="text-white" />
+            <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-11 h-11 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+              <Menu size={18} className="text-white" aria-hidden="true" />
             </button>
           </div>
         </div>
