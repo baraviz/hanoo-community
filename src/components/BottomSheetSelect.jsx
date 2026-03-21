@@ -28,6 +28,8 @@ export default function BottomSheetSelect({
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const sheetRef = useRef(null);
+  const triggerId = useRef(`bss-trigger-${Math.random().toString(36).slice(2)}`);
+  const sheetId = useRef(`bss-sheet-${Math.random().toString(36).slice(2)}`);
 
   const selectedOption = options.find(o => o.value === value);
 

@@ -113,7 +113,8 @@ export default function TimeWheelPicker({ options, value, onChange, color = "#00
               fontSize: 20,
               fontWeight: "bold",
               fontFamily: "monospace",
-              color: value === t ? color : "#9CA3AF",
+              /* Use CSS token so dark-mode contrast is always WCAG-compliant */
+            color: value === t ? color : "var(--text-tertiary)",
               transition: "color 0.15s",
               cursor: "pointer",
             }}
