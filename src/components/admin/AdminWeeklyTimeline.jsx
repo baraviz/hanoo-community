@@ -6,6 +6,27 @@ const HOURS = 24;
 
 const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 
+// ── Static hour-lines grid — never needs to re-render ────────────────────────
+const HourLines = memo(function HourLines() {
+  return (
+    <>
+      {Array.from({ length: HOURS + 1 }).map((_, i) => (
+        <div
+          key={i}
+          className="absolute left-0 right-0 flex items-center pointer-events-none"
+          style={{ top: `${(i / HOURS) * 100}%` }}
+          aria-hidden="true"
+        >
+          <div className="w-12 text-right pr-2">
+            <span className="text-[9px] text-gray-400">{String(i).padStart(2, "0")}:00</span>
+          </div>
+          <div className="flex-1 border-t border-gray-800 opacity-50" />
+        </div>
+      ))}
+    </>
+  );
+});
+
 // ── Memoized day column — only re-renders when its own data changes ──────────
 const DayColumn = memo(function DayColumn({ dayIndex, isToday, dayAvail, dayBookings, residentMap, currentMins }) {
   return (
