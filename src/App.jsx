@@ -11,7 +11,7 @@ import { NavigationProvider } from '@/lib/NavigationContext';
 import PageTransition from '@/components/PageTransition';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
-// ── Lazy-load all explicit page bundles ──────────────────────────────────────
+// ── Lazy-load explicit page bundles (pages NOT in pagesConfig) ───────────────
 const MyParking      = lazy(() => import('./pages/MyParking'));
 const Bookings       = lazy(() => import('./pages/Bookings'));
 const PrivacyPolicy  = lazy(() => import('./pages/PrivacyPolicy'));
