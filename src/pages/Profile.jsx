@@ -203,7 +203,7 @@ export default function Profile() {
       </div>
 
       {/* Tab content */}
-      <div className="px-5 py-5 space-y-4">
+      <div className="px-5 py-5 space-y-4" role="tabpanel" id={`tabpanel-${activeTab}`} aria-label={tabs.find(t => t.id === activeTab)?.label}>
 
         {/* ── PERSONAL TAB ── */}
         {activeTab === "personal" && (
