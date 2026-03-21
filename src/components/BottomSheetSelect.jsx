@@ -162,8 +162,6 @@ export default function BottomSheetSelect({
             {/* Accessible listbox wrapper */}
             <div role="listbox" aria-label={label} className="flex-1 overflow-y-auto px-4 pb-2">
 
-            {/* Scrollable options */}
-            <div className="flex-1 overflow-y-auto px-4 pb-2">
               {options.map(opt => {
                 const isSelected = opt.value === value;
                 return (
