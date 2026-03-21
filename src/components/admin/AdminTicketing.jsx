@@ -115,6 +115,7 @@ export default function AdminTicketing({ reports: initialReports }) {
                     onClick={() => setExpanded(expanded === report.id ? null : report.id)}
                     aria-expanded={expanded === report.id}
                     aria-label={`${expanded === report.id ? "סגור" : "פתח"} פרטי תקלה מאת ${report.user_name || report.user_email}`}
+                    className="w-full flex items-start gap-3 text-right min-h-[44px] py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 rounded-lg"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -152,7 +153,7 @@ export default function AdminTicketing({ reports: initialReports }) {
                               disabled={saving === report.id}
                               aria-label={`סמן כ: ${cfg.label}`}
                               aria-pressed={report.status === key}
-                              className="px-3 py-1 rounded-xl text-xs font-bold transition-all"
+                              className="px-3 py-1 rounded-xl text-xs font-bold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-500"
                               style={{
                                 background: report.status === key ? cfg.bg : "#F3F4F6",
                                 color: report.status === key ? cfg.color : "#6B7280",
@@ -179,7 +180,7 @@ export default function AdminTicketing({ reports: initialReports }) {
                           onClick={() => saveNotes(report.id)}
                           disabled={saving === report.id + "_notes"}
                           aria-label="שמור הערה פנימית"
-                          className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold text-white"
+                          className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
                           style={{ background: "#007AFF", opacity: saving === report.id + "_notes" ? 0.6 : 1 }}
                         >
                           שמור הערה
