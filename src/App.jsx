@@ -14,7 +14,6 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 // ── Lazy-load all explicit page bundles ──────────────────────────────────────
 const MyParking      = lazy(() => import('./pages/MyParking'));
 const Bookings       = lazy(() => import('./pages/Bookings'));
-const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const PrivacyPolicy  = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Accessibility  = lazy(() => import('./pages/Accessibility'));
@@ -85,7 +84,6 @@ const AuthenticatedApp = () => {
       {/* Explicit routes — now lazy-loaded */}
       <Route path="/MyParking"      element={<LayoutWrapper currentPageName="MyParking"><MyParking /></LayoutWrapper>} />
       <Route path="/Bookings"       element={<LayoutWrapper currentPageName="Bookings"><Bookings /></LayoutWrapper>} />
-      <Route path="/AdminDashboard" element={<LayoutWrapper currentPageName="AdminDashboard"><AdminDashboard /></LayoutWrapper>} />
       <Route path="/PrivacyPolicy"  element={<LayoutWrapper currentPageName="PrivacyPolicy"><PrivacyPolicy /></LayoutWrapper>} />
       <Route path="/TermsOfService" element={<LayoutWrapper currentPageName="TermsOfService"><TermsOfService /></LayoutWrapper>} />
       <Route path="/Accessibility"  element={<LayoutWrapper currentPageName="Accessibility"><Accessibility /></LayoutWrapper>} />
