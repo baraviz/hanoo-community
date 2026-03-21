@@ -71,13 +71,19 @@ export default function DailyUpdateModal({ user, resident }) {
   const leagueIcon = { Bronze: "🥉", Silver: "🥈", Gold: "🥇", Platinum: "💎", Diamond: "👑" }[data.league] || "🥉";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: "rgba(0,0,0,0.45)" }}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="daily-modal-title"
+      className="fixed inset-0 z-50 flex items-end justify-center"
+      style={{ background: "rgba(0,0,0,0.45)" }}
+    >
       <div className="bg-white rounded-t-3xl w-full p-6 max-w-[430px]" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
         {/* Header */}
         <div className="flex items-center justify-between mb-1">
-          <h2 className="text-xl font-bold text-gray-800">בוקר טוב! ☀️</h2>
-          <button onClick={dismiss} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-            <X size={16} className="text-gray-500" />
+          <h2 id="daily-modal-title" className="text-xl font-bold text-gray-800">בוקר טוב! ☀️</h2>
+          <button onClick={dismiss} aria-label="סגור עדכון יומי" className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+            <X size={16} className="text-gray-500" aria-hidden="true" />
           </button>
         </div>
         <p className="text-gray-400 text-sm mb-5">הנה מה שקרה מאז הביקור האחרון שלך</p>

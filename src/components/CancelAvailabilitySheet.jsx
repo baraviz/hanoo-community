@@ -97,6 +97,9 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="אישור מחיקת זמינות"
       className="fixed inset-0 z-50 flex flex-col justify-end"
       style={{ background: "rgba(0,0,0,0.4)", animation: anim.backdrop }}
       onClick={close}
@@ -146,8 +149,8 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
           <>
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-gray-800">⚠️ קיימות הזמנות פעילות</h2>
-              <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
-                <X size={16} className="text-gray-500" />
+              <button onClick={close} aria-label="סגור" className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+                <X size={16} className="text-gray-500" aria-hidden="true" />
               </button>
             </div>
 

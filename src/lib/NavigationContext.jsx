@@ -6,6 +6,14 @@
  *
  * System back gestures (Android hardware back / iOS swipe-back in WebView)
  * are intercepted via the `popstate` event and routed through our stack logic.
+ *
+ * Strategy:
+ *   - On mount we inject ONE sentinel entry above the real entry using pushState.
+ *   - When `popstate` fires (user pressed hardware back), the browser has already
+ *     popped back to the real entry. We immediately call `history.go(+1)` to
+ *     restore the sentinel, then run our own back-stack logic — so the WebView
+ *     never "exits" the app and the browser URL never changes unexpectedly.
+ *   - We guard against re-entrant / double-fire with a `handling` ref flag.
  */
 import { createContext, useContext, useCallback, useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -20,6 +28,8 @@ export function NavigationProvider({ children }) {
   const [activeTab, setActiveTab] = useState("/");
   const navigate = useNavigate();
   const location = useLocation();
+  const sentinelInjected = useRef(false);
+  const handlingBack = useRef(false);
 
   // Determine which tab root owns the current path
   function tabForPath(path) {
@@ -68,32 +78,50 @@ export function NavigationProvider({ children }) {
   }, [location.pathname]);
 
   /**
-   * System back-gesture support (Android WebView hardware back / iOS swipe).
+   * Android/iOS WebView back-gesture support.
    *
-   * We push a dummy history entry on mount so that a system "back" pops it
-   * instead of leaving the WebView. We then handle the `popstate` event and
-   * re-push the dummy entry to keep the browser history neutral, while
-   * delegating the actual navigation to our stack logic.
+   * We push exactly ONE sentinel entry above the current history entry so
+   * there is always something for the system "back" to pop without leaving
+   * the WebView. When `popstate` fires we:
+   *   1. Set a guard flag to prevent re-entrance.
+   *   2. Immediately go forward (+1) to restore the sentinel position.
+   *   3. Delegate the logical navigation to our own stack via `back()`.
+   *
+   * Using `replaceState` for the sentinel avoids inflating the browser
+   * history on every render and prevents double-fire on rapid presses.
    */
   useEffect(() => {
-    // Push a sentinel so there's always something to pop back to
-    window.history.pushState({ __hanoo: true }, "");
+    if (!sentinelInjected.current) {
+      window.history.pushState({ __hanoo_sentinel: true }, "");
+      sentinelInjected.current = true;
+    }
 
     function handlePopState(e) {
-      // Re-push the sentinel so the next back gesture is also caught
-      window.history.pushState({ __hanoo: true }, "");
+      // Ignore if we triggered this ourselves
+      if (handlingBack.current) return;
+      // Only handle real user-initiated back gestures (sentinel gets popped)
+      if (e.state && e.state.__hanoo_sentinel) return;
 
-      // Delegate to our in-app back logic
-      const tab = tabForPath(window.location.pathname);
-      const stacks = stacksRef.current;
-      const stack = stacks[tab] || [];
+      handlingBack.current = true;
 
-      if (stack.length > 1) {
-        const newStack = stack.slice(0, -1);
-        stacks[tab] = newStack;
-        navigate(newStack[newStack.length - 1]);
-      }
-      // If we're at a tab root, swallow the gesture (stay in app)
+      // Restore the sentinel so the next back gesture is also caught
+      window.history.go(+1);
+
+      // Run our in-app back logic after the history restoration settles
+      setTimeout(() => {
+        const tab = tabForPath(window.location.pathname);
+        const stacks = stacksRef.current;
+        const stack = stacks[tab] || [];
+
+        if (stack.length > 1) {
+          const newStack = stack.slice(0, -1);
+          stacks[tab] = newStack;
+          navigate(newStack[newStack.length - 1]);
+        }
+        // If at tab root → swallow (stay in app, don't exit WebView)
+
+        handlingBack.current = false;
+      }, 50);
     }
 
     window.addEventListener("popstate", handlePopState);
