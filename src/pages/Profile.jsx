@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Building2, Share2, Trash2, AlertTriangle } from "lucide-react";
+import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Building2, Share2, Trash2 } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import LeagueCard from "@/components/profile/LeagueCard";
 import ActivityHistory from "@/components/profile/ActivityHistory";
 import ResidentsManager from "@/components/profile/ResidentsManager";
+import DeleteAccountModal from "@/components/profile/DeleteAccountModal";
 import { format, parseISO } from "date-fns";
 
 const TABS = [
