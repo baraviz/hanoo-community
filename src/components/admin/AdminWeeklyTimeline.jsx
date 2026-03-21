@@ -186,20 +186,8 @@ export default function AdminWeeklyTimeline({ availability, bookings, residents 
 
         {/* Grid */}
         <div className="relative" style={{ height: 480 }}>
-          {/* Hour lines */}
-          {Array.from({ length: HOURS + 1 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute left-0 right-0 flex items-center pointer-events-none"
-              style={{ top: `${(i / HOURS) * 100}%` }}
-              aria-hidden="true"
-            >
-              <div className="w-12 text-right pr-2">
-                <span className="text-[9px] text-gray-400">{String(i).padStart(2,"0")}:00</span>
-              </div>
-              <div className="flex-1 border-t border-gray-800 opacity-50" />
-            </div>
-          ))}
+          {/* Hour lines — static, memoized */}
+          <HourLines />
 
           {/* Day columns */}
           <div
