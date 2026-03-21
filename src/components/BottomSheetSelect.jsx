@@ -114,7 +114,7 @@ export default function BottomSheetSelect({
             animation: closing ? "bssBackdropOut 0.23s ease-in forwards" : "bssBackdropIn 0.23s ease-out",
           }}
           onClick={closeSheet}
-          aria-hidden="true"
+          role="presentation"
         >
           <style>{`
             @keyframes bssBackdropIn  { from { opacity: 0; } to { opacity: 1; } }
