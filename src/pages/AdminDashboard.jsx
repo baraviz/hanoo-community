@@ -1,12 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { base44 } from "@/api/base44Client";
-import { Building2, Users, Car, Coins, RefreshCw } from "lucide-react";
-import AdminKPICards from "@/components/admin/AdminKPICards";
-import AdminBuildingsList from "@/components/admin/AdminBuildingsList";
-import AdminActiveBookings from "@/components/admin/AdminActiveBookings";
-import AdminWeeklyTimeline from "@/components/admin/AdminWeeklyTimeline";
-import AdminTicketing from "@/components/admin/AdminTicketing";
-import AdminReferralFunnel from "@/components/admin/AdminReferralFunnel";
+import { RefreshCw } from "lucide-react";
+
+const AdminKPICards      = lazy(() => import("@/components/admin/AdminKPICards"));
+const AdminBuildingsList = lazy(() => import("@/components/admin/AdminBuildingsList"));
+const AdminActiveBookings= lazy(() => import("@/components/admin/AdminActiveBookings"));
+const AdminWeeklyTimeline= lazy(() => import("@/components/admin/AdminWeeklyTimeline"));
+const AdminReferralFunnel= lazy(() => import("@/components/admin/AdminReferralFunnel"));
+const AdminTicketing     = lazy(() => import("@/components/admin/AdminTicketing"));
+
+const SectionFallback = () => (
+  <div className="rounded-2xl border border-gray-800 h-32 animate-pulse" style={{ background: "rgba(255,255,255,0.03)" }} />
+);
 
 const ADMIN_EMAIL = "bar.avizemer@gmail.com";
 
@@ -89,12 +94,12 @@ export default function AdminDashboard() {
       <div className="px-6 py-6 space-y-8 max-w-7xl mx-auto">
         {data && (
           <>
-            <AdminKPICards data={data} />
-            <AdminBuildingsList data={data} />
-            <AdminActiveBookings bookings={data.bookings} />
-            <AdminWeeklyTimeline availability={data.availability} bookings={data.bookings} residents={data.residents} />
-            <AdminReferralFunnel referrals={data.referrals || []} residents={data.residents} />
-            <AdminTicketing reports={data.bugReports || []} />
+            <Suspense fallback={<SectionFallback />}><AdminKPICards data={data} /></Suspense>
+            <Suspense fallback={<SectionFallback />}><AdminBuildingsList data={data} /></Suspense>
+            <Suspense fallback={<SectionFallback />}><AdminActiveBookings bookings={data.bookings} /></Suspense>
+            <Suspense fallback={<SectionFallback />}><AdminWeeklyTimeline availability={data.availability} bookings={data.bookings} residents={data.residents} /></Suspense>
+            <Suspense fallback={<SectionFallback />}><AdminReferralFunnel referrals={data.referrals || []} residents={data.residents} /></Suspense>
+            <Suspense fallback={<SectionFallback />}><AdminTicketing reports={data.bugReports || []} /></Suspense>
           </>
         )}
       </div>
