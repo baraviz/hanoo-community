@@ -115,7 +115,13 @@ const DayColumn = memo(function DayColumn({ dayIndex, isToday, dayAvail, dayBook
 });
 
 export default function AdminWeeklyTimeline({ availability, bookings, residents }) {
-  const now = new Date();
+  const [tick, setTick] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setTick(new Date()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const now = tick;
   const todayIndex = now.getDay();
   const currentMins = now.getHours() * 60 + now.getMinutes();
 
