@@ -25,9 +25,14 @@ function formatBookingTime(startTime, endTime) {
 function BookingCard({ booking, isOwner }) {
 const isPastBooking = isPast(new Date(booking.end_time));
 const hours = Math.round(differenceInMinutes(new Date(booking.end_time), new Date(booking.start_time)) / 60 * 10) / 10;
+const statusLabel = booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל";
 
 return (
-  <div className="card p-4">
+  <div
+    className="card p-4"
+    role="article"
+    aria-label={`הזמנה חניה ${booking.spot_number || ""}, ${statusLabel}, ${hours} שעות`}
+  >
     <div className="flex items-center gap-3">
       <div
         className="w-11 h-11 rounded-2xl flex items-center justify-center flex-none"
