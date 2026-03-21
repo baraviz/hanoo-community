@@ -54,7 +54,6 @@ function withSuspense(Component) {
 }
 
 export const PAGES = {
-  "Chat":           withSuspense(Chat),
   "FindParking":    withSuspense(FindParking),
   "Home":           withSuspense(Home),
   "Onboarding":     withSuspense(Onboarding),
