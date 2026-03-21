@@ -66,88 +66,132 @@ export default function AdminTicketing({ reports: initialReports }) {
           <p className="text-gray-500 text-sm">אין תקלות פתוחות</p>
         </div>
       ) : (
-        <div className="divide-y divide-gray-50">
-          {reports.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).map(report => (
-            <div key={report.id} className="px-5 py-4">
-              <button
-                className="w-full flex items-start gap-3 text-right min-h-[44px] py-1"
-                onClick={() => setExpanded(expanded === report.id ? null : report.id)}
-                aria-expanded={expanded === report.id}
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <StatusBadge status={report.status} />
-                    <span className="text-xs text-gray-400">
-                      {report.user_name || report.user_email}
-                    </span>
-                    <span className="text-xs text-gray-300">
-                      {report.created_date ? new Date(report.created_date).toLocaleDateString("he-IL") : ""}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-700 line-clamp-2">{report.description}</p>
-                </div>
-                <ChevronDown
-                  size={16}
-                  className="text-gray-400 flex-none mt-1 transition-transform"
-                  style={{ transform: expanded === report.id ? "rotate(180deg)" : "rotate(0deg)" }}
-                />
-              </button>
-
-              {expanded === report.id && (
-                <div className="mt-3 space-y-3 pt-3 border-t border-gray-100">
-                  {/* Full description */}
-                  <div className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-xs text-gray-400 mb-1">תיאור מלא</p>
-                    <p className="text-sm text-gray-700">{report.description}</p>
-                    <p className="text-xs text-gray-400 mt-2">מאת: {report.user_email}</p>
-                  </div>
-
-                  {/* Status change */}
-                  <div>
-                    <p className="text-xs text-gray-400 mb-2">שנה סטטוס</p>
-                    <div className="flex flex-wrap gap-2">
-                      {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
-                        <button
-                          key={key}
-                          onClick={() => updateStatus(report.id, key)}
-                          disabled={saving === report.id}
-                          className="px-3 py-1 rounded-xl text-xs font-bold transition-all"
-                          style={{
-                            background: report.status === key ? cfg.bg : "#F3F4F6",
-                            color: report.status === key ? cfg.color : "#6B7280",
-                            border: report.status === key ? `1.5px solid ${cfg.color}` : "1.5px solid transparent",
-                          }}
-                        >
-                          {cfg.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Admin notes */}
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">הערות פנימיות</p>
-                    <textarea
-                      rows={2}
-                      value={notes[report.id] !== undefined ? notes[report.id] : (report.admin_notes || "")}
-                      onChange={e => setNotes(prev => ({ ...prev, [report.id]: e.target.value }))}
-                      placeholder="הוסף הערה..."
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none resize-none"
-                    />
+        <>
+          {/* Virtualized list — shown when no ticket is expanded */}
+          {expanded === null ? (
+            <FixedSizeList
+              height={Math.min(reports.length * 80, 400)}
+              itemCount={reports.length}
+              itemSize={80}
+              width="100%"
+            >
+              {({ index, style }) => {
+                const report = [...reports].sort((a, b) => new Date(b.created_date) - new Date(a.created_date))[index];
+                return (
+                  <div
+                    key={report.id}
+                    style={{ ...style, borderBottom: index < reports.length - 1 ? "1px solid #f9fafb" : "none" }}
+                    className="px-5 flex items-center"
+                  >
                     <button
-                      onClick={() => saveNotes(report.id)}
-                      disabled={saving === report.id + "_notes"}
-                      className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold text-white"
-                      style={{ background: "#007AFF", opacity: saving === report.id + "_notes" ? 0.6 : 1 }}
+                      className="w-full flex items-start gap-3 text-right min-h-[44px] py-1"
+                      onClick={() => setExpanded(report.id)}
+                      aria-expanded={false}
+                      aria-label={`פתח פרטי תקלה מאת ${report.user_name || report.user_email}`}
                     >
-                      שמור הערה
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <StatusBadge status={report.status} />
+                          <span className="text-xs text-gray-400">{report.user_name || report.user_email}</span>
+                          <span className="text-xs text-gray-300">
+                            {report.created_date ? new Date(report.created_date).toLocaleDateString("he-IL") : ""}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-700 line-clamp-2">{report.description}</p>
+                      </div>
+                      <ChevronDown size={16} className="text-gray-400 flex-none mt-1" aria-hidden="true" />
                     </button>
                   </div>
+                );
+              }}
+            </FixedSizeList>
+          ) : (
+            /* Expanded view — render all non-virtualized so details are fully visible */
+            <div className="divide-y divide-gray-50">
+              {[...reports].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).map(report => (
+                <div key={report.id} className="px-5 py-4">
+                  <button
+                    className="w-full flex items-start gap-3 text-right min-h-[44px] py-1"
+                    onClick={() => setExpanded(expanded === report.id ? null : report.id)}
+                    aria-expanded={expanded === report.id}
+                    aria-label={`${expanded === report.id ? "סגור" : "פתח"} פרטי תקלה מאת ${report.user_name || report.user_email}`}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <StatusBadge status={report.status} />
+                        <span className="text-xs text-gray-400">{report.user_name || report.user_email}</span>
+                        <span className="text-xs text-gray-300">
+                          {report.created_date ? new Date(report.created_date).toLocaleDateString("he-IL") : ""}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 line-clamp-2">{report.description}</p>
+                    </div>
+                    <ChevronDown
+                      size={16}
+                      className="text-gray-400 flex-none mt-1 transition-transform"
+                      style={{ transform: expanded === report.id ? "rotate(180deg)" : "rotate(0deg)" }}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  {expanded === report.id && (
+                    <div className="mt-3 space-y-3 pt-3 border-t border-gray-100">
+                      <div className="bg-gray-50 rounded-xl p-3">
+                        <p className="text-xs text-gray-400 mb-1">תיאור מלא</p>
+                        <p className="text-sm text-gray-700">{report.description}</p>
+                        <p className="text-xs text-gray-400 mt-2">מאת: {report.user_email}</p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-400 mb-2">שנה סטטוס</p>
+                        <div className="flex flex-wrap gap-2">
+                          {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
+                            <button
+                              key={key}
+                              onClick={() => updateStatus(report.id, key)}
+                              disabled={saving === report.id}
+                              aria-label={`סמן כ: ${cfg.label}`}
+                              aria-pressed={report.status === key}
+                              className="px-3 py-1 rounded-xl text-xs font-bold transition-all"
+                              style={{
+                                background: report.status === key ? cfg.bg : "#F3F4F6",
+                                color: report.status === key ? cfg.color : "#6B7280",
+                                border: report.status === key ? `1.5px solid ${cfg.color}` : "1.5px solid transparent",
+                              }}
+                            >
+                              {cfg.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-gray-400 mb-1">הערות פנימיות</p>
+                        <textarea
+                          rows={2}
+                          value={notes[report.id] !== undefined ? notes[report.id] : (report.admin_notes || "")}
+                          onChange={e => setNotes(prev => ({ ...prev, [report.id]: e.target.value }))}
+                          placeholder="הוסף הערה..."
+                          aria-label="הערות פנימיות לתקלה"
+                          className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none resize-none"
+                        />
+                        <button
+                          onClick={() => saveNotes(report.id)}
+                          disabled={saving === report.id + "_notes"}
+                          aria-label="שמור הערה פנימית"
+                          className="mt-1 px-4 py-1.5 rounded-xl text-xs font-bold text-white"
+                          style={{ background: "#007AFF", opacity: saving === report.id + "_notes" ? 0.6 : 1 }}
+                        >
+                          שמור הערה
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );
