@@ -80,7 +80,7 @@ export default function AdminWeeklyTimeline({ availability, bookings, residents 
               style={{ top: `${(i / HOURS) * 100}%` }}
             >
               <div className="w-12 text-right pr-2">
-                <span className="text-[9px] text-gray-600">{String(i).padStart(2,"0")}:00</span>
+                <span className="text-[9px] text-gray-400">{String(i).padStart(2,"0")}:00</span>
               </div>
               <div className="flex-1 border-t border-gray-800 opacity-50" />
             </div>
@@ -179,15 +179,15 @@ export default function AdminWeeklyTimeline({ availability, bookings, residents 
         <div className="px-4 py-3 border-t border-gray-800 flex items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded" style={{ background: "rgba(16,185,129,0.4)", border: "1px solid rgba(16,185,129,0.6)" }} />
-            <span className="text-gray-400 text-xs">זמינות קבועה</span>
+            <span className="text-gray-300 text-xs">זמינות קבועה</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded" style={{ background: "rgba(245,158,11,0.4)", border: "1px solid rgba(245,158,11,0.6)" }} />
-            <span className="text-gray-400 text-xs">הזמנה פעילה</span>
+            <span className="text-gray-300 text-xs">הזמנה פעילה</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-gray-400 text-xs">עכשיו</span>
+            <div className="w-3 h-3 rounded-full bg-blue-400" />
+            <span className="text-gray-300 text-xs">עכשיו</span>
           </div>
         </div>
       </div>

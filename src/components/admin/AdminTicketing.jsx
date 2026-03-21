@@ -68,9 +68,10 @@ export default function AdminTicketing({ reports: initialReports }) {
         <div className="divide-y divide-gray-50">
           {reports.sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).map(report => (
             <div key={report.id} className="px-5 py-4">
-              <div
-                className="flex items-start gap-3 cursor-pointer"
+              <button
+                className="w-full flex items-start gap-3 text-right min-h-[44px] py-1"
                 onClick={() => setExpanded(expanded === report.id ? null : report.id)}
+                aria-expanded={expanded === report.id}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -89,7 +90,7 @@ export default function AdminTicketing({ reports: initialReports }) {
                   className="text-gray-400 flex-none mt-1 transition-transform"
                   style={{ transform: expanded === report.id ? "rotate(180deg)" : "rotate(0deg)" }}
                 />
-              </div>
+              </button>
 
               {expanded === report.id && (
                 <div className="mt-3 space-y-3 pt-3 border-t border-gray-100">

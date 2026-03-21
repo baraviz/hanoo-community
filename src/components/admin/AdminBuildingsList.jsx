@@ -27,22 +27,22 @@ export default function AdminBuildingsList({ data }) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-white truncate">{b.name}</p>
-                <p className="text-gray-500 text-xs truncate">{b.address}, {b.city}</p>
+                <p className="text-gray-400 text-xs truncate">{b.address}, {b.city}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
               <div className="text-center">
                 <p className="text-lg font-bold text-white">{b.residentCount}</p>
-                <p className="text-gray-500 text-[10px]">דיירים</p>
+                <p className="text-gray-400 text-[11px]">דיירים</p>
               </div>
               <div className="text-center border-x border-gray-800">
                 <p className="text-lg font-bold" style={{ color: b.activeBookings > 0 ? "#F59E0B" : "#6B7280" }}>{b.activeBookings}</p>
-                <p className="text-gray-500 text-[10px]">הזמנות פעילות</p>
+                <p className="text-gray-400 text-[11px]">הזמנות פעילות</p>
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold" style={{ color: b.availableOwners > 0 ? "#10B981" : "#6B7280" }}>{b.availableOwners}</p>
-                <p className="text-gray-500 text-[10px]">חניות זמינות</p>
+                <p className="text-gray-400 text-[11px]">חניות זמינות</p>
               </div>
             </div>
           </div>
