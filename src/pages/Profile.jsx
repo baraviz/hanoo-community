@@ -239,6 +239,7 @@ export default function Profile() {
                     <button
                       onClick={async () => { await savePhone(); setResident(prev => ({ ...prev, phone: phone.trim() })); setEditingPhone(false); }}
                       disabled={savingPhone}
+                      aria-label={phoneSaved ? "מספר טלפון נשמר" : "שמור מספר טלפון"}
                       className="px-4 py-2 rounded-xl text-sm font-bold text-white"
                       style={{ background: phoneSaved ? "var(--hanoo-green)" : "var(--hanoo-blue)", opacity: savingPhone ? 0.6 : 1 }}
                     >
