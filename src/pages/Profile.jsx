@@ -180,10 +180,14 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mt-4 bg-white bg-opacity-15 rounded-2xl p-1">
+        <div className="flex gap-1 mt-4 bg-white bg-opacity-15 rounded-2xl p-1" role="tablist" aria-label="ניווט פרופיל">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
+              role="tab"
+              aria-selected={activeTab === id}
+              aria-controls={`tabpanel-${id}`}
+              aria-label={label}
               onClick={() => setActiveTab(id)}
               className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-sm font-bold transition-all"
               style={{
@@ -191,7 +195,7 @@ export default function Profile() {
                 color: activeTab === id ? "#007AFF" : "rgba(255,255,255,0.8)",
               }}
             >
-              <Icon size={14} />
+              <Icon size={14} aria-hidden="true" />
               {label}
             </button>
           ))}
