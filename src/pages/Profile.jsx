@@ -332,7 +332,7 @@ export default function Profile() {
           >
             <div
               className="bg-white rounded-t-3xl p-6 space-y-4"
-              style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)" }}
+              style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1.5rem)" }}
               onClick={e => e.stopPropagation()}
             >
               <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
