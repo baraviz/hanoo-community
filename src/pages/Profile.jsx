@@ -1,3 +1,4 @@
+// Profile page
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppNavigation } from "@/lib/NavigationContext";
