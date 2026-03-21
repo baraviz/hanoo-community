@@ -274,10 +274,13 @@ export default function Onboarding() {
         </div>
 
         <div className="space-y-4">
+          <label htmlFor="invite-code" className="sr-only">קוד הצטרפות</label>
           <input
+            id="invite-code"
             value={inviteCode}
             onChange={e => { setInviteCode(e.target.value); setError(""); }}
             placeholder="לדוגמה: ABC123"
+            aria-label="קוד הצטרפות"
             className="w-full border-2 border-gray-200 rounded-2xl px-4 py-4 text-center text-2xl font-bold tracking-widest outline-none focus:border-blue-400"
             style={{ background: "white", letterSpacing: "0.3em" }}
             autoCapitalize="characters"
@@ -317,23 +320,23 @@ export default function Onboarding() {
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
-            <input value={apartment} onChange={e => setApartment(e.target.value)} placeholder="לדוגמה: 5" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="join-apartment" className="text-sm font-medium text-gray-700 block mb-1">מספר דירה</label>
+            <input id="join-apartment" value={apartment} onChange={e => setApartment(e.target.value)} placeholder="לדוגמה: 5" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר חניה שלי</label>
-            <input value={parkingSpot} onChange={e => setParkingSpot(e.target.value)} placeholder="לדוגמה: P15" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="join-parking" className="text-sm font-medium text-gray-700 block mb-1">מספר חניה שלי</label>
+            <input id="join-parking" value={parkingSpot} onChange={e => setParkingSpot(e.target.value)} placeholder="לדוגמה: P15" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           {foundBuilding?.underground_parking && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת חניה</label>
-              <input value={joinFloor} onChange={e => setJoinFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+              <label htmlFor="join-floor" className="text-sm font-medium text-gray-700 block mb-1">קומת חניה</label>
+              <input id="join-floor" value={joinFloor} onChange={e => setJoinFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
               <p className="text-gray-400 text-xs mt-1">הבניין כולל חניון תת קרקעי</p>
             </div>
           )}
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
-            <input value={joinPhone} onChange={e => setJoinPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="join-phone" className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
+            <input id="join-phone" value={joinPhone} onChange={e => setJoinPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
             <p className="text-gray-400 text-xs mt-1">לשימוש בתקשורת עם שכנים</p>
           </div>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -400,16 +403,16 @@ export default function Onboarding() {
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">שם הבניין *</label>
-            <input value={buildingName} onChange={e => setBuildingName(e.target.value)} placeholder="לדוגמה: בניין הרצל 12" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="building-name" className="text-sm font-medium text-gray-700 block mb-1">שם הבניין *</label>
+            <input id="building-name" value={buildingName} onChange={e => setBuildingName(e.target.value)} placeholder="לדוגמה: בניין הרצל 12" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">כתובת *</label>
-            <input value={buildingAddress} onChange={e => setBuildingAddress(e.target.value)} placeholder="לדוגמה: הרצל 12" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="building-address" className="text-sm font-medium text-gray-700 block mb-1">כתובת *</label>
+            <input id="building-address" value={buildingAddress} onChange={e => setBuildingAddress(e.target.value)} placeholder="לדוגמה: הרצל 12" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">עיר *</label>
-            <input value={buildingCity} onChange={e => setBuildingCity(e.target.value)} placeholder="לדוגמה: תל אביב" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="building-city" className="text-sm font-medium text-gray-700 block mb-1">עיר *</label>
+            <input id="building-city" value={buildingCity} onChange={e => setBuildingCity(e.target.value)} placeholder="לדוגמה: תל אביב" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
 
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -437,16 +440,16 @@ export default function Onboarding() {
 
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
-            <input value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="owner-apartment" className="text-sm font-medium text-gray-700 block mb-1">מספר דירתי</label>
+            <input id="owner-apartment" value={ownerApartment} onChange={e => setOwnerApartment(e.target.value)} placeholder="לדוגמה: 1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
-            <input value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="owner-parking" className="text-sm font-medium text-gray-700 block mb-1">מספר החניה שלי</label>
+            <input id="owner-parking" value={ownerParking} onChange={e => setOwnerParking(e.target.value)} placeholder="לדוגמה: P1" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
-            <input value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+            <label htmlFor="owner-phone" className="text-sm font-medium text-gray-700 block mb-1">מספר טלפון</label>
+            <input id="owner-phone" value={ownerPhone} onChange={e => setOwnerPhone(e.target.value)} placeholder="0501234567" type="tel" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
             <p className="text-gray-400 text-xs mt-1">לשימוש בתקשורת עם שכנים</p>
           </div>
 
@@ -460,6 +463,9 @@ export default function Onboarding() {
             </div>
             <button
               type="button"
+              role="switch"
+              aria-checked={undergroundParking}
+              aria-label="חניון תת קרקעי"
               onClick={() => setUndergroundParking(!undergroundParking)}
               className="relative w-12 h-6 rounded-full transition-colors"
               style={{ background: undergroundParking ? "#007AFF" : "#D1D5DB" }}
@@ -473,8 +479,8 @@ export default function Onboarding() {
 
           {undergroundParking && (
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי</label>
-              <input value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
+              <label htmlFor="owner-floor" className="text-sm font-medium text-gray-700 block mb-1">קומת החניה שלי</label>
+              <input id="owner-floor" value={ownerFloor} onChange={e => setOwnerFloor(e.target.value)} placeholder="לדוגמה: -2" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-blue-400" style={{ background: "white" }} />
             </div>
           )}
 
