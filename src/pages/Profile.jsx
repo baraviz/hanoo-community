@@ -216,8 +216,8 @@ export default function Profile() {
                   <div className="flex items-center gap-2">
                     <Phone size={16} style={{ color: "var(--text-tertiary)" }} className="flex-none" />
                     <span className="flex-1 text-sm font-medium" style={{ color: "var(--text-primary)" }} dir="ltr">{resident.phone}</span>
-                    <button onClick={() => setEditingPhone(true)} className="w-8 h-8 flex items-center justify-center rounded-xl" style={{ background: "var(--hanoo-blue-light)" }}>
-                      <Pencil size={14} style={{ color: "var(--hanoo-blue)" }} />
+                    <button onClick={() => setEditingPhone(true)} aria-label="ערוך מספר טלפון" className="w-8 h-8 flex items-center justify-center rounded-xl" style={{ background: "var(--hanoo-blue-light)" }}>
+                      <Pencil size={14} style={{ color: "var(--hanoo-blue)" }} aria-hidden="true" />
                     </button>
                   </div>
                 ) : (
