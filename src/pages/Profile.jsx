@@ -229,6 +229,7 @@ export default function Profile() {
                         value={phone}
                         onChange={e => setPhone(e.target.value)}
                         placeholder="050-0000000"
+                        aria-label="מספר טלפון"
                         className="flex-1 text-sm font-medium outline-none bg-transparent"
                         style={{ color: "var(--text-primary)" }}
                         dir="ltr"
