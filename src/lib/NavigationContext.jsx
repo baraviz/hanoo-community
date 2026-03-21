@@ -148,13 +148,16 @@ export function NavigationProvider({ children }) {
     async function handlePopState(e) {
       // Ignore if we triggered this ourselves (re-entrance guard)
       if (handlingBack.current) return;
-      // Ignore if somehow the sentinel itself surfaced
+      // Ignore sentinel re-surface and our own go(+1) re-pushes
       if (e.state?.__hanoo_sentinel) return;
+      // Ignore if this popstate was triggered by our own historyGo call
+      // (historyGo registers its own one-shot listener before we get here)
+      if (!sentinelRef.current) return;
 
       handlingBack.current = true;
 
       try {
-        // Re-push sentinel synchronously — await history settle before acting
+        // Re-push sentinel — await settle so the stack is consistent
         await historyGo(+1);
 
         const path   = window.location.pathname;
