@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Bell, X, Check } from "lucide-react";
+import { Bell, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { formatDistanceToNow } from "date-fns";
 import { he } from "date-fns/locale";
@@ -67,7 +67,6 @@ export default function NotificationBell({ userEmail }) {
     await markRead(n.id);
     if (n.type === "parking_cancelled" && n.action_url) {
       setOpen(false);
-      // Navigate to FindParking with the deep link params
       const url = new URL(n.action_url);
       navigate(`/FindParking${url.search}`);
     }
@@ -87,7 +86,7 @@ export default function NotificationBell({ userEmail }) {
         {unreadCount > 0 && (
           <span
             className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-white font-bold"
-            style={{ background: "#FF3B30", fontSize: 9 }}
+            style={{ background: "var(--hanoo-red)", fontSize: 9 }}
           >
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
@@ -96,24 +95,29 @@ export default function NotificationBell({ userEmail }) {
 
       {open && (
         <div
-          className="absolute left-0 top-12 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden z-50"
-          style={{ maxHeight: "70vh" }}
+          className="absolute left-0 top-12 w-80 rounded-2xl shadow-2xl overflow-hidden z-50"
+          style={{ maxHeight: "70vh", background: "var(--surface-card)", border: "1px solid var(--surface-card-border)" }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <span className="font-bold text-gray-800 text-sm">התראות</span>
+          <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "var(--surface-card-border)" }}>
+            <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>התראות</span>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
                   className="text-xs font-medium px-3 py-2 rounded-lg min-h-[44px]"
-                  style={{ color: "#007AFF", background: "#EBF4FF" }}
+                  style={{ color: "var(--hanoo-blue)", background: "var(--hanoo-blue-light)" }}
                 >
                   סמן הכל כנקרא
                 </button>
               )}
-              <button onClick={() => setOpen(false)} aria-label="סגור התראות" className="w-11 h-11 flex items-center justify-center rounded-full bg-gray-100">
-                <X size={13} className="text-gray-500" aria-hidden="true" />
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="סגור התראות"
+                className="w-11 h-11 flex items-center justify-center rounded-full"
+                style={{ background: "var(--btn-secondary-bg)" }}
+              >
+                <X size={13} style={{ color: "var(--text-secondary)" }} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -121,25 +125,35 @@ export default function NotificationBell({ userEmail }) {
           {/* List */}
           <div className="overflow-y-auto" style={{ maxHeight: "calc(70vh - 56px)" }}>
             {notifications.length === 0 ? (
-              <div className="text-center py-10 text-gray-400 text-sm">אין התראות</div>
+              <div className="text-center py-10 text-sm" style={{ color: "var(--text-tertiary)" }}>אין התראות</div>
             ) : (
               notifications.map(n => (
                 <div
                   key={n.id}
                   onClick={() => handleNotificationClick(n)}
-                  className="flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0"
-                  style={{ background: n.read ? "white" : (n.type === "parking_cancelled" ? "#FFF8F0" : "#F0F7FF") }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === "Enter" && handleNotificationClick(n)}
+                  className="flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors border-b last:border-0"
+                  style={{
+                    borderColor: "var(--surface-card-border)",
+                    background: n.read
+                      ? "var(--surface-card)"
+                      : n.type === "parking_cancelled"
+                        ? "var(--hanoo-orange-light)"
+                        : "var(--hanoo-blue-light)",
+                  }}
                 >
                   <span className="text-xl flex-none mt-0.5">{typeIcon[n.type] || "🔔"}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-800 text-sm leading-tight">{n.title}</p>
-                    <p className="text-gray-500 text-xs mt-0.5 leading-snug">{n.body}</p>
-                    <p className="text-gray-300 text-xs mt-1">
+                    <p className="font-bold text-sm leading-tight" style={{ color: "var(--text-primary)" }}>{n.title}</p>
+                    <p className="text-xs mt-0.5 leading-snug" style={{ color: "var(--text-secondary)" }}>{n.body}</p>
+                    <p className="text-xs mt-1" style={{ color: "var(--text-tertiary)" }}>
                       {formatDistanceToNow(new Date(n.created_date), { addSuffix: true, locale: he })}
                     </p>
                   </div>
                   {!n.read && (
-                    <div className="w-2 h-2 rounded-full flex-none mt-1.5" style={{ background: "#007AFF" }} />
+                    <div className="w-2 h-2 rounded-full flex-none mt-1.5" style={{ background: "var(--hanoo-blue)" }} />
                   )}
                 </div>
               ))
