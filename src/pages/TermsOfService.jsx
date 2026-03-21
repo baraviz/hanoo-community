@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import { useAppNavigation } from "@/lib/NavigationContext";
 
 export default function TermsOfService() {
-  const navigate = useNavigate();
+  const { back } = useAppNavigation();
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       <div className="sticky top-0 bg-white border-b border-gray-100 px-4 py-4 flex items-center gap-3 z-10">
-        <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
+        <button onClick={() => back()} aria-label="חזור" className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100">
           <ChevronRight size={18} className="text-gray-600" />
         </button>
         <h1 className="font-bold text-gray-800 text-base">תנאי שימוש</h1>

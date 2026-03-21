@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { AlertTriangle, CheckCircle, Clock, X, ChevronDown } from "lucide-react";
+import { FixedSizeList } from "react-window";
 
 const STATUS_CONFIG = {
   open:        { label: "פתוח",       bg: "#FEE2E2", color: "#DC2626" },
