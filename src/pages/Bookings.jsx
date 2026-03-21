@@ -162,7 +162,7 @@ export default function Bookings() {
       </div>
 
       {/* Content */}
-      <div id="bookings-panel" role="tabpanel" aria-label={tab === "mine" ? "אני הזמנתי" : "הזמינו ממני"} className="px-4 pt-4 pb-6 space-y-2">
+      <div id="bookings-panel" role="tabpanel" aria-live="polite" aria-label={tab === "mine" ? "אני הזמנתי" : "הזמינו ממני"} className="px-4 pt-4 pb-6 space-y-2">
         {upcoming.length === 0 && past.length === 0 && (
           <div className="text-center py-20">
             <div className="text-5xl mb-3">🅿️</div>
