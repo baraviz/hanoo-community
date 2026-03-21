@@ -22,8 +22,8 @@ export default function AdminBuildingsList({ data }) {
             style={{ background: "rgba(255,255,255,0.03)" }}
           >
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "rgba(59,130,246,0.12)" }}>
-                <Building2 size={18} style={{ color: "#3B82F6" }} />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                <Building2 size={18} style={{ color: "var(--hanoo-blue)" }} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-white truncate">{b.name}</p>

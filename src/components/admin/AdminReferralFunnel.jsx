@@ -33,8 +33,8 @@ export default function AdminReferralFunnel({ referrals, residents }) {
         className="w-full px-6 py-4 min-h-[56px] flex items-center justify-between focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400 rounded-2xl"
       >
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "rgba(16,185,129,0.15)" }}>
-            <Share2 size={18} style={{ color: "#10B981" }} />
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-green-light)" }}>
+            <Share2 size={18} style={{ color: "var(--hanoo-green)" }} />
           </div>
           <div className="text-right">
             <p className="text-white font-bold">פאנל שיתוף — הפניות</p>
@@ -51,9 +51,9 @@ export default function AdminReferralFunnel({ referrals, residents }) {
           {/* KPI row */}
           <div className="grid grid-cols-3 gap-3 pt-4">
             {[
-              { label: "קישורים נפתחו", value: opens, icon: Share2, color: "#3B82F6", bg: "rgba(59,130,246,0.12)" },
-              { label: "הצטרפו דרך קישור", value: joins, icon: UserCheck, color: "#10B981", bg: "rgba(16,185,129,0.12)" },
-              { label: "אחוז המרה", value: `${convRate}%`, icon: TrendingUp, color: "#F59E0B", bg: "rgba(245,158,11,0.12)" },
+              { label: "קישורים נפתחו", value: opens, icon: Share2, color: "var(--hanoo-blue)", bg: "var(--hanoo-blue-light)" },
+              { label: "הצטרפו דרך קישור", value: joins, icon: UserCheck, color: "var(--hanoo-green)", bg: "var(--hanoo-green-light)" },
+              { label: "אחוז המרה", value: `${convRate}%`, icon: TrendingUp, color: "var(--hanoo-orange)", bg: "var(--hanoo-orange-light)" },
             ].map(({ label, value, icon: Icon, color, bg }) => (
               <div key={label} className="rounded-xl p-4 flex flex-col items-center text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center mb-2" style={{ background: bg }}>
@@ -79,8 +79,8 @@ export default function AdminReferralFunnel({ referrals, residents }) {
                     </div>
                     <div className="text-left">
                       <p className="text-xs text-gray-400">
-                        <span style={{ color: "#10B981" }} className="font-bold">{r.joins}</span> הצטרפו ·{" "}
-                        <span style={{ color: "#3B82F6" }}>{r.opens}</span> פתחו
+                        <span style={{ color: "var(--hanoo-green)" }} className="font-bold">{r.joins}</span> הצטרפו ·{" "}
+                        <span style={{ color: "var(--hanoo-blue)" }}>{r.opens}</span> פתחו
                       </p>
                     </div>
                   </div>

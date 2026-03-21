@@ -43,8 +43,8 @@ export default function AdminActiveBookings({ bookings }) {
                   role="listitem"
                   aria-label={`הזמנה: ${b.renter_name || b.renter_email} → חנייה #${b.spot_number || "?"}`}
                 >
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "rgba(245,158,11,0.15)" }}>
-                    <Car size={18} style={{ color: "#F59E0B" }} aria-hidden="true" />
+                  <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-orange-light)" }}>
+                    <Car size={18} style={{ color: "var(--hanoo-orange)" }} aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -59,7 +59,7 @@ export default function AdminActiveBookings({ bookings }) {
                     </div>
                   </div>
                   <div className="text-right flex-none">
-                    <p className="text-sm font-bold" style={{ color: "#A78BFA" }}>{b.total_credits}</p>
+                    <p className="text-sm font-bold" style={{ color: "var(--hanoo-blue)" }}>{b.total_credits}</p>
                     <p className="text-gray-400 text-[11px]">{hours(b)}h</p>
                   </div>
                 </div>
