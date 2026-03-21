@@ -24,7 +24,7 @@ const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
 // Wraps every route with the shared Layout + PageTransition animation
 const LayoutWrapper = ({ children, currentPageName }) => {
-  const inner = <PageTransition>{children}</PageTransition>;
+  const inner = <PageTransition><ErrorBoundary>{children}</ErrorBoundary></PageTransition>;
   return Layout
     ? <Layout currentPageName={currentPageName}>{inner}</Layout>
     : inner;
