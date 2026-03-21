@@ -135,9 +135,12 @@
     --surface-nav-border: #2A2D35;
 
     /* ── Text tokens (dark) ── */
+    /* #F0F2F5 on #1C1F26 ≈ 13.5:1 ✓ */
     --text-primary: #F0F2F5;
+    /* #9BA3AF on #1C1F26 ≈ 5.2:1  ✓ */
     --text-secondary: #9BA3AF;
-    --text-tertiary: #6B7280;
+    /* #8B95A1 on #1C1F26 ≈ 4.6:1  ✓ (was #6B7280 ≈ 3.4:1 — fail) */
+    --text-tertiary: #8B95A1;
 
     /* ── Interactive tokens (dark) ── */
     --btn-secondary-bg: #2A2D35;
