@@ -73,15 +73,19 @@ export default function Profile() {
     return `${window.location.origin}/JoinViaLink?bid=${resident.building_id}&ref=${encodeURIComponent(user.email)}`;
   }
 
-  function handleShare() {
+  async function handleShare() {
     const link = buildShareLink();
     if (navigator.share) {
-      navigator.share({ title: "הצטרף לחניה השיתופית שלנו!", text: "שכן שלך הזמין אותך להצטרף ל-Hanoo — שיתוף חניות חכם בין שכנים", url: link });
-    } else {
-      navigator.clipboard.writeText(link);
-      setShareCopied(true);
-      setTimeout(() => setShareCopied(false), 2500);
+      try {
+        await navigator.share({ title: "הצטרף לחניה השיתופית שלנו!", text: "שכן שלך הזמין אותך להצטרף ל-Hanoo — שיתוף חניות חכם בין שכנים", url: link });
+        return;
+      } catch (_) {
+        // Permission denied or user cancelled — fall through to clipboard
+      }
     }
+    navigator.clipboard.writeText(link);
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2500);
   }
 
   async function savePhone() {
