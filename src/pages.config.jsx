@@ -8,7 +8,6 @@ import { lazy, Suspense } from 'react';
 import __Layout from './Layout.jsx';
 
 // Lazy-loaded pages — each gets its own JS chunk
-const Chat           = lazy(() => import('./pages/Chat'));
 const FindParking    = lazy(() => import('./pages/FindParking'));
 const Home           = lazy(() => import('./pages/Home'));
 const Onboarding     = lazy(() => import('./pages/Onboarding'));
