@@ -78,7 +78,8 @@ export default function AdminDashboard() {
         <button
           onClick={loadData}
           disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-medium transition-colors"
+          aria-label="רענן נתונים"
+          className="flex items-center gap-2 px-4 py-2 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-700 text-sm font-medium transition-colors"
         >
           <RefreshCw size={15} className={refreshing ? "animate-spin" : ""} />
           רענן

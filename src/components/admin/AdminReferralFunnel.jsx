@@ -27,10 +27,12 @@ export default function AdminReferralFunnel({ referrals, residents }) {
     <div className="rounded-2xl border border-gray-800 overflow-hidden" style={{ background: "rgba(255,255,255,0.03)" }}>
       <button
         onClick={() => setExpanded(p => !p)}
-        className="w-full px-6 py-4 flex items-center justify-between"
+        aria-expanded={expanded}
+        aria-controls="referral-funnel-body"
+        className="w-full px-6 py-4 min-h-[56px] flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "rgba(16,185,129,0.15)" }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-none" style={{ background: "rgba(16,185,129,0.15)" }}>
             <Share2 size={18} style={{ color: "#10B981" }} />
           </div>
           <div className="text-right">
@@ -38,11 +40,13 @@ export default function AdminReferralFunnel({ referrals, residents }) {
             <p className="text-gray-400 text-xs">{opens} פתיחות · {joins} הצטרפויות · {convRate}% המרה</p>
           </div>
         </div>
-        {expanded ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
+        {expanded
+          ? <ChevronUp size={18} className="text-gray-300" aria-hidden="true" />
+          : <ChevronDown size={18} className="text-gray-300" aria-hidden="true" />}
       </button>
 
       {expanded && (
-        <div className="px-6 pb-6 space-y-5 border-t border-gray-800">
+        <div id="referral-funnel-body" className="px-6 pb-6 space-y-5 border-t border-gray-800">
           {/* KPI row */}
           <div className="grid grid-cols-3 gap-3 pt-4">
             {[
@@ -63,14 +67,14 @@ export default function AdminReferralFunnel({ referrals, residents }) {
           {/* Top referrers */}
           {topReferrers.length > 0 && (
             <div>
-              <p className="text-gray-300 font-bold text-sm mb-3">שיאני הפניות</p>
+              <p className="text-gray-200 font-bold text-sm mb-3">שיאני הפניות</p>
               <div className="space-y-2">
                 {topReferrers.map((r, idx) => (
                   <div key={r.email} className="flex items-center gap-3 px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.04)" }}>
                     <span className="text-gray-500 text-xs w-5 text-center font-bold">#{idx + 1}</span>
                     <div className="flex-1">
                       <p className="text-white text-sm font-medium">{nameMap[r.email] || r.email}</p>
-                      <p className="text-gray-400 text-xs">{r.email}</p>
+                      <p className="text-gray-300 text-xs">{r.email}</p>
                     </div>
                     <div className="text-left">
                       <p className="text-xs text-gray-400">
