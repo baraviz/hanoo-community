@@ -312,107 +312,37 @@ export default function Profile() {
 
             <button
               onClick={() => base44.auth.logout()}
+              aria-label="התנתק מהחשבון"
               className="w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2"
               style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}
             >
-              <LogOut size={18} />
+              <LogOut size={18} aria-hidden="true" />
               התנתק
             </button>
 
             <button
               onClick={() => { setDeleteStep(1); setShowDeleteConfirm(true); }}
+              aria-label="פתח תהליך מחיקת חשבון"
               className="w-full py-3 rounded-2xl font-medium flex items-center justify-center gap-2 text-sm"
               style={{ background: "transparent", color: "var(--text-tertiary)", border: "1px solid var(--surface-card-border)" }}
             >
-              <Trash2 size={15} />
+              <Trash2 size={15} aria-hidden="true" />
               מחק חשבון
             </button>
           </>
         )}
 
-        {/* Delete account confirmation modal */}
+        {/* Delete account modal — 3-step flow */}
         {showDeleteConfirm && (
-          <div
-            className="fixed inset-0 z-50 flex flex-col justify-end"
-            style={{ background: "rgba(0,0,0,0.5)" }}
-            onClick={() => setShowDeleteConfirm(false)}
-          >
-            <div
-              className="bg-white rounded-t-3xl p-6 space-y-4"
-              style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px + 1.5rem)" }}
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto" />
-              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "#FEE2E2" }}>
-                <AlertTriangle size={28} style={{ color: "#EF4444" }} />
-              </div>
-
-              {deleteStep === 1 ? (
-                <>
-                  <h2 className="text-xl font-bold text-gray-800 text-center">מחיקת חשבון</h2>
-                  <p className="text-gray-500 text-sm text-center">
-                    פעולה זו תמחק את כל הנתונים שלך לצמיתות — פרופיל, זמינויות, והזמנות. לא ניתן לבטל פעולה זו.
-                  </p>
-                  <div className="flex gap-3 pt-1">
-                    <button
-                      onClick={() => setShowDeleteConfirm(false)}
-                      className="flex-1 py-3 rounded-2xl font-bold text-gray-700"
-                      style={{ background: "#F3F4F6" }}
-                    >
-                      ביטול
-                    </button>
-                    <button
-                      onClick={() => setDeleteStep(2)}
-                      className="flex-1 py-3 rounded-2xl font-bold text-white"
-                      style={{ background: "#EF4444" }}
-                    >
-                      המשך
-                    </button>
-                  </div>
-                </>
-              ) : deleteStep === 3 ? (
-                <div className="flex flex-col items-center gap-4 py-2">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: "#D1FAE5" }}>
-                    <CheckCircle size={28} style={{ color: "#059669" }} />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-800 text-center">החשבון נמחק</h2>
-                  <p className="text-gray-500 text-sm text-center">כל הנתונים שלך הוסרו בהצלחה. מתנתק...</p>
-                  <div className="w-6 h-6 border-2 border-gray-300 border-t-green-500 rounded-full animate-spin" />
-                </div>
-              ) : (
-                <>
-                  <h2 className="text-xl font-bold text-gray-800 text-center">אתה בטוח לחלוטין?</h2>
-                  <p className="text-gray-500 text-sm text-center">
-                    כל ה-<span className="font-bold text-gray-700">{resident?.credits || 0} קרדיטים</span> והנתונים שלך יימחקו לצמיתות.
-                  </p>
-                  {deleteError && (
-                    <p className="text-red-500 text-xs text-center bg-red-50 rounded-xl p-2">{deleteError}</p>
-                  )}
-                  <button
-                    aria-label="אשר מחיקת חשבון לצמיתות"
-                    onClick={deleteAccount}
-                    disabled={deleting}
-                    className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
-                    style={{ background: "#EF4444", opacity: deleting ? 0.6 : 1 }}
-                  >
-                    {deleting ? (
-                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" /> מוחק נתונים...</>
-                    ) : (
-                      <><Trash2 size={16} aria-hidden="true" /> כן, מחק את החשבון שלי</>
-                    )}
-                  </button>
-                  <button
-                    aria-label="בטל מחיקת חשבון"
-                    onClick={() => setShowDeleteConfirm(false)}
-                    className="w-full py-3 rounded-2xl font-bold text-gray-600"
-                    style={{ background: "#F3F4F6" }}
-                  >
-                    ביטול
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+          <DeleteAccountModal
+            step={deleteStep}
+            credits={resident?.credits || 0}
+            deleting={deleting}
+            deleteError={deleteError}
+            onClose={() => { if (!deleting) setShowDeleteConfirm(false); }}
+            onNext={() => setDeleteStep(2)}
+            onConfirm={deleteAccount}
+          />
         )}
 
         {/* ── LEAGUE TAB ── */}
