@@ -1,4 +1,4 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 
 const DAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 const TOTAL_MINS = 24 * 60;
