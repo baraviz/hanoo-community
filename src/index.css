@@ -163,6 +163,8 @@
     /* Prevent iOS font size boost in landscape */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    /* Tell browser/WebView which color schemes this app supports */
+    color-scheme: light dark;
   }
 
   body {
