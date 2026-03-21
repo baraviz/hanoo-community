@@ -1,3 +1,4 @@
+// Home page
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
