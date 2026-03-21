@@ -126,8 +126,8 @@ export default function Bookings() {
             <h1 className="text-white text-xl font-bold">הזמנות</h1>
             <p className="text-blue-200 text-xs mt-0.5">היסטוריית החניות שלך</p>
           </div>
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
-            <Menu size={18} className="text-white" />
+          <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
+            <Menu size={18} className="text-white" aria-hidden="true" />
           </button>
         </div>
 
