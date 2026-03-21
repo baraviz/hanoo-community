@@ -71,9 +71,11 @@ export default function BottomSheetSelect({
       {/* Trigger button */}
       <button
         type="button"
+        id={triggerId.current}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={sheetId.current}
         aria-label={label}
         disabled={disabled}
         onClick={openSheet}
