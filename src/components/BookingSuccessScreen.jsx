@@ -105,11 +105,11 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
         @keyframes fadeOut   { from { opacity: 1; } to { opacity: 0; } }
       `}</style>
       <div
-        className="rounded-t-3xl p-6 space-y-5"
+        className="rounded-t-3xl p-6 space-y-5 overflow-y-auto"
         style={{
           background: "var(--sheet-bg)",
-          paddingBottom: "calc(env(safe-area-inset-bottom) + 1.5rem)",
-          maxHeight: "90vh",
+          paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)",
+          maxHeight: "85dvh",
           animation: closing ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out",
         }}
         onClick={e => e.stopPropagation()}
