@@ -5,7 +5,7 @@ import { Car, CheckCircle, Clock, ArrowLeft, Search, Menu, Bell, ChevronRight } 
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import { format, differenceInMinutes } from "date-fns";
-import ThankYouWhatsApp from "@/components/ThankYouWhatsApp";
+import BookingSuccessScreen from "@/components/BookingSuccessScreen";
 
 export default function FindParking() {
   const [user, setUser] = useState(null);
