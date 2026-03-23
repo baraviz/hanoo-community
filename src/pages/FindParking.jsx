@@ -395,19 +395,19 @@ export default function FindParking() {
         {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
         {/* Header */}
         <div className="pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
-          <div className="flex items-center justify-between">
-            <div className="text-right">
+          <div className="relative flex items-center justify-center">
+            <button
+              onClick={() => { setShowResults(false); setSearched(false); setResults([]); setCombos([]); setNearbyResults([]); }}
+              className="absolute right-0 flex items-center gap-1 text-white text-sm font-bold"
+              aria-label="חזור לחיפוש"
+            >
+              חזור
+              <ArrowLeft size={16} style={{ transform: "scaleX(-1)" }} />
+            </button>
+            <div className="text-center">
               <h1 className="text-white text-xl font-bold">תוצאות חיפוש</h1>
               <p className="text-blue-200 text-xs mt-0.5">{fmtDateLabel(fromTime)} – {fmtDateLabel(toTime)}</p>
             </div>
-            <button
-              onClick={() => { setShowResults(false); setSearched(false); setResults([]); setCombos([]); }}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
-              style={{ background: "rgba(255,255,255,0.2)", color: "white" }}
-            >
-              <Search size={14} />
-              חזור לחיפוש
-            </button>
           </div>
         </div>
 
