@@ -99,7 +99,7 @@ export default function FindParking() {
 
   async function searchParking() {
     if (!fromTime || !toTime) return;
-    setLoading(true); setSearched(true);
+    setLoading(true); setSearched(true); setShowResults(true); setNotifyRequested(false);
 
     const fromDate = new Date(fromTime);
     const toDate = new Date(toTime);
