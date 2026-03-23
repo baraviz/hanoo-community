@@ -169,6 +169,53 @@ export default function FindParking() {
 
     setResults(full);
     setCombos(foundCombos);
+
+    // If no exact results, find nearby alternatives (slots that overlap but don't fully cover)
+    let nearby = [];
+    if (full.length === 0 && foundCombos.length === 0) {
+      const requestedDuration = toDate - fromDate; // ms
+      // Look at all avail slots (not just filtered by this window) for nearby options
+      const allCandidatesForNearby = allAvail
+        .filter(a => a.owner_email !== user.email && !bookedAvailIds.has(a.id))
+        .map(a => {
+          if (a.slot_type === "recurring") {
+            const dayOfWeek = localDay(fromDate);
+            if (!(a.days_of_week || []).includes(dayOfWeek)) return null;
+            const slotStart = a.time_start ?? 0;
+            const slotEnd = a.time_end ?? 1440;
+            const slotDuration = (slotEnd - slotStart) * 60000; // ms
+            if (slotDuration < requestedDuration) return null; // slot too short for the requested duration
+            const owner = residentMap[a.owner_email] || null;
+            // Option A: start at slot start (if slot start > fromMins, i.e. "start later")
+            // Option B: end at slot end (if slot end < toMins, i.e. "end earlier")
+            const options = [];
+            if (slotStart > fromMins) {
+              const newFrom = new Date(fromDate);
+              newFrom.setHours(Math.floor(slotStart / 60), slotStart % 60, 0, 0);
+              const newTo = new Date(newFrom.getTime() + requestedDuration);
+              const newToMins = newTo.getHours() * 60 + newTo.getMinutes();
+              if (newToMins <= slotEnd) {
+                options.push({ slot: { ...a, ownerResident: owner }, newFrom: toLocalInput(newFrom), newTo: toLocalInput(newTo), label: `מ-${fmtMins(slotStart)}` });
+              }
+            }
+            if (slotEnd < toMins) {
+              const newTo = new Date(fromDate);
+              newTo.setHours(Math.floor(slotEnd / 60), slotEnd % 60, 0, 0);
+              const newFrom = new Date(newTo.getTime() - requestedDuration);
+              const newFromMins = newFrom.getHours() * 60 + newFrom.getMinutes();
+              if (newFromMins >= slotStart) {
+                options.push({ slot: { ...a, ownerResident: owner }, newFrom: toLocalInput(newFrom), newTo: toLocalInput(newTo), label: `עד ${fmtMins(slotEnd)}` });
+              }
+            }
+            return options.length > 0 ? options : null;
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .flat();
+      nearby = allCandidatesForNearby.slice(0, 4);
+    }
+    setNearbyResults(nearby);
     setLoading(false);
   }
 
