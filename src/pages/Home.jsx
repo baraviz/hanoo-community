@@ -542,31 +542,38 @@ export default function Home() {
         )}
 
         {/* Upcoming bookings */}
-        {activeBooking && (
-          <div>
-            <h3 className="text-sm font-bold mb-3 px-1" style={{ color: "var(--text-primary)" }}>הזמנות קרובות</h3>
-            <button
-              onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
-              className="card p-3 flex items-center justify-between mb-2 active:opacity-75 transition-opacity"
-              style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)" }}
-            >
-              <div className="flex items-center gap-3 flex-1 text-right">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
-                  <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+        {activeBooking && (() => {
+          const now = new Date();
+          const isActive = new Date(activeBooking.start_time) <= now && now < new Date(activeBooking.end_time);
+          return (
+            <div>
+              <h3 className="text-sm font-bold mb-3 px-1 flex items-center gap-2" style={{ color: "var(--text-primary)" }}>
+                הזמנות קרובות
+                {isActive && <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>פעיל כעת</span>}
+              </h3>
+              <button
+                onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
+                className="card p-3 flex items-center justify-between mb-2 active:opacity-75 transition-opacity"
+                style={{ background: "var(--surface-card)", border: isActive ? "2px solid var(--hanoo-green)" : "1px solid var(--surface-card-border)" }}
+              >
+                <div className="flex items-center gap-3 flex-1 text-right">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: isActive ? "var(--hanoo-green-light)" : "var(--hanoo-blue-light)" }}>
+                    <Car size={18} style={{ color: isActive ? "var(--hanoo-green)" : "var(--hanoo-blue)" }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+                      חניה #{activeBooking.spot_number}
+                    </p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+                      של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                    חניה #{activeBooking.spot_number}
-                  </p>
-                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                    של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
-                  </p>
-                </div>
-              </div>
-              <ChevronLeft size={20} style={{ color: "var(--text-tertiary)", marginRight: 8 }} />
-            </button>
-          </div>
-        )}
+                <ChevronLeft size={20} style={{ color: "var(--text-tertiary)", marginRight: 8 }} />
+              </button>
+            </div>
+          );
+        })()}
 
         {/* Parking status card — BOTTOM */}
         {(recurringSlots.length > 0 || myActiveSlot) && (() => {
