@@ -32,6 +32,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
   const [displayedCredits, setDisplayedCredits] = useState(0);
+  const [endBookingSheet, setEndBookingSheet] = useState(null); // booking to confirm ending
+  const [closingEndSheet, setClosingEndSheet] = useState(false);
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
