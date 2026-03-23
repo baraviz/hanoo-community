@@ -144,6 +144,7 @@ export default function FindParking() {
       return;
     }
 
+    setCreditsBeforeBooking(resident.credits || 0);
     // Deduct from renter
     await base44.entities.Resident.update(resident.id, { credits: (resident.credits || 0) - cost });
     // Add to owner
