@@ -389,10 +389,19 @@ export default function FindParking() {
             const totalMins = Math.max(0, Math.round(diffMs / 60000));
             const hours = Math.floor(totalMins / 60);
             const mins = totalMins % 60;
-            const label = hours > 0 && mins > 0 ? `${hours} שעות ו-${mins} דקות` : hours > 0 ? `${hours} שעות` : `${mins} דקות`;
+            let hoursLabel;
+            if (hours === 1 && mins === 0) hoursLabel = "שעה אחת";
+            else if (hours === 2 && mins === 0) hoursLabel = "שעתיים";
+            else if (hours > 0 && mins > 0) hoursLabel = `${hours} שעות ו-${mins} דקות`;
+            else if (hours > 0) hoursLabel = `${hours} שעות`;
+            else hoursLabel = `${mins} דקות`;
+            const cost = calcCost(
+              new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes(),
+              new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes()
+            );
             return (
               <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
-                סה״כ: {label}
+                סה״כ: {hoursLabel} · {cost} קרדיטים
               </p>
             );
           })()}
