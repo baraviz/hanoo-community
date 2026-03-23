@@ -1,8 +1,6 @@
 // Profile page
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppNavigation } from "@/lib/NavigationContext";
-import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Building2, Share2, Trash2 } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
