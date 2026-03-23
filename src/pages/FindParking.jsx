@@ -225,7 +225,7 @@ export default function FindParking() {
   async function handleBookSingle(slot) {
     const fromMins = new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes();
     const toMins = new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes();
-    const cost = calcCost(fromMins, toMins);
+    const cost = calcCost(fromMins, toMins, fromTime, toTime);
 
     if ((resident.credits || 0) < cost) {
       alert(`אין מספיק קרדיטים. יש לך ${resident.credits}, נדרש ${cost}`);
@@ -570,10 +570,7 @@ export default function FindParking() {
             else if (hours > 0 && mins > 0) hoursLabel = `${hours} שעות ו-${mins} דקות`;
             else if (hours > 0) hoursLabel = `${hours} שעות`;
             else hoursLabel = `${mins} דקות`;
-            const cost = calcCost(
-              new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes(),
-              new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes()
-            );
+            const cost = calcCost(0, 0, fromTime, toTime);
             return (
               <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
                 סה״כ: {hoursLabel} · {cost} קרדיטים
