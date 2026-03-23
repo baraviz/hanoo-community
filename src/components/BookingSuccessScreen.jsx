@@ -251,59 +251,66 @@ export default function BookingSuccessScreen({
           className="flex flex-col px-5"
           style={{ justifyContent: isSplash ? "center" : "flex-start" }}
         >
-          {/* Splash: centered column. Settled: space-between row */}
-          <motion.div
-            animate={{
-              flexDirection: isSplash ? "column" : "row",
-              alignItems: "center",
-              justifyContent: isSplash ? "center" : "space-between",
-              gap: isSplash ? 20 : 0,
-            }}
-            transition={{ duration: 0.6, ease: easing }}
-            style={{ display: "flex" }}
-          >
-            {/* Icon */}
-            <motion.div
-              animate={{
-                width: isSplash ? 96 : 48,
-                height: isSplash ? 96 : 48,
-                opacity: phase >= 2 ? 1 : 0,
-                scale: phase >= 2 ? 1 : 0.3,
-              }}
-              transition={
-                phase === 2
-                  ? { type: "spring", stiffness: 300, damping: 22 }
-                  : { duration: 0.6, ease: easing }
-              }
-              className="rounded-full flex items-center justify-center flex-none"
-              style={{ background: "rgba(255,255,255,0.2)" }}
-            >
-              {phase >= 2 && <AnimatedCircleCheck size={isSplash ? 56 : 28} />}
-            </motion.div>
+          {isSplash ? (
+            /* ── Splash: icon + text centered column ── */
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+              <motion.div
+                animate={{
+                  opacity: phase >= 2 ? 1 : 0,
+                  scale: phase >= 2 ? 1 : 0.3,
+                  width: 96, height: 96,
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="rounded-full flex items-center justify-center flex-none"
+                style={{ background: "rgba(255,255,255,0.2)" }}
+              >
+                {phase >= 2 && <AnimatedCircleCheck size={56} />}
+              </motion.div>
+              <motion.div
+                animate={{ opacity: phase >= 2 ? 1 : 0, y: phase >= 2 ? 0 : 16 }}
+                transition={{ duration: 0.4, ease: easing, delay: 0.15 }}
+                style={{ textAlign: "center" }}
+              >
+                <div className="font-bold text-white leading-tight" style={{ fontSize: "2rem" }}>הוזמן בהצלחה!</div>
+                <motion.p
+                  className="text-sm mt-1"
+                  style={{ color: "rgba(255,255,255,0.75)" }}
+                  animate={{ opacity: phase >= 2 ? 1 : 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                >
+                  {duration} · {dayLbl} {fromStr}–{toStr}
+                </motion.p>
+              </motion.div>
+            </div>
+          ) : (
+            /* ── Settled: X button | centered title | check icon ── */
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              {/* X button — right side (RTL) */}
+              <button
+                onClick={onBack}
+                className="w-10 h-10 flex items-center justify-center rounded-full flex-none"
+                style={{ background: "rgba(255,255,255,0.2)" }}
+              >
+                <X size={18} className="text-white" />
+              </button>
 
-            {/* Text — left side in settled (opposite icon which is on right in RTL) */}
-            <motion.div
-              animate={{ opacity: phase >= 2 ? 1 : 0, y: phase >= 2 ? 0 : 16 }}
-              transition={phase === 2 ? { duration: 0.4, ease: easing, delay: 0.15 } : { duration: 0.5, ease: easing }}
-              style={{ textAlign: isSplash ? "center" : "left" }}
-            >
-              <motion.h2
-                className="font-bold text-white leading-tight"
-                animate={{ fontSize: isSplash ? "2rem" : "1.4rem" }}
-                transition={{ duration: 0.6, ease: easing }}
+              {/* Center: title + subtitle */}
+              <div className="flex-1 text-center px-2">
+                <div className="font-bold text-white leading-tight" style={{ fontSize: "1.15rem" }}>הוזמן בהצלחה!</div>
+                <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+                  {duration} · {dayLbl} {fromStr}–{toStr}
+                </p>
+              </div>
+
+              {/* Check icon — left side */}
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center flex-none"
+                style={{ background: "rgba(255,255,255,0.2)" }}
               >
-                הוזמן בהצלחה!
-              </motion.h2>
-              <motion.p
-                className="text-sm mt-1"
-                style={{ color: "rgba(255,255,255,0.75)" }}
-                animate={{ opacity: phase >= 2 ? 1 : 0 }}
-                transition={{ duration: 0.4, delay: phase === 2 ? 0.3 : 0 }}
-              >
-                {duration} · {dayLbl} {fromStr}–{toStr}
-              </motion.p>
-            </motion.div>
-          </motion.div>
+                <AnimatedCircleCheck size={28} />
+              </div>
+            </div>
+          )}
         </motion.div>
       </motion.div>
 
