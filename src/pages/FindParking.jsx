@@ -223,29 +223,15 @@ export default function FindParking() {
 
   if (bookingId) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-        {thankYouSlots.map((s, i) => (
-          <ThankYouWhatsApp
-            key={i}
-            ownerName={s.ownerName}
-            ownerPhone={s.ownerPhone}
-            spotNumber={s.spotNumber}
-            onClose={() => setThankYouSlots(prev => prev.filter((_, idx) => idx !== i))}
-          />
-        ))}
-        <div className="w-24 h-24 rounded-full flex items-center justify-center mb-6" style={{ background: "var(--hanoo-green-light)" }}>
-          <CheckCircle size={44} style={{ color: "var(--hanoo-green)" }} />
-        </div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>הוזמן! 🎉</h2>
-        <p className="mb-6" style={{ color: "var(--text-secondary)" }}>החניה שלך מוכנה מ-{format(new Date(fromTime), "HH:mm")} עד {format(new Date(toTime), "HH:mm")}</p>
-        <button
-          onClick={() => { setBookingId(null); setSearched(false); setResults([]); setCombos([]); }}
-          className="w-full py-4 rounded-2xl font-bold text-white"
-          style={{ background: "var(--hanoo-blue)" }}
-        >
-          חזור לחיפוש
-        </button>
-      </div>
+      <BookingSuccessScreen
+        fromTime={fromTime}
+        toTime={toTime}
+        thankYouSlots={thankYouSlots}
+        creditsBeforeBooking={creditsBeforeBooking}
+        creditsAfterBooking={resident?.credits ?? 0}
+        renterApartment={resident?.apartment_number}
+        onBack={() => { setBookingId(null); setSearched(false); setResults([]); setCombos([]); setCreditsBeforeBooking(null); }}
+      />
     );
   }
 
