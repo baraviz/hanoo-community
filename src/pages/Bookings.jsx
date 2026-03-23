@@ -164,10 +164,30 @@ export default function Bookings() {
 
       {/* Content */}
       <div id="bookings-panel" role="tabpanel" aria-live="polite" aria-label={tab === "mine" ? "אני הזמנתי" : "הזמינו ממני"} className="px-4 pt-4 pb-6 space-y-2">
+        {tab === "mine" && (upcoming.length > 0 || past.length > 0) && (
+          <div className="flex justify-center py-1">
+            <button
+              onClick={() => navigate("/FindParking")}
+              className="text-sm font-regular"
+              style={{ color: "var(--hanoo-blue)", textDecoration: "underline", textUnderlineOffset: 3 }}
+            >
+              הזמן חניה +
+            </button>
+          </div>
+        )}
         {upcoming.length === 0 && past.length === 0 && (
           <div className="text-center py-20">
             <div className="text-5xl mb-3">🅿️</div>
             <p className="font-medium" style={{ color: "var(--text-secondary)" }}>אין הזמנות עדיין</p>
+            {tab === "mine" && (
+              <button
+                onClick={() => navigate("/FindParking")}
+                className="mt-4 px-6 py-3 rounded-2xl font-bold text-white text-sm"
+                style={{ background: "var(--hanoo-blue)" }}
+              >
+                הזמן חניה +
+              </button>
+            )}
           </div>
         )}
 
