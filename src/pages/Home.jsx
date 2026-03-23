@@ -573,7 +573,7 @@ export default function Home() {
             </div>
             <button
               aria-label="סיים שימוש בחניה הפעילה"
-              onClick={() => endBooking(activeBooking)}
+              onClick={() => setEndBookingSheet(activeBooking)}
               disabled={endingBooking}
               className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
               style={{ background: "var(--hanoo-red)", opacity: endingBooking ? 0.6 : 1 }}
