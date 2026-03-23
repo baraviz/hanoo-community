@@ -81,6 +81,7 @@ return (
 }
 
 export default function Bookings() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
   const [tab, setTab] = useState("mine"); // "mine" | "theirs"
