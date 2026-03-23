@@ -136,13 +136,14 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
         <textarea
           value={message}
           onChange={e => setMessage(e.target.value)}
-          rows={5}
+          rows={6}
           className="w-full rounded-2xl px-4 py-3 text-sm outline-none resize-none"
           style={{
             border: "1px solid var(--surface-card-border)",
             background: "var(--btn-secondary-bg)",
             color: "var(--text-primary)",
             lineHeight: 1.6,
+            fontSize: 16, // prevents iOS zoom on focus
           }}
           placeholder="כתוב הודעת תודה..."
         />
