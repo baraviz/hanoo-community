@@ -156,6 +156,24 @@ export default function Home() {
 
       if (buildings.length > 0) setBuilding(buildings[0]);
       if (bookings.length > 0) setActiveBooking(bookings[0]);
+
+      // Animate credits counter
+      const targetCredits = r.credits || 0;
+      if (targetCredits > 0) {
+        const duration = 900;
+        const steps = 30;
+        const increment = targetCredits / steps;
+        let current = 0;
+        const interval = setInterval(() => {
+          current += increment;
+          if (current >= targetCredits) {
+            setDisplayedCredits(targetCredits);
+            clearInterval(interval);
+          } else {
+            setDisplayedCredits(Math.floor(current));
+          }
+        }, duration / steps);
+      }
       setRecurringSlots(recurring);
       setActiveBlocks(blocks.filter(b => new Date(b.end_at) > new Date()));
       // Show active temp slot (end_at in the future)
