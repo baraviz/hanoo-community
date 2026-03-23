@@ -579,8 +579,11 @@ export default function Home() {
           );
         })()}
 
-        {/* Parking status card — BOTTOM */}
-        {(recurringSlots.length > 0 || myActiveSlot) && (() => {
+        {/* Parking status — title and card */}
+        {(recurringSlots.length > 0 || myActiveSlot) && (
+          <div>
+            <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>החניה שלי</h3>
+            {(() => {
           const available = isAvailableNow();
           const nextText = !available ? getNextAvailableText() : null;
           let activeUntil = null;
