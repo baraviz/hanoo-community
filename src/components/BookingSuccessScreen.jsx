@@ -232,8 +232,8 @@ export default function BookingSuccessScreen({
         transition={
           phase === 1
             ? { duration: 0.45, ease: easing }
-            : phase === 3
-            ? { duration: 0.6, ease: easing }
+            : phase >= 2.5
+            ? { duration: 0.65, ease: easing }
             : { duration: 0 }
         }
         style={{ background: "var(--surface-header)", overflow: "hidden", flexShrink: 0 }}
@@ -245,70 +245,85 @@ export default function BookingSuccessScreen({
             paddingBottom: isSplash ? "2rem" : "1.25rem",
             flex: isSplash ? 1 : 0,
           }}
-          transition={{ duration: 0.6, ease: easing }}
+          transition={{ duration: 0.65, ease: easing }}
           className="flex flex-col px-5"
           style={{ justifyContent: isSplash ? "center" : "flex-start" }}
         >
-          {isSplash ? (
-            /* ── Splash: icon + text centered column ── */
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
-              <motion.div
-                animate={{
-                  opacity: phase >= 2 ? 1 : 0,
-                  scale: phase >= 2 ? 1 : 0.3,
-                  width: 96, height: 96,
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="rounded-full flex items-center justify-center flex-none"
-                style={{ background: "rgba(255,255,255,0.2)" }}
-              >
-                {phase >= 2 && <AnimatedCircleCheck size={56} />}
-              </motion.div>
-              <motion.div
-                animate={{ opacity: phase >= 2 ? 1 : 0, y: phase >= 2 ? 0 : 16 }}
-                transition={{ duration: 0.4, ease: easing, delay: 0.15 }}
-                style={{ textAlign: "center" }}
-              >
-                <div className="font-bold text-white leading-tight" style={{ fontSize: "2rem" }}>הוזמן בהצלחה!</div>
-                <motion.p
-                  className="text-sm mt-1"
-                  style={{ color: "rgba(255,255,255,0.75)" }}
-                  animate={{ opacity: phase >= 2 ? 1 : 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                >
-                  {duration} · {dayLbl} {fromStr}–{toStr}
-                </motion.p>
-              </motion.div>
-            </div>
-          ) : (
-            /* ── Settled: X button | centered title | check icon ── */
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              {/* X button — right side (RTL) */}
-              <button
-                onClick={onBack}
-                className="w-10 h-10 flex items-center justify-center rounded-full flex-none"
-                style={{ background: "rgba(255,255,255,0.2)", width: 40, height: 40 }}
-              >
-                <X size={16} className="text-white" />
-              </button>
+          {/* ── Always render both layouts, crossfade between them ── */}
 
-              {/* Center: title + subtitle */}
-              <div className="flex-1 text-center px-2">
-                <div className="font-bold text-white leading-tight" style={{ fontSize: "1.15rem" }}>הוזמן בהצלחה!</div>
-                <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.75)" }}>
-                  {duration} · {dayLbl} {fromStr}–{toStr}
-                </p>
-              </div>
-
-              {/* Check icon — left side */}
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center flex-none"
-                style={{ background: "rgba(255,255,255,0.2)" }}
+          {/* Splash layout */}
+          <motion.div
+            animate={{ opacity: isSplash ? 1 : 0, scale: isSplash ? 1 : 0.85 }}
+            transition={{ duration: 0.4, ease: easing }}
+            style={{
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 20,
+              position: isSplash ? "relative" : "absolute",
+              pointerEvents: isSplash ? "auto" : "none",
+            }}
+          >
+            <motion.div
+              animate={{
+                opacity: phase >= 2 ? 1 : 0,
+                scale: phase >= 2 ? 1 : 0.3,
+                width: 96, height: 96,
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 22 }}
+              className="rounded-full flex items-center justify-center flex-none"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            >
+              {phase >= 2 && <AnimatedCircleCheck size={56} />}
+            </motion.div>
+            <motion.div
+              animate={{ opacity: phase >= 2 ? 1 : 0, y: phase >= 2 ? 0 : 16 }}
+              transition={{ duration: 0.4, ease: easing, delay: 0.15 }}
+              style={{ textAlign: "center" }}
+            >
+              <div className="font-bold text-white leading-tight" style={{ fontSize: "2rem" }}>הוזמן בהצלחה!</div>
+              <motion.p
+                className="text-sm mt-1"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+                animate={{ opacity: phase >= 2 ? 1 : 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
               >
-                <AnimatedCircleCheck size={28} />
-              </div>
+                {duration} · {dayLbl} {fromStr}–{toStr}
+              </motion.p>
+            </motion.div>
+          </motion.div>
+
+          {/* Settled layout */}
+          <motion.div
+            animate={{ opacity: isSplash ? 0 : 1, y: isSplash ? 8 : 0 }}
+            transition={{ duration: 0.4, ease: easing, delay: isSplash ? 0 : 0.25 }}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              position: isSplash ? "absolute" : "relative",
+              pointerEvents: isSplash ? "none" : "auto",
+              width: "100%",
+            }}
+          >
+            <button
+              onClick={onBack}
+              className="flex items-center justify-center rounded-full flex-none"
+              style={{ background: "rgba(255,255,255,0.2)", width: 40, height: 40 }}
+            >
+              <X size={16} className="text-white" />
+            </button>
+
+            <div className="flex-1 text-center px-2">
+              <div className="font-bold text-white leading-tight" style={{ fontSize: "1.15rem" }}>הוזמן בהצלחה!</div>
+              <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+                {duration} · {dayLbl} {fromStr}–{toStr}
+              </p>
             </div>
-          )}
+
+            <div
+              className="rounded-full flex items-center justify-center flex-none"
+              style={{ background: "rgba(255,255,255,0.2)", width: 40, height: 40 }}
+            >
+              <AnimatedCircleCheck size={28} />
+            </div>
+          </motion.div>
+
         </motion.div>
       </motion.div>
 
