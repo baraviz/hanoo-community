@@ -475,6 +475,93 @@ export default function Home() {
           </div>
         </div>
       )}
+      {/* End Booking Sheet */}
+      {endBookingSheet && (() => {
+        const b = endBookingSheet;
+        const startDate = parseISO(b.start_time);
+        const now = new Date();
+        const usedMinutes = Math.max(0, Math.round((now - startDate) / 60000));
+        const usedHours = usedMinutes / 60;
+        const actualCost = Math.round(Math.max(0.5, usedHours) * 10);
+        const originalCost = b.total_credits;
+        const refund = Math.max(0, originalCost - actualCost);
+        const fmtTime = (d) => format(d, "HH:mm");
+        const fmtDuration = (mins) => {
+          const h = Math.floor(mins / 60), m = mins % 60;
+          if (h === 0) return `${m} דק׳`;
+          if (m === 0) return h === 1 ? "שעה" : h === 2 ? "שעתיים" : `${h} שעות`;
+          return `${h} שעות ו-${m} דק׳`;
+        };
+        return (
+          <div
+            className="fixed inset-0 z-50 flex flex-col justify-end"
+            style={{ background: "rgba(0,0,0,0.4)", animation: closingEndSheet ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
+            onClick={() => { setClosingEndSheet(true); setTimeout(() => { setEndBookingSheet(null); setClosingEndSheet(false); }, 220); }}
+          >
+            <div
+              className="rounded-t-3xl p-6 space-y-4"
+              style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closingEndSheet ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
+              <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>סיכום חניה</h2>
+
+              {/* Summary card */}
+              <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--btn-secondary-bg)" }}>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">חניה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>#{b.spot_number} של {b.owner_name}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">כניסה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtTime(startDate)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">יציאה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtTime(now)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">משך</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtDuration(usedMinutes)}</span>
+                </div>
+                <div className="border-t pt-3" style={{ borderColor: "var(--surface-card-border)" }}>
+                  <div className="flex items-center justify-between">
+                    <span style={{ color: "var(--text-secondary)" }} className="text-sm">עלות בפועל</span>
+                    <span className="font-bold" style={{ color: "var(--hanoo-blue)" }}>{actualCost} קרדיטים</span>
+                  </div>
+                  {refund > 0 && (
+                    <div className="flex items-center justify-between mt-1">
+                      <span style={{ color: "var(--text-secondary)" }} className="text-sm">החזר</span>
+                      <span className="font-bold" style={{ color: "var(--hanoo-green)" }}>+{refund} קרדיטים</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <button
+                  onClick={() => { setClosingEndSheet(true); setTimeout(() => { setEndBookingSheet(null); setClosingEndSheet(false); }, 220); }}
+                  className="py-3 rounded-2xl font-bold text-sm"
+                  style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-text)" }}
+                >
+                  ביטול
+                </button>
+                <button
+                  onClick={() => {
+                    setClosingEndSheet(true);
+                    setTimeout(() => { setEndBookingSheet(null); setClosingEndSheet(false); endBooking(b); }, 220);
+                  }}
+                  className="py-3 rounded-2xl font-bold text-white text-sm"
+                  style={{ background: "var(--hanoo-red)" }}
+                >
+                  סיים חניה
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Header */}
       <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
