@@ -284,6 +284,20 @@ export default function FindParking() {
 
   const fmtMins = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 
+  function fmtDateLabel(dateStr) {
+    if (!dateStr) return "—";
+    const d = new Date(dateStr);
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+    const isToday = d.toDateString() === today.toDateString();
+    const isTomorrow = d.toDateString() === tomorrow.toDateString();
+    const timeStr = d.toLocaleString("he-IL", { hour: "2-digit", minute: "2-digit" });
+    if (isToday) return `היום ${timeStr}`;
+    if (isTomorrow) return `מחר ${timeStr}`;
+    return d.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  }
+
   if (bookingId) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
