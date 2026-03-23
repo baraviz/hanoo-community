@@ -202,8 +202,8 @@ export default function FindParking() {
     setResident(prev => ({ ...prev, credits: (prev.credits || 0) - totalCost }));
     setBookingId(`${first.id}-${second.id}`);
     setThankYouSlots([
-      { ownerName: first.ownerResident?.user_name || first.owner_email, ownerPhone: first.ownerResident?.phone || null, spotNumber: first.ownerResident?.parking_spot || "?" },
-      { ownerName: second.ownerResident?.user_name || second.owner_email, ownerPhone: second.ownerResident?.phone || null, spotNumber: second.ownerResident?.parking_spot || "?" },
+      { ownerName: first.ownerResident?.user_name || first.owner_email, ownerPhone: first.ownerResident?.phone || null, spotNumber: first.ownerResident?.parking_spot || "?", parkingFloor: first.ownerResident?.parking_floor || null },
+      { ownerName: second.ownerResident?.user_name || second.owner_email, ownerPhone: second.ownerResident?.phone || null, spotNumber: second.ownerResident?.parking_spot || "?", parkingFloor: second.ownerResident?.parking_floor || null },
     ]);
     setResults([]);
     setCombos([]);
