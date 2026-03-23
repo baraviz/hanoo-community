@@ -234,6 +234,7 @@ export default function FindParking() {
         creditsBeforeBooking={creditsBeforeBooking}
         creditsAfterBooking={resident?.credits ?? 0}
         renterApartment={resident?.apartment_number}
+        renterName={user?.full_name}
         onBack={() => { setBookingId(null); setSearched(false); setResults([]); setCombos([]); setCreditsBeforeBooking(null); }}
       />
     );
