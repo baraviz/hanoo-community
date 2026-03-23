@@ -20,6 +20,7 @@ const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Accessibility  = lazy(() => import('./pages/Accessibility'));
 const ReportBug      = lazy(() => import('./pages/ReportBug'));
 const JoinViaLink    = lazy(() => import('./pages/JoinViaLink'));
+const PublicBookingView = lazy(() => import('./pages/PublicBookingView'));
 
 // ── Shared page-load fallback ─────────────────────────────────────────────────
 const PageFallback = () => (
