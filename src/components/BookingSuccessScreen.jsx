@@ -252,9 +252,9 @@ export default function BookingSuccessScreen({
       {/* ── Animated blue header ── */}
       <motion.div
         variants={headerVariants}
-        initial="splash"
-        animate={phase}
-        transition={transition}
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ opacity: 1, ...(phase === "splash" ? { height: "100vh" } : { height: "auto" }) }}
+        transition={phase === "splash" ? { duration: 0.5, ease: "easeOut" } : transition}
         style={{ background: "var(--surface-header)", overflow: "hidden", flexShrink: 0 }}
         className="flex flex-col"
       >
