@@ -750,33 +750,29 @@ export default function Home() {
           </div>
         )}
 
-        {/* Active booking */}
+        {/* Upcoming bookings */}
         {activeBooking && (
-          <div className="card p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-              <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה פעילה</p>
-            </div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
-                <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
-              </div>
-              <div>
-                <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{activeBooking.spot_number}</p>
-                <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {activeBooking.owner_name}</p>
-                <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>עד {format(parseISO(activeBooking.end_time), "HH:mm")}</p>
-              </div>
-            </div>
+          <div>
+            <h3 className="text-sm font-bold mb-3 px-1" style={{ color: "var(--text-primary)" }}>הזמנות קרובות</h3>
             <button
-              aria-label="סיים שימוש בחניה הפעילה"
-              onClick={() => setEndBookingSheet(activeBooking)}
-              disabled={endingBooking}
-              className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2"
-              style={{ background: "var(--hanoo-red)", opacity: endingBooking ? 0.6 : 1 }}
+              onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
+              className="card p-3 flex items-center justify-between mb-2 active:opacity-75 transition-opacity"
+              style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)" }}
             >
-              {endingBooking ? (
-                <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />מסיים...</>
-              ) : "סיים שימוש בחניה"}
+              <div className="flex items-center gap-3 flex-1 text-right">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                  <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+                    חניה #{activeBooking.spot_number}
+                  </p>
+                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+                    של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
+                  </p>
+                </div>
+              </div>
+              <ChevronLeft size={20} style={{ color: "var(--text-tertiary)", marginRight: 8 }} />
             </button>
           </div>
         )}
