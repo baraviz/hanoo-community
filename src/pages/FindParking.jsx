@@ -1,7 +1,7 @@
 // FindParking page
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Car, CheckCircle, Clock, ArrowLeft, Search, Menu, Bell } from "lucide-react";
+import { Car, CheckCircle, Clock, ArrowLeft, Search, Menu, Bell, ChevronRight } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import { format, differenceInMinutes } from "date-fns";
@@ -402,7 +402,7 @@ export default function FindParking() {
               aria-label="חזור לחיפוש"
             >
               חזור
-              <ArrowLeft size={16} style={{ transform: "scaleX(-1)" }} />
+              <ChevronRight size={16} />
             </button>
             <div className="text-center">
               <h1 className="text-white text-xl font-bold">תוצאות חיפוש</h1>
