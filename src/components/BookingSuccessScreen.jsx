@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, animate } from "framer-motion";
+import { motion, animate, useAnimation } from "framer-motion";
 import { X, Car, Clock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { format } from "date-fns";
@@ -33,15 +33,15 @@ function AnimatedCircleCheck({ size = 40 }) {
 }
 
 // ── Animated credit counter ───────────────────────────────────────────────────
-function AnimatedCredits({ from, to }) {
+function AnimatedCredits({ from, to, startDelay = 0 }) {
   const [display, setDisplay] = useState(from);
   useEffect(() => {
     const controls = animate(from, to, {
-      duration: 1.2, ease: "easeOut", delay: 0.8,
+      duration: 1.2, ease: "easeOut", delay: startDelay,
       onUpdate: v => setDisplay(Math.round(v)),
     });
     return () => controls.stop();
-  }, [from, to]);
+  }, [from, to, startDelay]);
   return <span>{display}</span>;
 }
 
@@ -126,16 +126,13 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, renterName, on
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Blue header strip */}
         <div className="px-6 pt-5 pb-4 rounded-t-3xl" style={{ background: "var(--hanoo-blue)" }}>
           <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "rgba(255,255,255,0.4)" }} />
-          {/* Close button row */}
           <div className="flex justify-end mb-2">
             <button onClick={close} className="w-9 h-9 flex items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.2)" }}>
               <X size={16} className="text-white" />
             </button>
           </div>
-          {/* Centered title */}
           <div className="text-center">
             <h3 className="font-bold text-lg text-white">שלח תודה ל{ownerFirstName} בוואטסאפ 🙌</h3>
             <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.8)" }}>תרוויח 10 נקודות לדירוג הליגה ⭐️</p>
@@ -143,7 +140,6 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, renterName, on
         </div>
 
         <div className="px-6 py-5 space-y-4" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}>
-          {/* Message textarea */}
           <textarea
             value={message}
             onChange={e => setMessage(e.target.value)}
@@ -199,66 +195,153 @@ export default function BookingSuccessScreen({
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetIndex, setSheetIndex] = useState(0);
+  // Phase: "splash" = full-screen blue, "settled" = compact header + content
+  const [phase, setPhase] = useState("splash");
 
-  const fromStr   = fromTime ? format(new Date(fromTime), "HH:mm") : "";
-  const toStr     = toTime   ? format(new Date(toTime),   "HH:mm") : "";
-  const dayLbl    = dateLabel(fromTime);
-  const duration  = durationLabel(fromTime, toTime);
-  const spent     = Math.max(0, (creditsBeforeBooking ?? creditsAfterBooking) - creditsAfterBooking);
-  const hasSlots  = thankYouSlots?.length > 0;
+  const fromStr  = fromTime ? format(new Date(fromTime), "HH:mm") : "";
+  const toStr    = toTime   ? format(new Date(toTime),   "HH:mm") : "";
+  const dayLbl   = dateLabel(fromTime);
+  const duration = durationLabel(fromTime, toTime);
+  const spent    = Math.max(0, (creditsBeforeBooking ?? creditsAfterBooking) - creditsAfterBooking);
+  const hasSlots = thankYouSlots?.length > 0;
   const firstSlot = thankYouSlots?.[0];
+
+  // After 2.5s in splash phase, transition to settled
+  useEffect(() => {
+    const t = setTimeout(() => setPhase("settled"), 2500);
+    return () => clearTimeout(t);
+  }, []);
+
+  const isSplash = phase === "splash";
+
+  // Header height: full-screen in splash, compact in settled
+  const headerVariants = {
+    splash: { height: "100vh" },
+    settled: { height: "auto" },
+  };
+
+  // Icon size wrapper: big in splash, small in settled
+  const iconWrapVariants = {
+    splash: { width: 96, height: 96 },
+    settled: { width: 48, height: 48 },
+  };
+
+  // Layout of icon+text row: centered in splash, RTL row in settled
+  const rowVariants = {
+    splash: { flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 },
+    settled: { flexDirection: "row-reverse", alignItems: "center", justifyContent: "flex-end", gap: 12 },
+  };
+
+  // Text alignment
+  const textVariants = {
+    splash: { textAlign: "center" },
+    settled: { textAlign: "right" },
+  };
+
+  // Title size
+  const titleVariants = {
+    splash: { fontSize: "2rem" },
+    settled: { fontSize: "1.5rem" },
+  };
+
+  const transition = { duration: 0.65, ease: [0.4, 0, 0.2, 1] };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--surface-page)" }}>
 
-      {/* ── Blue header — compact, RTL aligned ── */}
-      <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
-        <div className="flex items-center gap-3 pt-3">
-          {/* Small check circle */}
+      {/* ── Animated blue header ── */}
+      <motion.div
+        variants={headerVariants}
+        initial="splash"
+        animate={phase}
+        transition={transition}
+        style={{ background: "var(--surface-header)", overflow: "hidden", flexShrink: 0 }}
+        className="flex flex-col"
+      >
+        {/* Padded inner area */}
+        <motion.div
+          variants={{
+            splash: { paddingTop: "calc(env(safe-area-inset-top) + 2rem)", paddingBottom: "2rem", paddingLeft: "1.25rem", paddingRight: "1.25rem", flex: 1 },
+            settled: { paddingTop: "calc(env(safe-area-inset-top) + 0.75rem)", paddingBottom: "1.25rem", paddingLeft: "1.25rem", paddingRight: "1.25rem", flex: 0 },
+          }}
+          initial="splash"
+          animate={phase}
+          transition={transition}
+          className="flex flex-col"
+          style={{ justifyContent: isSplash ? "center" : "flex-start" }}
+        >
+          {/* Icon + text row */}
           <motion.div
-            className="w-12 h-12 rounded-full flex items-center justify-center flex-none"
-            style={{ background: "rgba(255,255,255,0.2)" }}
-            initial={{ scale: 0.4, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 320, damping: 22 }}
+            variants={rowVariants}
+            initial="splash"
+            animate={phase}
+            transition={transition}
+            style={{ display: "flex" }}
           >
-            <AnimatedCircleCheck size={40} />
+            {/* Icon circle */}
+            <motion.div
+              variants={iconWrapVariants}
+              initial="splash"
+              animate={phase}
+              transition={transition}
+              className="rounded-full flex items-center justify-center flex-none"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            >
+              <motion.div
+                variants={{
+                  splash: { width: 64, height: 64 },
+                  settled: { width: 32, height: 32 },
+                }}
+                initial="splash"
+                animate={phase}
+                transition={transition}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+              >
+                <AnimatedCircleCheck size={isSplash ? 64 : 32} />
+              </motion.div>
+            </motion.div>
+
+            {/* Text */}
+            <motion.div
+              variants={textVariants}
+              initial="splash"
+              animate={phase}
+              transition={transition}
+            >
+              <motion.h2
+                className="font-bold text-white leading-tight"
+                variants={titleVariants}
+                initial="splash"
+                animate={phase}
+                transition={transition}
+              >
+                הוזמן בהצלחה!
+              </motion.h2>
+              <motion.p
+                className="text-sm mt-1"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {duration} · {dayLbl} {fromStr}–{toStr}
+              </motion.p>
+            </motion.div>
           </motion.div>
+        </motion.div>
+      </motion.div>
 
-          {/* Title + subtitle right-aligned */}
-          <div className="text-right">
-            <motion.h2
-              className="text-2xl font-bold text-white leading-tight"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              הוזמן בהצלחה!
-            </motion.h2>
-            <motion.p
-              className="text-sm mt-0.5"
-              style={{ color: "rgba(255,255,255,0.75)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.45 }}
-            >
-              {duration} · {dayLbl} {fromStr}–{toStr}
-            </motion.p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Scrollable content ── */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
-
+      {/* ── Content — revealed after transition ── */}
+      <motion.div
+        className="flex-1 overflow-y-auto px-5 py-4 space-y-3"
+        style={{ paddingBottom: "calc(80px + 1.5rem)" }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={phase === "settled" ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.45, ease: "easeOut", delay: 0.2 }}
+      >
         {/* Parking details card */}
         {hasSlots && (
-          <motion.div
-            className="app-card p-4"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
+          <div className="app-card p-4">
             <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>פרטי החניה</p>
             {thankYouSlots.map((slot, i) => (
               <div key={i} className={i > 0 ? "pt-3 mt-3 border-t" : ""} style={{ borderColor: "var(--surface-card-border)" }}>
@@ -288,21 +371,16 @@ export default function BookingSuccessScreen({
                 <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{duration}</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Credits card */}
-        <motion.div
-          className="app-card p-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
+        <div className="app-card p-4">
           <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-3xl font-bold" style={{ color: "var(--hanoo-blue)" }}>
-                <AnimatedCredits from={creditsBeforeBooking ?? creditsAfterBooking} to={creditsAfterBooking} />
+                <AnimatedCredits from={creditsBeforeBooking ?? creditsAfterBooking} to={creditsAfterBooking} startDelay={0.3} />
               </p>
               <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>יתרה נוכחית</p>
             </div>
@@ -310,16 +388,11 @@ export default function BookingSuccessScreen({
               -{spent} קרדיטים
             </span>
           </div>
-        </motion.div>
+        </div>
 
         {/* Thank you CTA */}
         {hasSlots && (
-          <motion.div
-            className="app-card overflow-hidden"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
+          <div className="app-card overflow-hidden">
             <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
               <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                 שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ
@@ -337,9 +410,9 @@ export default function BookingSuccessScreen({
                 שלח תודה
               </button>
             </div>
-          </motion.div>
+          </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Thank-you sheet */}
       {sheetOpen && thankYouSlots?.[sheetIndex] && (
