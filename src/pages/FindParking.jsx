@@ -354,8 +354,8 @@ export default function FindParking() {
             </div>
           )}
 
-          {/* Single-slot results */}
-          {!loading && results.map(slot => {
+          {/* Single-slot results — show only first result, hide spot number/floor */}
+          {!loading && results.slice(0, 1).map(slot => {
             const cost = calcCost(fromMinsR, toMinsR, fromTime, toTime);
             const owner = slot.ownerResident;
             return (
@@ -365,9 +365,8 @@ export default function FindParking() {
                     <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{owner?.parking_spot || "?"}</p>
-                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {owner?.user_name || slot.owner_email}</p>
-                    {owner?.parking_floor && <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קומה {owner.parking_floor}</p>}
+                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>החניה של {owner?.user_name?.split(" ")[0] || "שכן"}</p>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>פרטים יוצגו לאחר ההזמנה</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{cost}</p>
