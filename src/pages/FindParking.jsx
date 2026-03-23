@@ -343,8 +343,7 @@ export default function FindParking() {
                 </button>
               ) : (
                 <div className="flex items-center gap-2 justify-center px-5 py-3 rounded-2xl text-sm font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
-                  <CheckCircle size={16} />
-                  נשמר! נודיע לך כשיתפנה
+                  ✓ נשמר! נודיע לך כשיתפנה
                 </div>
               )}
             </div>
