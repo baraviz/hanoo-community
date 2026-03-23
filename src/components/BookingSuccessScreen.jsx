@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, animate } from "framer-motion";
-import { X, Car, Clock, MapPin } from "lucide-react";
+import { X, Car, Clock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { format } from "date-fns";
 
@@ -15,7 +15,7 @@ function WhatsAppIcon({ size = 18 }) {
 }
 
 // ── Animated circle-check ─────────────────────────────────────────────────────
-function AnimatedCircleCheck({ size = 56 }) {
+function AnimatedCircleCheck({ size = 40 }) {
   return (
     <svg fill="none" height={size} width={size} stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" viewBox="0 0 24 24">
       <motion.circle r="10" cx="12" cy="12"
@@ -69,16 +69,18 @@ function durationLabel(fromTime, toTime) {
 }
 
 // ── Thank-you bottom sheet ────────────────────────────────────────────────────
-function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
+function ThankYouSheet({ slot, fromTime, toTime, renterApartment, renterName, onClose }) {
   const [closing, setClosing] = useState(false);
   const [sending, setSending] = useState(false);
 
-  const firstName = (slot.ownerName || "").split(" ")[0] || slot.ownerName;
+  const ownerFirstName = (slot.ownerName || "").split(" ")[0] || slot.ownerName;
+  const renterFirstName = (renterName || "").split(" ")[0] || renterName;
   const fromStr = fromTime ? format(new Date(fromTime), "HH:mm") : "";
   const toStr   = toTime   ? format(new Date(toTime),   "HH:mm") : "";
-  const dayLabel = dateLabel(fromTime);
+  const dayLbl  = dateLabel(fromTime);
+
   const [message, setMessage] = useState(
-    `היי ${firstName}! תודה רבה על החניה שפירסמת באפליקציית Hanoo!\nאני אחנה שם ${dayLabel} בין ${fromStr}-${toStr}, יעזור לי מאוד! 🙏\n\nהשכן/ה מדירה ${renterApartment || "?"}`
+    `היי ${ownerFirstName}! תודה רבה על החניה שפירסמת באפליקציית Hanoo!\nאני אחנה שם ${dayLbl} בין ${fromStr}-${toStr}, יעזור לי מאוד! 🙏\n\n${renterFirstName || "השכן/ה"}, מדירה ${renterApartment || "?"}`
   );
 
   function close() {
@@ -124,20 +126,19 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
         }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Green header strip */}
-        <div className="px-6 pt-5 pb-4 rounded-t-3xl" style={{ background: "#25D366" }}>
+        {/* Blue header strip */}
+        <div className="px-6 pt-5 pb-4 rounded-t-3xl" style={{ background: "var(--hanoo-blue)" }}>
           <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "rgba(255,255,255,0.4)" }} />
-          <div className="flex items-center justify-between">
+          {/* Close button row */}
+          <div className="flex justify-end mb-2">
             <button onClick={close} className="w-9 h-9 flex items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.2)" }}>
               <X size={16} className="text-white" />
             </button>
-            <div className="text-right">
-              <h3 className="font-bold text-lg text-white">שלח תודה ל{firstName} 👋</h3>
-              <p className="text-xs" style={{ color: "rgba(255,255,255,0.8)" }}>תרוויח 10 נקודות לדירוג הליגה ⭐️</p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.2)" }}>
-              <WhatsAppIcon size={20} />
-            </div>
+          </div>
+          {/* Centered title */}
+          <div className="text-center">
+            <h3 className="font-bold text-lg text-white">שלח תודה ל{ownerFirstName} בוואטסאפ 🙌</h3>
+            <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.8)" }}>תרוויח 10 נקודות לדירוג הליגה ⭐️</p>
           </div>
         </div>
 
@@ -166,11 +167,10 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
           <button
             onClick={sendWhatsApp}
             disabled={sending}
-            className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
-            style={{ background: "#25D366", opacity: sending ? 0.7 : 1 }}
+            className="w-full py-4 rounded-2xl font-bold text-white text-base"
+            style={{ background: "var(--hanoo-blue)", opacity: sending ? 0.7 : 1 }}
           >
-            <WhatsAppIcon size={20} />
-            {sending ? "שולח..." : "שלח הודעה בוואטסאפ"}
+            {sending ? "שולח..." : "שלח תודה"}
           </button>
 
           <button
@@ -194,6 +194,7 @@ export default function BookingSuccessScreen({
   creditsBeforeBooking,
   creditsAfterBooking,
   renterApartment,
+  renterName,
   onBack,
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -210,42 +211,45 @@ export default function BookingSuccessScreen({
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--surface-page)" }}>
 
-      {/* ── Blue header ── */}
-      <div className="pt-safe px-5 pb-8" style={{ background: "var(--surface-header)" }}>
-        <div className="flex flex-col items-center pt-4 text-center">
+      {/* ── Blue header — compact, RTL aligned ── */}
+      <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
+        <div className="flex items-center gap-3 pt-3">
+          {/* Small check circle */}
           <motion.div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
+            className="w-12 h-12 rounded-full flex items-center justify-center flex-none"
             style={{ background: "rgba(255,255,255,0.2)" }}
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 320, damping: 22 }}
           >
-            <AnimatedCircleCheck size={52} />
+            <AnimatedCircleCheck size={40} />
           </motion.div>
 
-          <motion.h2
-            className="text-3xl font-bold text-white mb-1"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-          >
-            הוזמן בהצלחה!
-          </motion.h2>
-
-          <motion.p
-            className="text-sm"
-            style={{ color: "rgba(255,255,255,0.75)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {duration} · {dayLbl} {fromStr}–{toStr}
-          </motion.p>
+          {/* Title + subtitle right-aligned */}
+          <div className="text-right">
+            <motion.h2
+              className="text-2xl font-bold text-white leading-tight"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              הוזמן בהצלחה!
+            </motion.h2>
+            <motion.p
+              className="text-sm mt-0.5"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.45 }}
+            >
+              {duration} · {dayLbl} {fromStr}–{toStr}
+            </motion.p>
+          </div>
         </div>
       </div>
 
       {/* ── Scrollable content ── */}
-      <div className="flex-1 overflow-y-auto px-5 py-5 space-y-4" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3" style={{ paddingBottom: "calc(80px + 1.5rem)" }}>
 
         {/* Parking details card */}
         {hasSlots && (
@@ -253,7 +257,7 @@ export default function BookingSuccessScreen({
             className="app-card p-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
+            transition={{ delay: 0.4 }}
           >
             <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>פרטי החניה</p>
             {thankYouSlots.map((slot, i) => (
@@ -265,12 +269,10 @@ export default function BookingSuccessScreen({
                   <div className="flex-1">
                     <p className="font-bold" style={{ color: "var(--text-primary)" }}>
                       חניה #{slot.spotNumber || "?"}
-                      {thankYouSlots.length > 1 && <span className="text-xs font-normal mr-1" style={{ color: "var(--text-tertiary)" }}>{i === 0 ? "(ראשונה)" : "(שנייה)"}</span>}
+                      {slot.parkingFloor ? `, קומה ${slot.parkingFloor}` : ""}
+                      {thankYouSlots.length > 1 && <span className="text-xs font-normal mr-1" style={{ color: "var(--text-tertiary)" }}>{i === 0 ? " (ראשונה)" : " (שנייה)"}</span>}
                     </p>
-                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {slot.ownerName}</p>
-                    {slot.parkingFloor && (
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-tertiary)" }}>קומה {slot.parkingFloor}</p>
-                    )}
+                    <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>של {slot.ownerName}</p>
                   </div>
                 </div>
               </div>
@@ -294,7 +296,7 @@ export default function BookingSuccessScreen({
           className="app-card p-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55 }}
+          transition={{ delay: 0.5 }}
         >
           <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
           <div className="flex items-center justify-between">
@@ -316,30 +318,23 @@ export default function BookingSuccessScreen({
             className="app-card overflow-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.65 }}
+            transition={{ delay: 0.6 }}
           >
-            {/* Card header */}
-            <div className="px-4 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "#E8F8EF" }}>
-                <WhatsAppIcon size={20} />
-              </div>
-              <div className="flex-1 text-right">
-                <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                  שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} 🙌
-                </p>
-                <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                  תרוויח 10 נקודות לדירוג הליגה ⭐️
-                </p>
-              </div>
+            <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+              <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+                שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ 🙌
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
+                תרוויח 10 נקודות לדירוג הליגה ⭐️
+              </p>
             </div>
             <div className="px-4 py-3">
               <button
                 onClick={() => { setSheetIndex(0); setSheetOpen(true); }}
-                className="w-full py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
-                style={{ background: "#25D366" }}
+                className="w-full py-3.5 rounded-2xl font-bold text-white"
+                style={{ background: "var(--hanoo-blue)" }}
               >
-                <WhatsAppIcon size={18} />
-                שלח הודעת תודה בוואטסאפ
+                שלח תודה
               </button>
             </div>
           </motion.div>
@@ -353,6 +348,7 @@ export default function BookingSuccessScreen({
           fromTime={fromTime}
           toTime={toTime}
           renterApartment={renterApartment}
+          renterName={renterName}
           onClose={() => {
             const next = sheetIndex + 1;
             if (next < thankYouSlots.length) setSheetIndex(next);
