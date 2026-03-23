@@ -62,42 +62,6 @@ export default function FindParking() {
     return new Date(d - off).toISOString().slice(0, 16);
   }
 
-  // Returns [start, end] coverage of a slot in minutes relative to day
-  function localDay(d) {
-    // Parse as local time to get correct day-of-week
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()).getDay();
-  }
-
-  function slotCoverage(a, fromDate, toDate) {
-    const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
-    const toMins = toDate.getHours() * 60 + toDate.getMinutes();
-    const dayOfWeek = localDay(fromDate);
-
-    if (a.slot_type === "recurring") {
-      if (!(a.days_of_week || []).includes(dayOfWeek)) return null;
-      const s = Math.max(a.time_start ?? 0, fromMins);
-      const e = Math.min(a.time_end ?? 1440, toMins);
-      if (e <= s) return null;
-      return [s, e];
-    }
-    if (a.slot_type === "temp") {
-      const slotStart = new Date(a.start_at);
-      const slotEnd = new Date(a.end_at);
-      if (slotEnd <= fromDate || slotStart >= toDate) return null;
-      const s = Math.max(
-        slotStart.getHours() * 60 + slotStart.getMinutes(),
-        fromDate.getHours() * 60 + fromDate.getMinutes()
-      );
-      const e = Math.min(
-        slotEnd.getHours() * 60 + slotEnd.getMinutes(),
-        toDate.getHours() * 60 + toDate.getMinutes()
-      );
-      if (e <= s) return null;
-      return [s, e];
-    }
-    return null;
-  }
-
   async function searchParking() {
     if (!fromTime || !toTime) return;
     setLoading(true); setSearched(true); setShowResults(true); setNotifyRequested(false);
