@@ -34,6 +34,8 @@ export default function Home() {
   const [displayedCredits, setDisplayedCredits] = useState(0);
   const [endBookingSheet, setEndBookingSheet] = useState(null); // booking to confirm ending
   const [closingEndSheet, setClosingEndSheet] = useState(false);
+  const [pastBookingSummary, setPastBookingSummary] = useState(null); // expired booking summary
+  const [closingPastSheet, setClosingPastSheet] = useState(false);
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
