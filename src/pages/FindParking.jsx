@@ -102,120 +102,19 @@ export default function FindParking() {
     if (!fromTime || !toTime) return;
     setLoading(true); setSearched(true); setShowResults(true); setNotifyRequested(false);
 
-    const fromDate = new Date(fromTime);
-    const toDate = new Date(toTime);
-    const fromMins = fromDate.getHours() * 60 + fromDate.getMinutes();
-    const toMins = toDate.getHours() * 60 + toDate.getMinutes();
-
-    const [allAvail, residents, activeBookings] = await Promise.all([
-      base44.entities.WeeklyAvailability.filter({ building_id: resident.building_id }),
-      base44.entities.Resident.filter({ building_id: resident.building_id }),
-      base44.entities.Booking.filter({ building_id: resident.building_id, status: "active" }),
-    ]);
-
-    const residentMap = {};
-    residents.forEach(r => { residentMap[r.user_email] = r; });
-    const bookedAvailIds = new Set(activeBookings.map(b => b.parking_slot_id));
-
-    // Filter out self and booked, attach coverage
-    console.log("=== SEARCH DEBUG ===");
-    console.log("fromDate:", fromDate.toISOString(), "day:", fromDate.getDay(), "fromMins:", fromMins, "toMins:", toMins);
-    console.log("allAvail count:", allAvail.length);
-    allAvail.forEach(a => {
-      console.log(`  slot owner:${a.owner_email} type:${a.slot_type} days:${JSON.stringify(a.days_of_week)} start:${a.time_start} end:${a.time_end}`);
+    const { data } = await base44.functions.invoke("searchParking", {
+      building_id: resident.building_id,
+      from_time: new Date(fromTime).toISOString(),
+      to_time: new Date(toTime).toISOString(),
     });
 
-    const candidates = allAvail
-      .filter(a => a.owner_email !== user.email && !bookedAvailIds.has(a.id))
-      .map(a => {
-        const cov = slotCoverage(a, fromDate, toDate);
-        console.log(`  coverage for ${a.owner_email} slot_type:${a.slot_type}:`, cov);
-        return cov ? { ...a, covStart: cov[0], covEnd: cov[1], ownerResident: residentMap[a.owner_email] || null } : null;
-      })
-      .filter(Boolean);
-
-    console.log("candidates after coverage:", candidates.map(c => `${c.owner_email} [${c.covStart}-${c.covEnd}]`));
-
-    // Full coverage slots
-    const full = candidates.filter(a => a.covStart <= fromMins && a.covEnd >= toMins);
-
-    // Combos: pairs that together cover [fromMins, toMins] with no gap
-    const partial = candidates.filter(a => !(a.covStart <= fromMins && a.covEnd >= toMins));
-    const allForCombos = candidates; // include full ones too as potential combo partners
-    const foundCombos = [];
-    for (let i = 0; i < allForCombos.length; i++) {
-      for (let j = i + 1; j < allForCombos.length; j++) {
-        const a = allForCombos[i];
-        const b = allForCombos[j];
-        // They must be different owners
-        if (a.owner_email === b.owner_email) continue;
-        // Check if together they cover [fromMins, toMins] with no gap
-        // Sort by start
-        const [first, second] = a.covStart <= b.covStart ? [a, b] : [b, a];
-        if (
-          first.covStart <= fromMins &&
-          second.covEnd >= toMins &&
-          second.covStart <= first.covEnd // no gap
-        ) {
-          // Skip if first alone covers everything (already in full results)
-          const firstAlone = first.covStart <= fromMins && first.covEnd >= toMins;
-          const secondAlone = second.covStart <= fromMins && second.covEnd >= toMins;
-          if (!firstAlone && !secondAlone) {
-            foundCombos.push({ first, second });
-          }
-        }
-      }
-    }
-
-    setResults(full);
-    setCombos(foundCombos);
-
-    // If no exact results, find nearby alternatives (slots that overlap but don't fully cover)
-    let nearby = [];
-    if (full.length === 0 && foundCombos.length === 0) {
-      const requestedDuration = toDate - fromDate; // ms
-      // Look at all avail slots (not just filtered by this window) for nearby options
-      const allCandidatesForNearby = allAvail
-        .filter(a => a.owner_email !== user.email && !bookedAvailIds.has(a.id))
-        .map(a => {
-          if (a.slot_type === "recurring") {
-            const dayOfWeek = localDay(fromDate);
-            if (!(a.days_of_week || []).includes(dayOfWeek)) return null;
-            const slotStart = a.time_start ?? 0;
-            const slotEnd = a.time_end ?? 1440;
-            const slotDuration = (slotEnd - slotStart) * 60000; // ms
-            if (slotDuration < requestedDuration) return null; // slot too short for the requested duration
-            const owner = residentMap[a.owner_email] || null;
-            // Option A: start at slot start (if slot start > fromMins, i.e. "start later")
-            // Option B: end at slot end (if slot end < toMins, i.e. "end earlier")
-            const options = [];
-            if (slotStart > fromMins) {
-              const newFrom = new Date(fromDate);
-              newFrom.setHours(Math.floor(slotStart / 60), slotStart % 60, 0, 0);
-              const newTo = new Date(newFrom.getTime() + requestedDuration);
-              const newToMins = newTo.getHours() * 60 + newTo.getMinutes();
-              if (newToMins <= slotEnd) {
-                options.push({ slot: { ...a, ownerResident: owner }, newFrom: toLocalInput(newFrom), newTo: toLocalInput(newTo), label: `מ-${fmtMins(slotStart)}` });
-              }
-            }
-            if (slotEnd < toMins) {
-              const newTo = new Date(fromDate);
-              newTo.setHours(Math.floor(slotEnd / 60), slotEnd % 60, 0, 0);
-              const newFrom = new Date(newTo.getTime() - requestedDuration);
-              const newFromMins = newFrom.getHours() * 60 + newFrom.getMinutes();
-              if (newFromMins >= slotStart) {
-                options.push({ slot: { ...a, ownerResident: owner }, newFrom: toLocalInput(newFrom), newTo: toLocalInput(newTo), label: `עד ${fmtMins(slotEnd)}` });
-              }
-            }
-            return options.length > 0 ? options : null;
-          }
-          return null;
-        })
-        .filter(Boolean)
-        .flat();
-      nearby = allCandidatesForNearby.slice(0, 4);
-    }
-    setNearbyResults(nearby);
+    setResults(data.full || []);
+    setCombos(data.combos || []);
+    setNearbyResults((data.nearby || []).map(opt => ({
+      ...opt,
+      newFrom: toLocalInput(new Date(opt.newFrom)),
+      newTo: toLocalInput(new Date(opt.newTo)),
+    })));
     setLoading(false);
   }
 
