@@ -394,7 +394,7 @@ export default function Home() {
                       <span
                         className="underline cursor-pointer"
                         style={{ color: "var(--hanoo-blue)" }}
-                        onClick={() => { closeStatusDrawer(); navigate(createPageUrl("MyParking")); }}
+                        onClick={() => { closeStatusDrawer(); navigate("/MyParking"); }}
                       >
                         יומן הזמינות
                       </span>
