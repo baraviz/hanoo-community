@@ -212,16 +212,14 @@ export default function BookingSuccessScreen({
   const firstSlot = thankYouSlots?.[0];
 
   useEffect(() => {
-    // phase 0 → 1: blue fills screen
-    const t1 = setTimeout(() => setPhase(1), 30);
-    // phase 1 → 2: icon + text appear
-    const t2 = setTimeout(() => setPhase(2), 530);
-    // phase 2 → 3: collapse + reveal content
-    const t3 = setTimeout(() => setPhase(3), 3000);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t1 = setTimeout(() => setPhase(1), 30);      // blue fills screen
+    const t2 = setTimeout(() => setPhase(2), 530);     // icon + text appear
+    const t3 = setTimeout(() => setPhase(2.5), 3000);  // shrink to settled layout
+    const t4 = setTimeout(() => setPhase(3), 3650);    // reveal page content
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
   }, []);
 
-  const isSplash = phase < 3;
+  const isSplash = phase < 2.5;
   const easing = [0.4, 0, 0.2, 1];
 
   return (
