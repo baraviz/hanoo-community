@@ -23,7 +23,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [recurringSlots, setRecurringSlots] = useState([]);
   const [removingSlot, setRemovingSlot] = useState(false);
-  const [endingBooking, setEndingBooking] = useState(false);
   const [showStatusDrawer, setShowStatusDrawer] = useState(false);
   const [closingDrawer, setClosingDrawer] = useState(false);
   const [availUntilMinutes, setAvailUntilMinutes] = useState(null);
