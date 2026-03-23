@@ -550,28 +550,28 @@ export default function Home() {
               <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>הזמנות קרובות</h3>
               <button
                 onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
-                className="card flex flex-col gap-3 mb-2 active:opacity-75 transition-opacity"
+                className="card flex flex-col gap-3 active:opacity-75 transition-opacity w-full"
                 style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)", padding: "1rem" }}
               >
-                {isActive && (
-                  <div className="flex justify-end">
-                    <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
-                      פעיל כעת
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center gap-3 text-right">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
-                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
-                  </div>
-                  <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-right flex-1">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                      <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+                    </div>
                     <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                       חניה #{activeBooking.spot_number}
                     </p>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                      של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
-                    </p>
                   </div>
+                  {isActive && (
+                    <span className="text-xs px-2 py-0.5 rounded-full font-bold flex-none" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
+                      פעיל כעת
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+                    של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
+                  </p>
                   <ChevronLeft size={20} style={{ color: "var(--text-tertiary)" }} />
                 </div>
               </button>
