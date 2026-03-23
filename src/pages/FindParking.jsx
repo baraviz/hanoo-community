@@ -351,7 +351,21 @@ export default function FindParking() {
             <span className="flex-1 text-sm font-medium text-left" style={{ color: "var(--text-primary)" }}>
               {fmtDateLabel(fromTime)}
             </span>
-            <input type="datetime-local" value={fromTime} onChange={e => setFromTime(e.target.value)} className="absolute inset-0 w-full h-full cursor-pointer" style={{ opacity: 0 }} />
+            <input
+              type="datetime-local"
+              value={fromTime}
+              min={toLocalInput(new Date())}
+              onChange={e => {
+                const newFrom = e.target.value;
+                setFromTime(newFrom);
+                if (newFrom) {
+                  const newTo = toLocalInput(new Date(new Date(newFrom).getTime() + 2 * 3600000));
+                  setToTime(newTo);
+                }
+              }}
+              className="absolute inset-0 w-full h-full cursor-pointer"
+              style={{ opacity: 0 }}
+            />
           </label>
           <div className="border-t mx-3" style={{ borderColor: "var(--surface-card-border)" }} />
           <label className="relative flex items-center gap-3 rounded-xl px-3 py-3 cursor-pointer overflow-hidden" style={{ background: "var(--btn-secondary-bg)" }}>
@@ -360,8 +374,27 @@ export default function FindParking() {
             <span className="flex-1 text-sm font-medium text-left" style={{ color: "var(--text-primary)" }}>
               {fmtDateLabel(toTime)}
             </span>
-            <input type="datetime-local" value={toTime} onChange={e => setToTime(e.target.value)} className="absolute inset-0 w-full h-full cursor-pointer" style={{ opacity: 0 }} />
+            <input
+              type="datetime-local"
+              value={toTime}
+              min={fromTime || toLocalInput(new Date())}
+              onChange={e => setToTime(e.target.value)}
+              className="absolute inset-0 w-full h-full cursor-pointer"
+              style={{ opacity: 0 }}
+            />
           </label>
+          {fromTime && toTime && (() => {
+            const diffMs = new Date(toTime) - new Date(fromTime);
+            const totalMins = Math.max(0, Math.round(diffMs / 60000));
+            const hours = Math.floor(totalMins / 60);
+            const mins = totalMins % 60;
+            const label = hours > 0 && mins > 0 ? `${hours} שעות ו-${mins} דקות` : hours > 0 ? `${hours} שעות` : `${mins} דקות`;
+            return (
+              <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
+                סה״כ: {label}
+              </p>
+            );
+          })()}
         </div>
 
         <button
