@@ -383,13 +383,12 @@ export default function FindParking() {
             );
           })}
 
-          {/* Combo results */}
-          {!loading && combos.map((combo, idx) => {
+          {/* Combo results — show only first combo, hide spot numbers */}
+          {!loading && combos.slice(0, 1).map((combo, idx) => {
             const { first, second } = combo;
             const splitPoint = first.covEnd;
             const cost1 = calcCost(fromMinsR, splitPoint);
             const cost2 = calcCost(splitPoint, toMinsR);
-            // cost1+cost2 together span the full requested duration
             const totalCost = cost1 + cost2;
             return (
               <div key={idx} className="card overflow-hidden">
@@ -405,8 +404,8 @@ export default function FindParking() {
                     <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{first.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {first.ownerResident?.user_name || first.owner_email}</p>
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>החניה של {first.ownerResident?.user_name?.split(" ")[0] || "שכן"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>פרטים יוצגו לאחר ההזמנה</p>
                   </div>
                   <div className="text-left flex-none">
                     <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(fromMinsR)} – {fmtMins(splitPoint)}</p>
@@ -423,8 +422,8 @@ export default function FindParking() {
                     <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{second.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {second.ownerResident?.user_name || second.owner_email}</p>
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>החניה של {second.ownerResident?.user_name?.split(" ")[0] || "שכן"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>פרטים יוצגו לאחר ההזמנה</p>
                   </div>
                   <div className="text-left flex-none">
                     <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(splitPoint)} – {fmtMins(toMinsR)}</p>
