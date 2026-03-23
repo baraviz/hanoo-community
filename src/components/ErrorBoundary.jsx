@@ -21,6 +21,10 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error("[ErrorBoundary]", error, info.componentStack);
+    // Auto-reload on lazy module fetch failures (stale build cache)
+    if (error?.message?.includes("Failed to fetch dynamically imported module")) {
+      window.location.reload();
+    }
   }
 
   render() {
