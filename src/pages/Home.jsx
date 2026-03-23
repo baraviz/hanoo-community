@@ -629,10 +629,9 @@ export default function Home() {
             </div>
           );
            })()}
-          </div>
-          )}
-          </div>
-          </PullToRefreshWrapper>
+           </div>
+           )}
+           </PullToRefreshWrapper>
     </div>
   );
 }
