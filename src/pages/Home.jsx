@@ -593,6 +593,84 @@ export default function Home() {
         );
       })()}
 
+      {/* Past Booking Summary Sheet */}
+      {pastBookingSummary && (() => {
+        const b = pastBookingSummary;
+        const startDate = parseISO(b.start_time);
+        const endDate = parseISO(b.end_time);
+        const usedMinutes = Math.max(0, Math.round((endDate - startDate) / 60000));
+        const fmtTime = (d) => format(d, "HH:mm");
+        const fmtDuration = (mins) => {
+          const h = Math.floor(mins / 60), m = mins % 60;
+          if (h === 0) return `${m} דק׳`;
+          if (m === 0) return h === 1 ? "שעה" : h === 2 ? "שעתיים" : `${h} שעות`;
+          return `${h} שעות ו-${m} דק׳`;
+        };
+        const closeSheet = () => {
+          setClosingPastSheet(true);
+          setTimeout(() => { setPastBookingSummary(null); setClosingPastSheet(false); }, 220);
+        };
+        return (
+          <div
+            className="fixed inset-0 z-50 flex flex-col justify-end"
+            style={{ background: "rgba(0,0,0,0.4)", animation: closingPastSheet ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
+            onClick={closeSheet}
+          >
+            <div
+              className="rounded-t-3xl p-6 space-y-4"
+              style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closingPastSheet ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
+              onClick={e => e.stopPropagation()}
+            >
+              <style>{`
+                @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+                @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+              `}</style>
+              <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto" style={{ background: "var(--hanoo-blue-light)" }}>
+                <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
+              </div>
+              <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>הזמנה הסתיימה</h2>
+              <p className="text-sm text-center" style={{ color: "var(--text-secondary)" }}>סיכום החניה האחרונה שלך</p>
+
+              <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--btn-secondary-bg)" }}>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">חניה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>#{b.spot_number} של {b.owner_name}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">כניסה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtTime(startDate)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">יציאה</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtTime(endDate)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: "var(--text-secondary)" }} className="text-sm">משך</span>
+                  <span className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{fmtDuration(usedMinutes)}</span>
+                </div>
+                <div className="border-t pt-3" style={{ borderColor: "var(--surface-card-border)" }}>
+                  <div className="flex items-center justify-between">
+                    <span style={{ color: "var(--text-secondary)" }} className="text-sm">עלות</span>
+                    <span className="font-bold" style={{ color: "var(--hanoo-blue)" }}>{b.total_credits} קרדיטים</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={closeSheet}
+                className="w-full py-3 rounded-2xl font-bold text-white"
+                style={{ background: "var(--hanoo-blue)" }}
+              >
+                סגור
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Header */}
       <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-4">
