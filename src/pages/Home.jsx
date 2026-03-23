@@ -1,7 +1,6 @@
 // Home page — cache bust 2
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { Search, Plus, Clock, Car, Gift, AlertTriangle, ParkingSquare, Menu, ChevronLeft } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
