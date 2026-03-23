@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, LogOut, AlertTriangle, Shield, FileText, Accessibility } from "lucide-react";
+import { X, LogOut, AlertTriangle, Shield, FileText, Accessibility, CalendarDays } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import ThemeToggle from "@/components/ThemeToggle";
 

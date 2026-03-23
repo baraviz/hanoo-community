@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Car, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
+import { Search, Plus, Clock, Gift, AlertTriangle, ParkingSquare, Menu } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
