@@ -1,7 +1,7 @@
 // FindParking page
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Car, CheckCircle, Clock, ArrowLeft, Search, Menu, Bell, ChevronRight } from "lucide-react";
+import { Car, Clock, ArrowLeft, Search, Menu, Bell, ChevronRight } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import { format, differenceInMinutes } from "date-fns";
