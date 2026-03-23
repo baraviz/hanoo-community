@@ -63,6 +63,7 @@ export default function SideMenu({ onClose }) {
         {/* Menu items */}
         <div className="flex-1 overflow-y-auto py-2">
           {[
+            { label: "הזמנות",           icon: CalendarDays,  path: "/Bookings" },
             { label: "דיווח על תקלה",    icon: AlertTriangle, path: "/ReportBug" },
             { label: "מדיניות פרטיות",   icon: Shield,        path: "/PrivacyPolicy" },
             { label: "תנאי שימוש",       icon: FileText,      path: "/TermsOfService" },
