@@ -41,13 +41,17 @@ export default function BookingDetails() {
     setSubmitting(true);
     try {
       const user = await base44.auth.me();
-      // Send image + report to email via backend function
       let imageUrl = null;
+      
+      // Upload image if provided
       if (reportImage) {
-        const uploadRes = await base44.functions.invoke("uploadReportImage", { file: reportImage });
+        const formData = new FormData();
+        formData.append('file', reportImage);
+        const uploadRes = await base44.functions.invoke("uploadReportImage", formData);
         imageUrl = uploadRes.data?.url;
       }
       
+      // Send report email
       await base44.functions.invoke("sendReportEmail", {
         user_email: user.email,
         user_name: user.full_name,
@@ -56,18 +60,10 @@ export default function BookingDetails() {
         image_url: imageUrl,
       });
 
-      // Offer alternative parking
-      const altRes = await base44.functions.invoke("findAlternativeParking", {
-        building_id: booking.building_id,
-        from_time: booking.start_time,
-        to_time: booking.end_time,
-      });
-
       setShowReport(false);
       setReportText("");
       setReportImage(null);
-      // Navigate to alternatives screen or show modal
-      alert("תודה על הדיווח! מחפשים לך חניה חלופית...");
+      alert("תודה על הדיווח! אנחנו בדרך לחפש לך חניה חלופית");
     } catch (e) {
       console.error(e);
       alert("שגיאה בשליחת הדיווח");
