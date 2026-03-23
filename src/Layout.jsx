@@ -67,7 +67,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center justify-around py-2" role="tablist" aria-label="ניווט ראשי">
             {navItems.map(({ name, label, icon: Icon, path }) => {
               const isActive = name === "Home"
-                ? location.pathname === "/"
+                ? location.pathname === "/" || currentPageName === "Home"
                 : location.pathname.startsWith(`/${name}`);
               return (
                 <button
