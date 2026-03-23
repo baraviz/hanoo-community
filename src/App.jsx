@@ -92,6 +92,7 @@ const AuthenticatedApp = () => {
       <Route path="/Accessibility"  element={<LayoutWrapper currentPageName="Accessibility"><Accessibility /></LayoutWrapper>} />
       <Route path="/ReportBug"      element={<LayoutWrapper currentPageName="ReportBug"><ReportBug /></LayoutWrapper>} />
       <Route path="/JoinViaLink"    element={<LayoutWrapper currentPageName="JoinViaLink"><JoinViaLink /></LayoutWrapper>} />
+      <Route path="/booking/:token" element={<PublicBookingView />} />
       <Route path="*"               element={<PageNotFound />} />
     </Routes>
   );
