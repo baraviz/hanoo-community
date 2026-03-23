@@ -160,7 +160,7 @@ export default function FindParking() {
     await bookSlot(slot, fromMins, toMins);
     setResident(prev => ({ ...prev, credits: (prev.credits || 0) - cost }));
     setBookingId(slot.id);
-    setThankYouSlots([{ ownerName: slot.ownerResident?.user_name || slot.owner_email, ownerPhone: slot.ownerResident?.phone || null, spotNumber: slot.ownerResident?.parking_spot || "?" }]);
+    setThankYouSlots([{ ownerName: slot.ownerResident?.user_name || slot.owner_email, ownerPhone: slot.ownerResident?.phone || null, spotNumber: slot.ownerResident?.parking_spot || "?", parkingFloor: slot.ownerResident?.parking_floor || null }]);
     setResults([]);
     setCombos([]);
   }
