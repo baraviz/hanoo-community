@@ -180,31 +180,19 @@ export default function Bookings() {
         {upcoming.length === 0 && past.length === 0 && (
           <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
             <img
-              src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/1c0461427_ChatGPTImageMar23202611_25_48AM.png"
+              src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/8dc6b8013_ChatGPTImageMar23202611_25_48AM11.png"
               alt="אין הזמנות"
               className="w-56 h-56 object-contain mb-2"
             />
-            <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>עדיין אין לך הזמנות</h2>
-            <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
-              כשתזמין חניה, כל ההזמנות שלך ייפיעו כאן מחר.
-            </p>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>עדיין אין לך הזמנות</h2>
             {tab === "mine" && (
-              <>
-                <button
-                  onClick={() => navigate("/FindParking")}
-                  className="w-full py-4 rounded-2xl font-bold text-white text-base mb-3"
-                  style={{ background: "var(--hanoo-blue)" }}
-                >
-                  מצא חניה עכשיו
-                </button>
-                <button
-                  onClick={() => navigate("/")}
-                  className="text-sm font-medium"
-                  style={{ color: "var(--hanoo-blue)" }}
-                >
-                  איך זה עובד?
-                </button>
-              </>
+              <button
+                onClick={() => navigate("/FindParking")}
+                className="w-full py-4 rounded-2xl font-bold text-white text-base"
+                style={{ background: "var(--hanoo-blue)" }}
+              >
+                מצא חניה עכשיו
+              </button>
             )}
           </div>
         )}
