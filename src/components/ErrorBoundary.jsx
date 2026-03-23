@@ -33,12 +33,11 @@ export default class ErrorBoundary extends Component {
         role="alert"
         aria-live="assertive"
       >
-        <div
-          className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-          style={{ background: "var(--hanoo-red-light)" }}
-        >
-          <span className="text-3xl">⚠️</span>
-        </div>
+        <img
+          src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/47e72826a_ChatGPTImageMar23202603_38_05PM1.png"
+          alt="שגיאה"
+          className="w-40 h-40 object-contain mb-2"
+        />
         <h2 className="text-xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>
           משהו השתבש
         </h2>
