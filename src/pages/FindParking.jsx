@@ -590,6 +590,7 @@ export default function FindParking() {
   }
 
   // ── Search form view ──
+
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
