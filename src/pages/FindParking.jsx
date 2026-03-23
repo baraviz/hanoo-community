@@ -358,7 +358,7 @@ export default function FindParking() {
             <Clock size={16} style={{ color: "var(--text-secondary)" }} className="flex-none" />
             <span className="text-xs font-bold flex-none" style={{ color: "var(--text-secondary)" }}>עד מתי?</span>
             <span className="flex-1 text-sm font-medium text-left" style={{ color: "var(--text-primary)" }}>
-              {toTime ? new Date(toTime).toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—"}
+              {fmtDateLabel(toTime)}
             </span>
             <input type="datetime-local" value={toTime} onChange={e => setToTime(e.target.value)} className="absolute inset-0 w-full h-full cursor-pointer" style={{ opacity: 0 }} />
           </label>
