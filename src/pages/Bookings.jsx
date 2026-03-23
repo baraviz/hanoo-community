@@ -184,7 +184,8 @@ export default function Bookings() {
               alt="אין הזמנות"
               className="w-56 h-56 object-contain mb-2"
             />
-            <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>עדיין אין לך הזמנות</h2>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>עדיין אין לך הזמנות</h2>
+            <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>כשתזמין חניה, כל ההזמנות שלך יופיעו כאן</p>
             {tab === "mine" && (
               <button
                 onClick={() => navigate("/FindParking")}
