@@ -433,16 +433,53 @@ export default function FindParking() {
 
           {/* No results */}
           {!loading && searched && !hasAnyResults && (
-            <div className="text-center py-6 px-2">
+            <div className="text-center py-4 px-2">
               <img
                 src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/2a3eaa27f_ChatGPTImageMar23202611_34_18AM1.png"
                 alt="לא נמצאו חניות"
-                className="w-44 h-44 object-contain mx-auto mb-2"
+                className="w-40 h-40 object-contain mx-auto mb-2"
               />
-              <p className="font-bold text-base mb-1" style={{ color: "var(--text-primary)" }}>לא מצאנו בדיוק מה שחיפשת</p>
-              <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
-                אין חניות פנויות בזמן זה — אבל ייתכן שיש בטווח של שעה לפני או אחרי.
-              </p>
+              <p className="font-bold text-base mb-1" style={{ color: "var(--text-primary)" }}>לא מצאנו חניה בדיוק בשעות האלה</p>
+
+              {nearbyResults.length > 0 ? (
+                <>
+                  <p className="text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
+                    אבל יש אפשרויות בשעות קרובות:
+                  </p>
+                  <div className="space-y-2 text-right mb-5">
+                    {nearbyResults.map((opt, idx) => {
+                      const owner = opt.slot.ownerResident;
+                      const altCost = calcCost(0, 0, opt.newFrom, opt.newTo);
+                      return (
+                        <div key={idx} className="card p-3 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                            <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{owner?.parking_spot || "?"}</p>
+                            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{fmtDateLabel(opt.newFrom)} – {fmtDateLabel(opt.newTo)}</p>
+                          </div>
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="text-xs font-bold" style={{ color: "var(--hanoo-blue)" }}>{altCost} קרדיטים</span>
+                            <button
+                              onClick={() => { setFromTime(opt.newFrom); setToTime(opt.newTo); setShowResults(false); setSearched(false); setResults([]); setCombos([]); setNearbyResults([]); }}
+                              className="text-xs font-bold px-3 py-1.5 rounded-xl"
+                              style={{ background: "var(--hanoo-blue)", color: "white" }}
+                            >
+                              {opt.label}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
+                  לא נמצאו חניות זמינות בשעות אלו.
+                </p>
+              )}
+
               {!notifyRequested ? (
                 <button
                   onClick={() => setNotifyRequested(true)}
