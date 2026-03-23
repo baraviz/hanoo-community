@@ -195,8 +195,8 @@ export default function BookingSuccessScreen({
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetIndex, setSheetIndex] = useState(0);
-  // Phase: "splash" = full-screen blue, "settled" = compact header + content
-  const [phase, setPhase] = useState("splash");
+  // "enter" → "splash" → "settled"
+  const [phase, setPhase] = useState("enter");
 
   const fromStr  = fromTime ? format(new Date(fromTime), "HH:mm") : "";
   const toStr    = toTime   ? format(new Date(toTime),   "HH:mm") : "";
@@ -206,123 +206,100 @@ export default function BookingSuccessScreen({
   const hasSlots = thankYouSlots?.length > 0;
   const firstSlot = thankYouSlots?.[0];
 
-  // After 2.5s in splash phase, transition to settled
   useEffect(() => {
-    const t = setTimeout(() => setPhase("settled"), 2500);
-    return () => clearTimeout(t);
+    // Small delay so React renders the "enter" state first, then animate in
+    const t1 = setTimeout(() => setPhase("splash"), 50);
+    const t2 = setTimeout(() => setPhase("settled"), 3000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
-  const isSplash = phase === "splash";
-
-  // Header height: full-screen in splash, compact in settled
-  const headerVariants = {
-    splash: { height: "100vh" },
-    settled: { height: "auto" },
-  };
-
-  // Icon size wrapper: big in splash, small in settled
-  const iconWrapVariants = {
-    splash: { width: 96, height: 96 },
-    settled: { width: 48, height: 48 },
-  };
-
-  // Layout of icon+text row: centered in splash, RTL row in settled
-  const rowVariants = {
-    splash: { flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 },
-    settled: { flexDirection: "row-reverse", alignItems: "center", justifyContent: "flex-end", gap: 12 },
-  };
-
-  // Text alignment
-  const textVariants = {
-    splash: { textAlign: "center" },
-    settled: { textAlign: "right" },
-  };
-
-  // Title size
-  const titleVariants = {
-    splash: { fontSize: "2rem" },
-    settled: { fontSize: "1.5rem" },
-  };
-
-  const transition = { duration: 0.65, ease: [0.4, 0, 0.2, 1] };
+  const isSplash = phase !== "settled";
+  const easing = [0.4, 0, 0.2, 1];
+  const collapseTr = { duration: 0.65, ease: easing };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--surface-page)" }}>
 
       {/* ── Animated blue header ── */}
       <motion.div
-        variants={headerVariants}
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ opacity: 1, ...(phase === "splash" ? { height: "100vh" } : { height: "auto" }) }}
-        transition={phase === "splash" ? { duration: 0.5, ease: "easeOut" } : transition}
+        animate={{
+          height: phase === "enter" ? 0 : phase === "splash" ? "100vh" : "auto",
+          opacity: phase === "enter" ? 0 : 1,
+        }}
+        transition={
+          phase === "splash"
+            ? { height: { duration: 0.45, ease: easing }, opacity: { duration: 0.3 } }
+            : collapseTr
+        }
         style={{ background: "var(--surface-header)", overflow: "hidden", flexShrink: 0 }}
         className="flex flex-col"
       >
         {/* Padded inner area */}
         <motion.div
-          variants={{
-            splash: { paddingTop: "calc(env(safe-area-inset-top) + 2rem)", paddingBottom: "2rem", paddingLeft: "1.25rem", paddingRight: "1.25rem", flex: 1 },
-            settled: { paddingTop: "calc(env(safe-area-inset-top) + 0.75rem)", paddingBottom: "1.25rem", paddingLeft: "1.25rem", paddingRight: "1.25rem", flex: 0 },
+          animate={{
+            paddingTop: isSplash ? "calc(env(safe-area-inset-top) + 2rem)" : "calc(env(safe-area-inset-top) + 0.75rem)",
+            paddingBottom: isSplash ? "2rem" : "1.25rem",
+            flex: isSplash ? 1 : 0,
           }}
-          initial="splash"
-          animate={phase}
-          transition={transition}
-          className="flex flex-col"
+          transition={collapseTr}
+          className="flex flex-col px-5"
           style={{ justifyContent: isSplash ? "center" : "flex-start" }}
         >
           {/* Icon + text row */}
           <motion.div
-            variants={rowVariants}
-            initial="splash"
-            animate={phase}
-            transition={transition}
+            animate={{
+              flexDirection: isSplash ? "column" : "row-reverse",
+              alignItems: "center",
+              justifyContent: isSplash ? "center" : "flex-end",
+              gap: isSplash ? 20 : 12,
+            }}
+            transition={collapseTr}
             style={{ display: "flex" }}
           >
             {/* Icon circle */}
             <motion.div
-              variants={iconWrapVariants}
-              initial="splash"
-              animate={phase}
-              transition={transition}
+              animate={{
+                width: isSplash ? 96 : 48,
+                height: isSplash ? 96 : 48,
+                scale: phase === "enter" ? 0 : 1,
+                opacity: phase === "enter" ? 0 : 1,
+              }}
+              transition={
+                phase === "splash"
+                  ? { type: "spring", stiffness: 280, damping: 20, delay: 0.25 }
+                  : collapseTr
+              }
               className="rounded-full flex items-center justify-center flex-none"
               style={{ background: "rgba(255,255,255,0.2)" }}
             >
-              <motion.div
-                variants={{
-                  splash: { width: 64, height: 64 },
-                  settled: { width: 32, height: 32 },
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1, ...(phase === "settled" ? { width: 32, height: 32 } : { width: 64, height: 64 }) }}
-                transition={{ type: "spring", stiffness: 280, damping: 20, delay: 0.1 }}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-              >
-                <AnimatedCircleCheck size={isSplash ? 64 : 32} />
-              </motion.div>
+              <AnimatedCircleCheck size={isSplash ? 56 : 28} />
             </motion.div>
 
             {/* Text */}
             <motion.div
-              variants={textVariants}
-              initial="splash"
-              animate={phase}
-              transition={transition}
+              animate={{ textAlign: isSplash ? "center" : "right" }}
+              transition={collapseTr}
             >
               <motion.h2
                 className="font-bold text-white leading-tight"
-                variants={titleVariants}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0, ...(phase === "settled" ? { fontSize: "1.5rem" } : { fontSize: "2rem" }) }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.35 }}
+                animate={{
+                  fontSize: isSplash ? "2rem" : "1.5rem",
+                  opacity: phase === "enter" ? 0 : 1,
+                  y: phase === "enter" ? 20 : 0,
+                }}
+                transition={
+                  phase === "splash"
+                    ? { duration: 0.45, ease: easing, delay: 0.4 }
+                    : collapseTr
+                }
               >
                 הוזמן בהצלחה!
               </motion.h2>
               <motion.p
                 className="text-sm mt-1"
                 style={{ color: "rgba(255,255,255,0.75)" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
+                animate={{ opacity: phase === "enter" ? 0 : 1 }}
+                transition={{ duration: 0.4, delay: phase === "splash" ? 0.65 : 0 }}
               >
                 {duration} · {dayLbl} {fromStr}–{toStr}
               </motion.p>
