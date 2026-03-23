@@ -332,7 +332,7 @@ export default function BookingSuccessScreen({
         className="flex-1 overflow-y-auto px-5 py-4 space-y-3"
         style={{ paddingBottom: "calc(80px + 1.5rem)" }}
         initial={{ opacity: 0, y: 24 }}
-        animate={phase === 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+        animate={phase >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 0.45, ease: "easeOut", delay: 0.25 }}
       >
         {/* Parking details card */}
