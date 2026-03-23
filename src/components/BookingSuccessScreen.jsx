@@ -95,7 +95,7 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col justify-end"
-      style={{ background: "rgba(0,0,0,0.5)", animation: closing ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out" }}
+      style={{ background: "rgba(0,0,0,0.5)", animation: closing ? "fadeOut 0.22s ease-in forwards" : "fadeIn 0.22s ease-out", alignItems: "stretch" }}
       onClick={close}
     >
       <style>{`
