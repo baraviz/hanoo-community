@@ -180,8 +180,15 @@ export default function FindParking() {
     return 0;
   }
 
-  function calcCost(startMins, endMins) {
-    const base = ((endMins - startMins) / 60) * 10;
+  function calcCost(startMins, endMins, fromStr, toStr) {
+    // If actual datetime strings provided, use real diff (handles cross-day correctly)
+    let durationHours;
+    if (fromStr && toStr) {
+      durationHours = (new Date(toStr) - new Date(fromStr)) / 3600000;
+    } else {
+      durationHours = (endMins - startMins) / 60;
+    }
+    const base = Math.max(0, durationHours) * 10;
     return Math.round(base * (1 - getDiscount()));
   }
 
