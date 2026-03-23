@@ -330,6 +330,173 @@ export default function FindParking() {
 
   const hasAnyResults = results.length > 0 || combos.length > 0;
 
+  // ── Results view (after search) ──
+  if (showResults) {
+    const fromMinsR = new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes();
+    const toMinsR   = new Date(toTime).getHours()   * 60 + new Date(toTime).getMinutes();
+
+    return (
+      <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
+        {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+        {/* Header */}
+        <div className="pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
+          <div className="flex items-center justify-between">
+            <div className="text-right">
+              <h1 className="text-white text-xl font-bold">תוצאות חיפוש</h1>
+              <p className="text-blue-200 text-xs mt-0.5">{fmtDateLabel(fromTime)} – {fmtDateLabel(toTime)}</p>
+            </div>
+            <button
+              onClick={() => { setShowResults(false); setSearched(false); setResults([]); setCombos([]); }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold"
+              style={{ background: "rgba(255,255,255,0.2)", color: "white" }}
+            >
+              <Search size={14} />
+              חזור לחיפוש
+            </button>
+          </div>
+        </div>
+
+        <div className="px-5 py-5 space-y-3">
+          {/* Skeleton while loading */}
+          {loading && (
+            <>
+              {[1,2,3].map(i => (
+                <div key={i} className="card p-4 animate-pulse">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 rounded-2xl" style={{ background: "var(--btn-secondary-bg)" }} />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 rounded-lg w-2/3" style={{ background: "var(--btn-secondary-bg)" }} />
+                      <div className="h-3 rounded-lg w-1/2" style={{ background: "var(--btn-secondary-bg)" }} />
+                    </div>
+                    <div className="w-12 h-8 rounded-lg" style={{ background: "var(--btn-secondary-bg)" }} />
+                  </div>
+                  <div className="h-10 rounded-xl" style={{ background: "var(--btn-secondary-bg)" }} />
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* No results */}
+          {!loading && searched && !hasAnyResults && (
+            <div className="text-center py-6 px-2">
+              <img
+                src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/2a3eaa27f_ChatGPTImageMar23202611_34_18AM1.png"
+                alt="לא נמצאו חניות"
+                className="w-44 h-44 object-contain mx-auto mb-2"
+              />
+              <p className="font-bold text-base mb-1" style={{ color: "var(--text-primary)" }}>לא מצאנו בדיוק מה שחיפשת</p>
+              <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
+                אין חניות פנויות בזמן זה — אבל ייתכן שיש בטווח של שעה לפני או אחרי.
+              </p>
+              {!notifyRequested ? (
+                <button
+                  onClick={() => setNotifyRequested(true)}
+                  className="flex items-center gap-2 mx-auto px-5 py-3 rounded-2xl font-bold text-sm"
+                  style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
+                >
+                  <Bell size={16} />
+                  תודיעו לי כשיתפנה
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 justify-center px-5 py-3 rounded-2xl text-sm font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
+                  <CheckCircle size={16} />
+                  נשמר! נודיע לך כשיתפנה
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Single-slot results */}
+          {!loading && results.map(slot => {
+            const cost = calcCost(fromMinsR, toMinsR);
+            const owner = slot.ownerResident;
+            return (
+              <div key={slot.id} className="card p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{owner?.parking_spot || "?"}</p>
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {owner?.user_name || slot.owner_email}</p>
+                    {owner?.parking_floor && <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קומה {owner.parking_floor}</p>}
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{cost}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
+                    {getDiscount() > 0 && (
+                      <p className="text-xs font-bold" style={{ color: "var(--hanoo-green)" }}>{getDiscount() * 100}% הנחה 🎟️</p>
+                    )}
+                  </div>
+                </div>
+                <button onClick={() => handleBookSingle(slot)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
+                  הזמן עכשיו
+                </button>
+              </div>
+            );
+          })}
+
+          {/* Combo results */}
+          {!loading && combos.map((combo, idx) => {
+            const { first, second } = combo;
+            const splitPoint = first.covEnd;
+            const cost1 = calcCost(fromMinsR, splitPoint);
+            const cost2 = calcCost(splitPoint, toMinsR);
+            const totalCost = cost1 + cost2;
+            return (
+              <div key={idx} className="card overflow-hidden">
+                <div className="px-4 pt-3 pb-2 flex items-center justify-between" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+                  <span className="text-xs font-bold" style={{ color: "var(--text-tertiary)" }}>שילוב חניות</span>
+                  <div className="text-right">
+                    <span className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{totalCost}</span>
+                    <span className="text-xs" style={{ color: "var(--text-tertiary)" }}> קרדיטים</span>
+                  </div>
+                </div>
+                <div className="px-4 py-3 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{first.ownerResident?.parking_spot || "?"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {first.ownerResident?.user_name || first.owner_email}</p>
+                  </div>
+                  <div className="text-left flex-none">
+                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(fromMinsR)} – {fmtMins(splitPoint)}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost1} קרדיטים</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-1">
+                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
+                  <ArrowLeft size={12} style={{ color: "var(--text-tertiary)" }} />
+                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
+                </div>
+                <div className="px-4 py-3 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{second.ownerResident?.parking_spot || "?"}</p>
+                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {second.ownerResident?.user_name || second.owner_email}</p>
+                  </div>
+                  <div className="text-left flex-none">
+                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(splitPoint)} – {fmtMins(toMinsR)}</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost2} קרדיטים</p>
+                  </div>
+                </div>
+                <div className="px-4 pb-4">
+                  <button onClick={() => handleBookCombo(combo)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
+                    הזמן את השילוב
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Search form view ──
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
       {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
@@ -410,139 +577,13 @@ export default function FindParking() {
 
         <button
           onClick={searchParking}
-          disabled={loading || !resident}
+          disabled={!resident}
           className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2 mb-4"
-          style={{ background: "var(--hanoo-blue)", opacity: loading ? 0.7 : 1 }}
+          style={{ background: "var(--hanoo-blue)" }}
         >
           <Search size={18} />
-          {loading ? "מחפש..." : "חפש חניה"}
+          חפש חניה
         </button>
-
-        {searched && !loading && !hasAnyResults && (
-        <div className="text-center py-10 px-2">
-          <div className="text-5xl mb-4">🅿️</div>
-          <p className="font-bold text-base mb-1" style={{ color: "var(--text-primary)" }}>לא מצאנו בדיוק מה שחיפשת</p>
-          <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
-            אין חניות פנויות בזמן זה — אבל ייתכן שיש אפשרות בטווח של שעה לפני או אחרי.
-          </p>
-          {!notifyRequested ? (
-            <button
-              onClick={() => setNotifyRequested(true)}
-              className="flex items-center gap-2 mx-auto px-5 py-3 rounded-2xl font-bold text-sm"
-              style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
-            >
-              <Bell size={16} />
-              תודיעו לי כשיתפנה
-            </button>
-          ) : (
-            <div className="flex items-center gap-2 justify-center px-5 py-3 rounded-2xl text-sm font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
-              <CheckCircle size={16} />
-              נשמר! נודיע לך כשיתפנה
-            </div>
-          )}
-        </div>
-        )}
-
-        {/* Single-slot results */}
-        <div className="space-y-3">
-          {results.map(slot => {
-            const fromMins = new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes();
-            const toMins = new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes();
-            const cost = calcCost(fromMins, toMins);
-            const owner = slot.ownerResident;
-            return (
-              <div key={slot.id} className="card p-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue-light)" }}>
-                    <Car size={24} style={{ color: "var(--hanoo-blue)" }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold" style={{ color: "var(--text-primary)" }}>חניה #{owner?.parking_spot || "?"}</p>
-                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>של {owner?.user_name || slot.owner_email}</p>
-                    {owner?.parking_floor && <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קומה {owner.parking_floor}</p>}
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{cost}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
-                    {getDiscount() > 0 && (
-                      <p className="text-xs font-bold" style={{ color: "var(--hanoo-green)" }}>{getDiscount() * 100}% הנחה 🎟️</p>
-                    )}
-                  </div>
-                </div>
-                <button onClick={() => handleBookSingle(slot)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
-                  הזמן עכשיו
-                </button>
-              </div>
-            );
-          })}
-
-          {/* Combo results */}
-          {combos.map((combo, idx) => {
-            const { first, second } = combo;
-            const fromMins = new Date(fromTime).getHours() * 60 + new Date(fromTime).getMinutes();
-            const toMins = new Date(toTime).getHours() * 60 + new Date(toTime).getMinutes();
-            const splitPoint = first.covEnd;
-            const cost1 = calcCost(fromMins, splitPoint);
-            const cost2 = calcCost(splitPoint, toMins);
-            const totalCost = cost1 + cost2;
-
-            return (
-              <div key={idx} className="card overflow-hidden">
-                {/* Header */}
-                <div className="px-4 pt-3 pb-2 flex items-center justify-between" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
-                  <span className="text-xs font-bold" style={{ color: "var(--text-tertiary)" }}>שילוב חניות</span>
-                  <div className="text-right">
-                    <span className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{totalCost}</span>
-                    <span className="text-xs" style={{ color: "var(--text-tertiary)" }}> קרדיטים</span>
-                  </div>
-                </div>
-
-                {/* First slot */}
-                <div className="px-4 py-3 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
-                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{first.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {first.ownerResident?.user_name || first.owner_email}</p>
-                  </div>
-                  <div className="text-left flex-none">
-                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(fromMins)} – {fmtMins(splitPoint)}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost1} קרדיטים</p>
-                  </div>
-                </div>
-
-                {/* Arrow divider */}
-                <div className="flex items-center gap-2 px-4 py-1">
-                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
-                  <ArrowLeft size={12} style={{ color: "var(--text-tertiary)" }} />
-                  <div className="flex-1 border-t border-dashed" style={{ borderColor: "var(--surface-card-border)" }} />
-                </div>
-
-                {/* Second slot */}
-                <div className="px-4 py-3 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
-                    <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>חניה #{second.ownerResident?.parking_spot || "?"}</p>
-                    <p className="text-xs" style={{ color: "var(--text-secondary)" }}>של {second.ownerResident?.user_name || second.owner_email}</p>
-                  </div>
-                  <div className="text-left flex-none">
-                    <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(splitPoint)} – {fmtMins(toMins)}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost2} קרדיטים</p>
-                  </div>
-                </div>
-
-                <div className="px-4 pb-4">
-                  <button onClick={() => handleBookCombo(combo)} className="w-full py-3 rounded-xl font-bold text-white" style={{ background: "var(--hanoo-blue)" }}>
-                    הזמן את השילוב
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
       </div>
     </div>
   );
