@@ -418,10 +418,27 @@ export default function FindParking() {
         </button>
 
         {searched && !loading && !hasAnyResults && (
-        <div className="text-center py-12">
+        <div className="text-center py-10 px-2">
           <div className="text-5xl mb-4">🅿️</div>
-          <p className="font-medium" style={{ color: "var(--text-secondary)" }}>אין חניות פנויות בזמן זה</p>
-          <p className="text-sm mt-1" style={{ color: "var(--text-tertiary)" }}>נסה שעה אחרת</p>
+          <p className="font-bold text-base mb-1" style={{ color: "var(--text-primary)" }}>לא מצאנו בדיוק מה שחיפשת</p>
+          <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
+            אין חניות פנויות בזמן זה — אבל ייתכן שיש אפשרות בטווח של שעה לפני או אחרי.
+          </p>
+          {!notifyRequested ? (
+            <button
+              onClick={() => setNotifyRequested(true)}
+              className="flex items-center gap-2 mx-auto px-5 py-3 rounded-2xl font-bold text-sm"
+              style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
+            >
+              <Bell size={16} />
+              תודיעו לי כשיתפנה
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 justify-center px-5 py-3 rounded-2xl text-sm font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
+              <CheckCircle size={16} />
+              נשמר! נודיע לך כשיתפנה
+            </div>
+          )}
         </div>
         )}
 
