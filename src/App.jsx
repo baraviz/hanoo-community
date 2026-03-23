@@ -14,6 +14,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 // ── Lazy-load explicit page bundles (pages NOT in pagesConfig) ───────────────
 const MyParking      = lazy(() => import('./pages/MyParking'));
 const Bookings       = lazy(() => import('./pages/Bookings'));
+const BookingDetails = lazy(() => import('./pages/BookingDetails'));
 const PrivacyPolicy  = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Accessibility  = lazy(() => import('./pages/Accessibility'));
