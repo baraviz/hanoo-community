@@ -531,7 +531,7 @@ export default function Home() {
             </div>
             <p className="text-sm" style={{ color: "var(--hanoo-orange)" }}>פרסם זמינות של לפחות שעתיים בפעם הראשונה וקבל 100 קרדיטים (כבר קיבלת 50 בהצטרפות)</p>
             <button
-              onClick={() => navigate(createPageUrl("PublishParking"))}
+              onClick={() => navigate("/PublishParking")}
               className="mt-3 w-full py-2 rounded-xl text-sm font-semibold text-white"
               style={{ background: "var(--hanoo-orange)" }}
             >
