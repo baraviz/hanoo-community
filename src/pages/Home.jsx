@@ -159,7 +159,26 @@ export default function Home() {
       ]);
 
       if (buildings.length > 0) setBuilding(buildings[0]);
-      if (bookings.length > 0) setActiveBooking(bookings[0]);
+
+      // Check for expired bookings (still "active" but end_time passed)
+      const now = new Date();
+      const expiredBookings = bookings.filter(b => new Date(b.end_time) < now);
+      const validBookings = bookings.filter(b => new Date(b.end_time) >= now);
+
+      if (validBookings.length > 0) setActiveBooking(validBookings[0]);
+
+      // Show summary sheet for expired booking (only once per session)
+      if (expiredBookings.length > 0) {
+        const seenKey = `past_booking_seen_${expiredBookings[0].id}`;
+        if (!sessionStorage.getItem(seenKey)) {
+          sessionStorage.setItem(seenKey, "1");
+          setPastBookingSummary(expiredBookings[0]);
+        }
+        // Mark expired bookings as completed in background
+        expiredBookings.forEach(b => {
+          base44.entities.Booking.update(b.id, { status: "completed" }).catch(() => {});
+        });
+      }
 
       // Animate credits counter
       const targetCredits = r.credits || 0;
