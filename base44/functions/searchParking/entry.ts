@@ -14,11 +14,14 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.21';
 const TZ = 'Asia/Jerusalem';
 
 function localMins(date) {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: TZ, hour: 'numeric', minute: 'numeric', hour12: false,
-  }).formatToParts(date);
-  const h = parseInt(parts.find(p => p.type === 'hour').value);
-  const m = parseInt(parts.find(p => p.type === 'minute').value);
+  // Use a fixed-offset approach: format as HH:MM in the target timezone
+  const str = date.toLocaleString('en-US', {
+    timeZone: TZ, hour: '2-digit', minute: '2-digit', hour12: false,
+  });
+  // str = "14:00" or "09:05"
+  const [hStr, mStr] = str.split(':');
+  const h = parseInt(hStr) % 24; // handle "24" edge case
+  const m = parseInt(mStr);
   return h * 60 + m;
 }
 
