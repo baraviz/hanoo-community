@@ -22,6 +22,7 @@ export default function FindParking() {
   const [autoSearch, setAutoSearch] = useState(false);
   const [notifyRequested, setNotifyRequested] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [nearbyResults, setNearbyResults] = useState([]); // alternatives when no exact match
 
   useEffect(() => {
     base44.auth.me().then(u => {
