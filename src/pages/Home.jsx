@@ -550,15 +550,17 @@ export default function Home() {
               <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>הזמנות קרובות</h3>
               <button
                 onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
-                className="card p-3 flex items-center justify-between mb-2 active:opacity-75 transition-opacity relative"
-                style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)" }}
+                className="card flex flex-col gap-3 mb-2 active:opacity-75 transition-opacity"
+                style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)", padding: "1rem" }}
               >
                 {isActive && (
-                  <span className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
-                    פעיל כעת
-                  </span>
+                  <div className="flex justify-end">
+                    <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
+                      פעיל כעת
+                    </span>
+                  </div>
                 )}
-                <div className="flex items-center gap-3 flex-1 text-right">
+                <div className="flex items-center gap-3 text-right">
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
                     <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                   </div>
@@ -570,8 +572,8 @@ export default function Home() {
                       של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
                     </p>
                   </div>
+                  <ChevronLeft size={20} style={{ color: "var(--text-tertiary)" }} />
                 </div>
-                <ChevronLeft size={20} style={{ color: "var(--text-tertiary)", marginRight: 8 }} />
               </button>
             </div>
           );
