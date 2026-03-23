@@ -496,7 +496,7 @@ export default function FindParking() {
               type="datetime-local"
               value={toTime}
               min={fromTime || toLocalInput(new Date())}
-              onChange={e => setToTime(e.target.value)}
+              onChange={e => { if (e.target.value > fromTime) setToTime(e.target.value); }}
               className="absolute inset-0 w-full h-full cursor-pointer"
               style={{ opacity: 0 }}
             />
