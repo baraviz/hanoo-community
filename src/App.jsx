@@ -85,6 +85,7 @@ const AuthenticatedApp = () => {
       {/* Explicit routes — now lazy-loaded */}
       <Route path="/MyParking"      element={<LayoutWrapper currentPageName="MyParking"><MyParking /></LayoutWrapper>} />
       <Route path="/Bookings"       element={<LayoutWrapper currentPageName="Bookings"><Bookings /></LayoutWrapper>} />
+      <Route path="/BookingDetails/:bookingId" element={<LayoutWrapper currentPageName="BookingDetails"><BookingDetails /></LayoutWrapper>} />
       <Route path="/PrivacyPolicy"  element={<LayoutWrapper currentPageName="PrivacyPolicy"><PrivacyPolicy /></LayoutWrapper>} />
       <Route path="/TermsOfService" element={<LayoutWrapper currentPageName="TermsOfService"><TermsOfService /></LayoutWrapper>} />
       <Route path="/Accessibility"  element={<LayoutWrapper currentPageName="Accessibility"><Accessibility /></LayoutWrapper>} />
