@@ -42,7 +42,7 @@ export default function Profile() {
 
   async function loadData() {
     const u = await base44.auth.me().catch(() => null);
-    if (!u) { base44.auth.redirectToLogin(createPageUrl("Profile")); return; }
+    if (!u) { base44.auth.redirectToLogin("/Profile"); return; }
     setUser(u);
     const res = await base44.entities.Resident.filter({ user_email: u.email });
     if (res.length === 0) return;
