@@ -484,8 +484,10 @@ export default function Home() {
         const now = new Date();
         const usedMinutes = Math.max(0, Math.round((now - startDate) / 60000));
         const usedHours = usedMinutes / 60;
-        const actualCost = Math.round(Math.max(0.5, usedHours) * 10);
         const originalCost = b.total_credits;
+        const originalHours = (parseISO(b.end_time) - startDate) / 3600000;
+        const ratePerHour = originalHours > 0 ? originalCost / originalHours : 10;
+        const actualCost = Math.round(Math.max(0.5, usedHours) * ratePerHour);
         const refund = Math.max(0, originalCost - actualCost);
         const fmtTime = (d) => format(d, "HH:mm");
         const fmtDuration = (mins) => {
