@@ -72,7 +72,6 @@ Deno.serve(async (req) => {
 
       const rawCoverage = getSlotCoverage(avail, fromDate, toDate, dayOfWeek, fromMins, toMins);
       if (!rawCoverage) continue;
-      console.log(`[DEBUG] slot ${avail.id} owner=${avail.owner_email} type=${avail.slot_type} days=${JSON.stringify(avail.days_of_week)} rawCoverage=${JSON.stringify(rawCoverage)}`);
 
       const [rawStart, rawEnd] = rawCoverage;
 
