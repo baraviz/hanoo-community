@@ -632,9 +632,11 @@ export default function Home() {
               </button>
             </div>
           );
-        })()}
-      </div>
-      </PullToRefreshWrapper>
+           })()}
+          </div>
+          )}
+          </div>
+          </PullToRefreshWrapper>
     </div>
   );
 }
