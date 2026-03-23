@@ -43,9 +43,13 @@ export default function FindParking() {
       setAutoSearch(true);
     } else {
       const now = new Date();
-      now.setMinutes(0, 0, 0);
-      const later = new Date(now.getTime() + 2 * 3600000);
-      setFromTime(toLocalInput(now));
+      // Round up to next half-hour
+      const ms = now.getTime();
+      const halfHour = 30 * 60 * 1000;
+      const rounded = new Date(Math.ceil(ms / halfHour) * halfHour);
+      rounded.setSeconds(0, 0);
+      const later = new Date(rounded.getTime() + 2 * 3600000);
+      setFromTime(toLocalInput(rounded));
       setToTime(toLocalInput(later));
     }
   }, []);
