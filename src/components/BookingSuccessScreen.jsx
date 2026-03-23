@@ -108,8 +108,8 @@ function ThankYouSheet({ slot, fromTime, toTime, renterApartment, onClose }) {
         className="rounded-t-3xl p-6 space-y-5 overflow-y-auto"
         style={{
           background: "var(--sheet-bg)",
-          paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)",
-          maxHeight: "85dvh",
+          paddingBottom: "calc(env(safe-area-inset-bottom) + 64px + 1rem)",
+          maxHeight: "calc(85dvh - 64px)",
           animation: closing ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out",
         }}
         onClick={e => e.stopPropagation()}
