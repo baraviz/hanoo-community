@@ -18,6 +18,7 @@ export default function FindParking() {
   const [loading, setLoading] = useState(false);
   const [bookingId, setBookingId] = useState(null);
   const [thankYouSlots, setThankYouSlots] = useState([]);
+  const [creditsBeforeBooking, setCreditsBeforeBooking] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [autoSearch, setAutoSearch] = useState(false);
   const [notifyRequested, setNotifyRequested] = useState(false);
