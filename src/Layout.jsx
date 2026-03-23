@@ -26,9 +26,8 @@ export default function Layout({ children, currentPageName }) {
 
   const navItems = [
     { name: "Home",        label: "בית",       icon: Home,          path: "/" },
-    { name: "FindParking", label: "מצא חניה",  icon: Car,           path: "/FindParking" },
+    { name: "FindParking", label: "חיפוש",     icon: Search,        path: "/FindParking" },
     { name: "MyParking",   label: "החניה שלי", icon: ParkingSquare, path: "/MyParking" },
-    { name: "Bookings",    label: "הזמנות",    icon: CalendarDays,  path: "/Bookings" },
     { name: "Profile",     label: "פרופיל",    icon: User,          path: "/Profile" },
   ];
 
