@@ -134,7 +134,7 @@ export default function Home() {
 
       const residents = await base44.entities.Resident.filter({ user_email: u.email });
       if (residents.length === 0) {
-        navigate(createPageUrl("Onboarding"));
+        navigate("/Onboarding");
         return;
       }
       const r = residents[0];
