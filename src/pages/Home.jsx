@@ -31,6 +31,7 @@ export default function Home() {
   const [activeBlocks, setActiveBlocks] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
+  const [displayedCredits, setDisplayedCredits] = useState(0);
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
