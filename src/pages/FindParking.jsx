@@ -415,7 +415,7 @@ export default function FindParking() {
 
           {/* Single-slot results */}
           {!loading && results.map(slot => {
-            const cost = calcCost(fromMinsR, toMinsR);
+            const cost = calcCost(fromMinsR, toMinsR, fromTime, toTime);
             const owner = slot.ownerResident;
             return (
               <div key={slot.id} className="card p-4">
@@ -449,6 +449,7 @@ export default function FindParking() {
             const splitPoint = first.covEnd;
             const cost1 = calcCost(fromMinsR, splitPoint);
             const cost2 = calcCost(splitPoint, toMinsR);
+            // cost1+cost2 together span the full requested duration
             const totalCost = cost1 + cost2;
             return (
               <div key={idx} className="card overflow-hidden">
