@@ -49,6 +49,7 @@ Deno.serve(async (req) => {
     const fromMins  = localMins(fromDate);
     const toMins    = localMins(toDate);
     const dayOfWeek = localDay(fromDate);
+    console.log(`[DEBUG] fromMins=${fromMins} toMins=${toMins} dayOfWeek=${dayOfWeek}`);
 
     // 1. Fetch data server-side
     const [allAvail, allResidents, activeBookings] = await Promise.all([
