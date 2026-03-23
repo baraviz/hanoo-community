@@ -322,10 +322,10 @@ export default function BookingSuccessScreen({
           >
             <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
               <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ 🙌
+                שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ
               </p>
               <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
-                תרוויח 10 נקודות לדירוג הליגה ⭐️
+                תרוויח 10 נקודות לדירוג הליגה
               </p>
             </div>
             <div className="px-4 py-3">
