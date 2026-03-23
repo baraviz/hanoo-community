@@ -518,7 +518,7 @@ export default function Home() {
             className="card p-4 flex flex-col items-center gap-2 active:scale-95 transition-transform select-none"
           >
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: "var(--hanoo-blue)" }}>
-              <Car size={22} className="text-white" aria-hidden="true" />
+              <Search size={22} className="text-white" aria-hidden="true" />
             </div>
             <span className="text-sm font-semibold select-none" style={{ color: "var(--text-primary)" }}>מצא חניה</span>
           </button>
