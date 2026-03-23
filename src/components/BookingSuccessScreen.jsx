@@ -292,9 +292,9 @@ export default function BookingSuccessScreen({
                   splash: { width: 64, height: 64 },
                   settled: { width: 32, height: 32 },
                 }}
-                initial="splash"
-                animate={phase}
-                transition={transition}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1, ...(phase === "settled" ? { width: 32, height: 32 } : { width: 64, height: 64 }) }}
+                transition={{ type: "spring", stiffness: 280, damping: 20, delay: 0.1 }}
                 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 <AnimatedCircleCheck size={isSplash ? 64 : 32} />
@@ -311,9 +311,9 @@ export default function BookingSuccessScreen({
               <motion.h2
                 className="font-bold text-white leading-tight"
                 variants={titleVariants}
-                initial="splash"
-                animate={phase}
-                transition={transition}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0, ...(phase === "settled" ? { fontSize: "1.5rem" } : { fontSize: "2rem" }) }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: 0.35 }}
               >
                 הוזמן בהצלחה!
               </motion.h2>
@@ -322,7 +322,7 @@ export default function BookingSuccessScreen({
                 style={{ color: "rgba(255,255,255,0.75)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.6 }}
               >
                 {duration} · {dayLbl} {fromStr}–{toStr}
               </motion.p>
