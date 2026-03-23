@@ -177,6 +177,7 @@ export default function FindParking() {
       return;
     }
 
+    setCreditsBeforeBooking(resident.credits || 0);
     await base44.entities.Resident.update(resident.id, { credits: (resident.credits || 0) - totalCost });
 
     // Add credits to both owners
