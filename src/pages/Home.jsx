@@ -503,6 +503,12 @@ export default function Home() {
               style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closingEndSheet ? "slideDown 0.22s ease-in forwards" : "slideUp 0.22s ease-out" }}
               onClick={e => e.stopPropagation()}
             >
+              <style>{`
+                @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+                @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+              `}</style>
               <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
               <h2 className="text-xl font-bold text-center" style={{ color: "var(--text-primary)" }}>סיכום חניה</h2>
 
