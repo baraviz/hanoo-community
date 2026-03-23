@@ -166,14 +166,17 @@ export default function BookingDetails() {
 
           <button
             onClick={() => {
-              const msg = `היי, הגעתי ל${booking.spot_number} בבניין ${building?.name}. התור זמין?`;
-              window.location.href = `sms:${booking.owner_phone || ""}?body=${encodeURIComponent(msg)}`;
+              const token = btoa(booking.id);
+              const publicUrl = `${window.location.origin}/booking/${token}`;
+              const msg = `היי, הנה הפרטים של החניה שלי: ${publicUrl}`;
+              const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+              window.open(whatsappUrl, "_blank");
             }}
-            className="w-full py-3 rounded-2xl font-bold flex items-center justify-center gap-2"
-            style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
+            className="w-full py-3 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
+            style={{ background: "#25D366" }}
           >
             <MessageCircle size={18} />
-            שלח הודעה
+            שתף בוואטסאפ
           </button>
 
           <button
