@@ -196,33 +196,7 @@ export default function Home() {
     setLoading(false);
   }
 
-  async function endBooking(booking) {
-    setEndingBooking(true);
-    setActiveBooking(null); // חיווי מיידי
-    const now = new Date().toISOString();
-    await base44.entities.Booking.update(booking.id, { status: "completed", end_time: now });
 
-    // Return credits proportionally (using same rate as original booking)
-    const start = parseISO(booking.start_time);
-    const end = new Date();
-    const hours = Math.max(0.5, (end - start) / 3600000);
-    const originalCost = booking.total_credits;
-    const originalHours = (parseISO(booking.end_time) - parseISO(booking.start_time)) / 3600000;
-    const ratePerHour = originalHours > 0 ? originalCost / originalHours : 10;
-    const actualCost = Math.round(hours * ratePerHour);
-    const refund = originalCost - actualCost;
-
-    if (refund > 0) {
-      const renterRes = await base44.entities.Resident.filter({ user_email: booking.renter_email });
-      if (renterRes.length > 0) {
-        await base44.entities.Resident.update(renterRes[0].id, {
-          credits: (renterRes[0].credits || 0) + refund,
-        });
-      }
-    }
-    setEndingBooking(false);
-    loadData();
-  }
 
   async function confirmDeactivate() {
     setRemovingSlot(true);
