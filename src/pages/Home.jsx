@@ -604,10 +604,7 @@ export default function Home() {
           return (
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <ParkingSquare size={18} style={{ color: "var(--hanoo-blue)" }} />
-                  <p className="font-bold" style={{ color: "var(--text-primary)" }}>החניה שלי</p>
-                </div>
+                <div></div>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                   style={{ background: available ? "var(--hanoo-green-light)" : "var(--hanoo-red-light)", color: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }}>
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }} />
