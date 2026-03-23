@@ -486,16 +486,26 @@ export default function Home() {
         </div>
 
         {/* Credits Card */}
-        <div className="bg-white bg-opacity-20 rounded-2xl p-4 flex items-center justify-between">
-          <div>
-            <p className="text-blue-100 text-xs mb-1">יתרת קרדיטים</p>
-            <p className="text-white text-3xl font-bold">{resident?.credits || 0}</p>
-            <p className="text-blue-200 text-xs">קרדיטים זמינים</p>
-          </div>
-          <div className="w-14 h-14 bg-white bg-opacity-25 rounded-full flex items-center justify-center">
-            <span className="text-white text-2xl">₪</span>
-          </div>
-        </div>
+        {(() => {
+          const credits = resident?.credits || 0;
+          const league = resident?.league || "Bronze";
+          const discountMap = { Bronze: 1, Silver: 0.9, Gold: 0.8, Platinum: 0.7, Diamond: 0.6 };
+          const pricePerHour = 10;
+          const effectivePrice = pricePerHour * (discountMap[league] || 1);
+          const hours = effectivePrice > 0 ? (credits / effectivePrice).toFixed(1) : 0;
+          return (
+            <div className="bg-white bg-opacity-20 rounded-2xl p-4 flex items-center justify-between">
+              <div>
+                <p className="text-blue-100 text-xs mb-1">יתרת קרדיטים</p>
+                <p className="text-white text-3xl font-bold">{displayedCredits}</p>
+                <p className="text-blue-200 text-xs">שווה ערך ל-{hours} שעות חניה</p>
+              </div>
+              <div className="w-14 h-14 bg-white bg-opacity-25 rounded-full flex items-center justify-center">
+                <span className="text-white text-2xl">₪</span>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       <PullToRefreshWrapper onRefresh={loadData}>
