@@ -51,14 +51,21 @@ export default function PublicBookingView() {
     setLoading(false);
   }
 
+  function fileToBase64(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function handleReport() {
     setSubmitting(true);
     try {
       let imageUrl = null;
       if (reportImage) {
-        const formData = new FormData();
-        formData.append('file', reportImage);
-        const uploadRes = await base44.functions.invoke("uploadReportImage", formData);
+        const base64 = await fileToBase64(reportImage);
+        const uploadRes = await base44.functions.invoke("uploadReportImage", { file: base64 });
         imageUrl = uploadRes.data?.url;
       }
 
