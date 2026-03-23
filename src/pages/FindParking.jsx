@@ -391,10 +391,10 @@ export default function FindParking() {
     const toMinsR   = new Date(toTime).getHours()   * 60 + new Date(toTime).getMinutes();
 
     return (
-      <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
+      <div className="flex flex-col" style={{ height: "calc(100vh - 64px)", background: "var(--surface-page)" }}>
         {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
         {/* Header */}
-        <div className="pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
+        <div className="flex-none pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
           <div className="relative flex items-center justify-center">
             <button
               onClick={() => { setShowResults(false); setSearched(false); setResults([]); setCombos([]); setNearbyResults([]); }}
