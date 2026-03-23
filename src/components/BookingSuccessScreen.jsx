@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, animate, useAnimation } from "framer-motion";
+import { motion, animate } from "framer-motion";
 import { X, Car, Clock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { format } from "date-fns";
@@ -195,8 +195,13 @@ export default function BookingSuccessScreen({
 }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [sheetIndex, setSheetIndex] = useState(0);
-  // "enter" → "splash" → "settled"
-  const [phase, setPhase] = useState("enter");
+
+  // Animation phases:
+  // 0 = hidden (start)
+  // 1 = blue fills screen (background only)
+  // 2 = content appears inside splash
+  // 3 = collapses to header + reveals page content
+  const [phase, setPhase] = useState(0);
 
   const fromStr  = fromTime ? format(new Date(fromTime), "HH:mm") : "";
   const toStr    = toTime   ? format(new Date(toTime),   "HH:mm") : "";
@@ -207,99 +212,93 @@ export default function BookingSuccessScreen({
   const firstSlot = thankYouSlots?.[0];
 
   useEffect(() => {
-    // Small delay so React renders the "enter" state first, then animate in
-    const t1 = setTimeout(() => setPhase("splash"), 50);
-    const t2 = setTimeout(() => setPhase("settled"), 3000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    // phase 0 → 1: blue fills screen
+    const t1 = setTimeout(() => setPhase(1), 30);
+    // phase 1 → 2: icon + text appear
+    const t2 = setTimeout(() => setPhase(2), 530);
+    // phase 2 → 3: collapse + reveal content
+    const t3 = setTimeout(() => setPhase(3), 3000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
-  const isSplash = phase !== "settled";
+  const isSplash = phase < 3;
   const easing = [0.4, 0, 0.2, 1];
-  const collapseTr = { duration: 0.65, ease: easing };
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--surface-page)" }}>
 
-      {/* ── Animated blue header ── */}
+      {/* ── Blue overlay / header ── */}
       <motion.div
-        animate={{
-          height: phase === "enter" ? 0 : phase === "splash" ? "100vh" : "auto",
-          opacity: phase === "enter" ? 0 : 1,
-        }}
+        initial={{ height: 0 }}
+        animate={{ height: isSplash ? "100vh" : "auto" }}
         transition={
-          phase === "splash"
-            ? { height: { duration: 0.45, ease: easing }, opacity: { duration: 0.3 } }
-            : collapseTr
+          phase === 1
+            ? { duration: 0.45, ease: easing }
+            : phase === 3
+            ? { duration: 0.6, ease: easing }
+            : { duration: 0 }
         }
         style={{ background: "var(--surface-header)", overflow: "hidden", flexShrink: 0 }}
         className="flex flex-col"
       >
-        {/* Padded inner area */}
         <motion.div
           animate={{
-            paddingTop: isSplash ? "calc(env(safe-area-inset-top) + 2rem)" : "calc(env(safe-area-inset-top) + 0.75rem)",
+            paddingTop: isSplash ? "calc(env(safe-area-inset-top) + 2rem)" : "calc(env(safe-area-inset-top) + 1rem)",
             paddingBottom: isSplash ? "2rem" : "1.25rem",
             flex: isSplash ? 1 : 0,
           }}
-          transition={collapseTr}
+          transition={{ duration: 0.6, ease: easing }}
           className="flex flex-col px-5"
           style={{ justifyContent: isSplash ? "center" : "flex-start" }}
         >
-          {/* Icon + text row */}
+          {/* Splash: centered column. Settled: space-between row */}
           <motion.div
             animate={{
-              flexDirection: isSplash ? "column" : "row-reverse",
+              flexDirection: isSplash ? "column" : "row",
               alignItems: "center",
-              justifyContent: isSplash ? "center" : "flex-end",
-              gap: isSplash ? 20 : 12,
+              justifyContent: isSplash ? "center" : "space-between",
+              gap: isSplash ? 20 : 0,
             }}
-            transition={collapseTr}
+            transition={{ duration: 0.6, ease: easing }}
             style={{ display: "flex" }}
           >
-            {/* Icon circle */}
+            {/* Icon */}
             <motion.div
               animate={{
                 width: isSplash ? 96 : 48,
                 height: isSplash ? 96 : 48,
-                scale: phase === "enter" ? 0 : 1,
-                opacity: phase === "enter" ? 0 : 1,
+                opacity: phase >= 2 ? 1 : 0,
+                scale: phase >= 2 ? 1 : 0.3,
               }}
               transition={
-                phase === "splash"
-                  ? { type: "spring", stiffness: 280, damping: 20, delay: 0.25 }
-                  : collapseTr
+                phase === 2
+                  ? { type: "spring", stiffness: 300, damping: 22 }
+                  : { duration: 0.6, ease: easing }
               }
               className="rounded-full flex items-center justify-center flex-none"
               style={{ background: "rgba(255,255,255,0.2)" }}
             >
-              <AnimatedCircleCheck size={isSplash ? 56 : 28} />
+              {phase >= 2 && <AnimatedCircleCheck size={isSplash ? 56 : 28} />}
             </motion.div>
 
-            {/* Text */}
+            {/* Text — left side in settled (opposite icon which is on right in RTL) */}
             <motion.div
-              animate={{ textAlign: isSplash ? "center" : "right" }}
-              transition={collapseTr}
+              animate={{ opacity: phase >= 2 ? 1 : 0, y: phase >= 2 ? 0 : 16 }}
+              transition={phase === 2 ? { duration: 0.4, ease: easing, delay: 0.15 } : { duration: 0.5, ease: easing }}
+              style={{ textAlign: isSplash ? "center" : "left" }}
             >
               <motion.h2
                 className="font-bold text-white leading-tight"
-                animate={{
-                  fontSize: isSplash ? "2rem" : "1.5rem",
-                  opacity: phase === "enter" ? 0 : 1,
-                  y: phase === "enter" ? 20 : 0,
-                }}
-                transition={
-                  phase === "splash"
-                    ? { duration: 0.45, ease: easing, delay: 0.4 }
-                    : collapseTr
-                }
+                animate={{ fontSize: isSplash ? "2rem" : "1.4rem" }}
+                transition={{ duration: 0.6, ease: easing }}
               >
                 הוזמן בהצלחה!
               </motion.h2>
               <motion.p
                 className="text-sm mt-1"
                 style={{ color: "rgba(255,255,255,0.75)" }}
-                animate={{ opacity: phase === "enter" ? 0 : 1 }}
-                transition={{ duration: 0.4, delay: phase === "splash" ? 0.65 : 0 }}
+                animate={{ opacity: phase >= 2 ? 1 : 0 }}
+                transition={{ duration: 0.4, delay: phase === 2 ? 0.3 : 0 }}
               >
                 {duration} · {dayLbl} {fromStr}–{toStr}
               </motion.p>
@@ -308,13 +307,13 @@ export default function BookingSuccessScreen({
         </motion.div>
       </motion.div>
 
-      {/* ── Content — revealed after transition ── */}
+      {/* ── Page content — revealed on phase 3 ── */}
       <motion.div
         className="flex-1 overflow-y-auto px-5 py-4 space-y-3"
         style={{ paddingBottom: "calc(80px + 1.5rem)" }}
-        initial={{ opacity: 0, y: 30 }}
-        animate={phase === "settled" ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-        transition={{ duration: 0.45, ease: "easeOut", delay: 0.2 }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={phase === 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+        transition={{ duration: 0.45, ease: "easeOut", delay: 0.25 }}
       >
         {/* Parking details card */}
         {hasSlots && (
@@ -370,7 +369,7 @@ export default function BookingSuccessScreen({
         {/* Thank you CTA */}
         {hasSlots && (
           <div className="app-card overflow-hidden">
-            <div className="px-4 pt-4 pb-3" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+            <div className="px-4 pt-4 pb-3 text-center" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
               <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                 שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ
               </p>
@@ -381,10 +380,11 @@ export default function BookingSuccessScreen({
             <div className="px-4 py-3">
               <button
                 onClick={() => { setSheetIndex(0); setSheetOpen(true); }}
-                className="w-full py-3.5 rounded-2xl font-bold text-white"
-                style={{ background: "var(--hanoo-blue)" }}
+                className="w-full py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
+                style={{ background: "#25D366" }}
               >
-                שלח תודה
+                <WhatsAppIcon size={20} />
+                שלח תודה בוואטסאפ
               </button>
             </div>
           </div>
