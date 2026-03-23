@@ -289,9 +289,9 @@ export default function BookingSuccessScreen({
               <button
                 onClick={onBack}
                 className="w-10 h-10 flex items-center justify-center rounded-full flex-none"
-                style={{ background: "rgba(255,255,255,0.2)" }}
+                style={{ background: "rgba(255,255,255,0.2)", width: 40, height: 40 }}
               >
-                <X size={18} className="text-white" />
+                <X size={16} className="text-white" />
               </button>
 
               {/* Center: title + subtitle */}
