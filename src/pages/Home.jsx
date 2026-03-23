@@ -164,18 +164,10 @@ export default function Home() {
 
       if (validBookings.length > 0) setActiveBooking(validBookings[0]);
 
-      // Show summary sheet for expired booking (only once per session)
-      if (expiredBookings.length > 0) {
-        const seenKey = `past_booking_seen_${expiredBookings[0].id}`;
-        if (!sessionStorage.getItem(seenKey)) {
-          sessionStorage.setItem(seenKey, "1");
-          setPastBookingSummary(expiredBookings[0]);
-        }
-        // Mark expired bookings as completed in background
-        expiredBookings.forEach(b => {
-          base44.entities.Booking.update(b.id, { status: "completed" }).catch(() => {});
-        });
-      }
+      // Mark expired bookings as completed in background
+      expiredBookings.forEach(b => {
+        base44.entities.Booking.update(b.id, { status: "completed" }).catch(() => {});
+      });
 
       // Animate credits counter
       const targetCredits = r.credits || 0;
