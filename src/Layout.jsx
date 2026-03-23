@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Home, Car, CalendarDays, User, ParkingSquare } from "lucide-react";
+import { Home, Search, User, ParkingSquare } from "lucide-react";
 import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAppNavigation } from "@/lib/NavigationContext";
