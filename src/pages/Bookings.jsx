@@ -178,17 +178,33 @@ export default function Bookings() {
           </div>
         )}
         {upcoming.length === 0 && past.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-5xl mb-3">🅿️</div>
-            <p className="font-medium" style={{ color: "var(--text-secondary)" }}>אין הזמנות עדיין</p>
+          <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+            <img
+              src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/1c0461427_ChatGPTImageMar23202611_25_48AM.png"
+              alt="אין הזמנות"
+              className="w-56 h-56 object-contain mb-2"
+            />
+            <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>עדיין אין לך הזמנות</h2>
+            <p className="text-sm mb-6" style={{ color: "var(--text-secondary)" }}>
+              כשתזמין חניה, כל ההזמנות שלך ייפיעו כאן מחר.
+            </p>
             {tab === "mine" && (
-              <button
-                onClick={() => navigate("/FindParking")}
-                className="mt-4 px-6 py-3 rounded-2xl font-bold text-white text-sm"
-                style={{ background: "var(--hanoo-blue)" }}
-              >
-                הזמן חניה +
-              </button>
+              <>
+                <button
+                  onClick={() => navigate("/FindParking")}
+                  className="w-full py-4 rounded-2xl font-bold text-white text-base mb-3"
+                  style={{ background: "var(--hanoo-blue)" }}
+                >
+                  מצא חניה עכשיו
+                </button>
+                <button
+                  onClick={() => navigate("/")}
+                  className="text-sm font-medium"
+                  style={{ color: "var(--hanoo-blue)" }}
+                >
+                  איך זה עובד?
+                </button>
+              </>
             )}
           </div>
         )}
