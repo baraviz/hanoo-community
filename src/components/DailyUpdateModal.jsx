@@ -90,9 +90,20 @@ export default function DailyUpdateModal({ user, resident }) {
       aria-modal="true"
       aria-labelledby="daily-modal-title"
       className="fixed inset-0 z-50 flex items-end justify-center"
-      style={{ background: "rgba(0,0,0,0.45)" }}
+      style={{ background: "rgba(0,0,0,0.45)", animation: closing ? "fadeOut 0.26s ease-in forwards" : "fadeIn 0.26s ease-out" }}
+      onClick={dismiss}
     >
-      <div className="rounded-t-3xl w-full p-6 max-w-[430px]" style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)" }}>
+      <style>{`
+        @keyframes slideUp   { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slideDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
+        @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut   { from { opacity: 1; } to { opacity: 0; } }
+      `}</style>
+      <div
+        className="rounded-t-3xl w-full p-6 max-w-[430px]"
+        style={{ background: "var(--sheet-bg)", paddingBottom: "calc(80px + 1.5rem)", animation: closing ? "slideDown 0.26s ease-in forwards" : "slideUp 0.26s ease-out" }}
+        onClick={e => e.stopPropagation()}
+      >
         {/* Handle */}
         <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "var(--sheet-handle)" }} />
         {/* Header */}
