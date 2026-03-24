@@ -62,9 +62,16 @@ export default function DailyUpdateModal({ user, resident }) {
     setShow(true);
   }
 
+  const navigate = useNavigate();
+
   function dismiss() {
     localStorage.setItem(LAST_SEEN_KEY, new Date().toDateString());
     setShow(false);
+  }
+
+  function goTo(path) {
+    dismiss();
+    navigate(path);
   }
 
   if (!show || !data) return null;
