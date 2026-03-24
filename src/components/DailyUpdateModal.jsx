@@ -133,21 +133,21 @@ export default function DailyUpdateModal({ user, resident }) {
                   );
                 })}
               </div>
-              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+              <ChevronLeft size={18} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
             </button>
           )}
 
           {/* Completed bookings */}
           {data.completedToday.length > 0 && (
             <button onClick={() => goTo("/Bookings")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
-              <Car size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+              <Car size={20} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
                   {data.completedToday.length === 1 ? "הזמנה אחת הושלמה" : `${data.completedToday.length} הזמנות הושלמו`}
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>+{data.completedToday.length * 5} נקודות נצברו</p>
               </div>
-              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+              <ChevronLeft size={18} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
             </button>
           )}
 
@@ -168,7 +168,7 @@ export default function DailyUpdateModal({ user, resident }) {
                   <p key={i} className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>זמינה עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
                 ))}
               </div>
-              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+              <ChevronLeft size={18} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
             </button>
           )}
         </div>
