@@ -100,18 +100,18 @@ export default function DailyUpdateModal({ user, resident }) {
 
         <div className="space-y-3">
           {/* Points & League */}
-          <div className="flex items-center gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+          <button onClick={() => goTo("/Profile")} className="w-full flex items-center gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
             <span className="text-2xl">{leagueIcon}</span>
             <div className="flex-1">
               <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>ליגת {data.league}</p>
               <p className="text-xs" style={{ color: "var(--text-secondary)" }}>יש לך {data.points} נקודות</p>
             </div>
-            <Star size={18} style={{ color: "var(--hanoo-blue)" }} />
-          </div>
+            <ChevronLeft size={18} style={{ color: "var(--hanoo-blue)" }} />
+          </button>
 
           {/* Bookings received today */}
           {data.receivedToday.length > 0 && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+            <button onClick={() => goTo("/Bookings")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
               <span className="text-2xl mt-0.5">🎉</span>
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
@@ -133,12 +133,13 @@ export default function DailyUpdateModal({ user, resident }) {
                   );
                 })}
               </div>
-            </div>
+              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+            </button>
           )}
 
           {/* Completed bookings */}
           {data.completedToday.length > 0 && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+            <button onClick={() => goTo("/Bookings")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
               <Car size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
@@ -146,12 +147,13 @@ export default function DailyUpdateModal({ user, resident }) {
                 </p>
                 <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>+{data.completedToday.length * 5} נקודות נצברו</p>
               </div>
-            </div>
+              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+            </button>
           )}
 
           {/* Today's availability */}
           {(data.recurringToday.length > 0 || data.tempToday.length > 0) && (
-            <div className="flex items-start gap-3 p-3 rounded-2xl" style={{ background: "var(--hanoo-blue-light)" }}>
+            <button onClick={() => goTo("/MyParking")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
               <ParkingSquare size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>החניה שלך היום</p>
@@ -166,7 +168,8 @@ export default function DailyUpdateModal({ user, resident }) {
                   <p key={i} className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>זמינה עד {format(new Date(s.end_at), "HH:mm")} (חד פעמי)</p>
                 ))}
               </div>
-            </div>
+              <ChevronLeft size={18} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+            </button>
           )}
         </div>
 
