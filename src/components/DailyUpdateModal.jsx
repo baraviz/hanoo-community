@@ -64,14 +64,20 @@ export default function DailyUpdateModal({ user, resident }) {
 
   const navigate = useNavigate();
 
+  const [closing, setClosing] = useState(false);
+
   function dismiss() {
-    localStorage.setItem(LAST_SEEN_KEY, new Date().toDateString());
-    setShow(false);
+    setClosing(true);
+    setTimeout(() => {
+      localStorage.setItem(LAST_SEEN_KEY, new Date().toDateString());
+      setShow(false);
+      setClosing(false);
+    }, 260);
   }
 
   function goTo(path) {
     dismiss();
-    navigate(path);
+    setTimeout(() => navigate(path), 260);
   }
 
   if (!show || !data) return null;
