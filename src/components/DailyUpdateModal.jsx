@@ -153,8 +153,8 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Today's availability */}
           {(data.recurringToday.length > 0 || data.tempToday.length > 0) && (
-            <button onClick={() => goTo("/MyParking")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
-              <ParkingSquare size={20} className="mt-0.5 flex-none" style={{ color: "var(--hanoo-blue)" }} />
+            <button onClick={() => goTo("/MyParking")} className="w-full flex items-center gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
+              <ParkingSquare size={20} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>החניה שלך היום</p>
                 {data.recurringToday.map((s, i) => {
