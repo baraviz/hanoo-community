@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { X, Star, Car, ParkingSquare } from "lucide-react";
+import { X, Car, ParkingSquare, ChevronLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { format, startOfDay, isToday } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const LAST_SEEN_KEY = "hanoo_daily_modal_date";
 
