@@ -603,7 +603,14 @@ export default function Home() {
           return (
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
-                <div></div>
+                <div className="text-right">
+                  {resident?.parking_spot && (
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+                      חניה {resident.parking_spot}
+                      {resident.parking_floor ? ` · קומה ${resident.parking_floor}` : ""}
+                    </p>
+                  )}
+                </div>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
                   style={{ background: available ? "var(--hanoo-green-light)" : "var(--hanoo-red-light)", color: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }}>
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }} />
