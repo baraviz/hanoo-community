@@ -51,13 +51,15 @@ export default function AgentOnboarding({ onClose }) {
     }, 230);
   }
 
-  function saveContact() {
+function saveContact() {
   const vcard = [
     "BEGIN:VCARD",
     "VERSION:3.0",
-    "FN;CHARSET=UTF-8:Hanoo Bot - עוזר חניה חכם",
-    "N;CHARSET=UTF-8:Bot;Hanoo;;;",
-    `TEL;TYPE=CELL:${WHATSAPP_BOT_PHONE}`,
+    "FN;CHARSET=UTF-8:חנו בוט – עוזר חניה חכם",
+    "N;CHARSET=UTF-8:בוט;חנו;;;",
+    "ORG;CHARSET=UTF-8:Hanoo",
+    `item1.TEL;TYPE=CELL:${WHATSAPP_BOT_PHONE}`,
+    "item1.X-ABLabel:mobile",
     "END:VCARD",
   ].join("\r\n");
 
