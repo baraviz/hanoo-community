@@ -376,6 +376,7 @@ export default function MyParking() {
                       return bsDay === dayIndex && bsStart < b.end && bsEnd > b.start;
                     });
                     const blockEndTime = activeBlock ? fmt(new Date(activeBlock.end_at).getHours() * 60 + new Date(activeBlock.end_at).getMinutes()) : null;
+                    const blockStatus = activeBooking ? "תפוס" : blockEndTime ? "חסום" : "זמין";
                     // Find active booking overlapping this recurring slot (today or any future date matching day)
                     const activeBooking = activeBookings.find(bk => {
                       const bkDay = new Date(bk.start_time).getDay();
@@ -383,7 +384,6 @@ export default function MyParking() {
                       const bkEndMins = new Date(bk.end_time).getHours() * 60 + new Date(bk.end_time).getMinutes();
                       return bkDay === dayIndex && bkStartMins < b.end && bkEndMins > b.start;
                     });
-                    const blockStatus = activeBooking ? "תפוס" : blockEndTime ? "חסום" : "זמין";
                     return (
                      <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "var(--hanoo-orange-light)" } : {}} role="listitem" aria-label={`זמינות ${fmt(b.start)}–${fmt(b.end)}, ${blockStatus}${activeBooking ? ` של ${activeBooking.renter_name}` : ""}`}>
                        <div className="flex items-center gap-2">
@@ -532,7 +532,7 @@ export default function MyParking() {
                 <div
                   key={i}
                   className="absolute left-0 right-0 pointer-events-none"
-                  style={{ borderTop: "1px solid rgba(156,163,175,0.3)", top: `${(i / HOURS) * 100}%` }}
+                  style={{ borderTop: "1px solid var(--surface-card-border)", top: `${(i / HOURS) * 100}%` }}
                 />
               ))}
 

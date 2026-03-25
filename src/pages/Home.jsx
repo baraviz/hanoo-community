@@ -727,12 +727,12 @@ export default function Home() {
                 </button>
               )}
             </div>
-            );
-            })()}
-            </div>
-            )}
-            </div>
-            </PullToRefreshWrapper>
-            </div>
-            );
-            }
+          );
+           })()}
+          </div>
+          )}
+          </div>
+          </PullToRefreshWrapper>
+          </div>
+          );
+          }
