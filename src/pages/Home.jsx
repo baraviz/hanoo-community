@@ -591,14 +591,15 @@ export default function Home() {
           <div>
             <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>החניה שלי</h3>
             {(() => {
+          const now = new Date();
+          const bookedNow = activeOwnerBookings.find(b => new Date(b.start_time) <= now && new Date(b.end_time) > now);
           const available = isAvailableNow();
           const nextText = !available ? getNextAvailableText() : null;
           let activeUntil = null;
           if (available) {
-            if (myActiveSlot && new Date(myActiveSlot.start_at) <= new Date()) {
+            if (myActiveSlot && new Date(myActiveSlot.start_at) <= now) {
               activeUntil = format(parseISO(myActiveSlot.end_at), "HH:mm");
             } else {
-              const now = new Date();
               const dayOfWeek = now.getDay();
               const minutes = now.getHours() * 60 + now.getMinutes();
               const rec = recurringSlots.find(s => s.days_of_week?.includes(dayOfWeek) && s.time_start <= minutes && s.time_end > minutes);
@@ -608,6 +609,25 @@ export default function Home() {
               }
             }
           }
+
+          let badgeBg, badgeColor, badgeDot, badgeLabel;
+          if (bookedNow) {
+            badgeBg = "var(--hanoo-red-light)";
+            badgeColor = "var(--hanoo-red)";
+            badgeDot = "var(--hanoo-red)";
+            badgeLabel = "מוזמנת כעת";
+          } else if (available) {
+            badgeBg = "var(--hanoo-green-light)";
+            badgeColor = "var(--hanoo-green)";
+            badgeDot = "var(--hanoo-green)";
+            badgeLabel = "זמינה כעת";
+          } else {
+            badgeBg = "#F3F4F6";
+            badgeColor = "var(--text-secondary)";
+            badgeDot = "var(--text-tertiary)";
+            badgeLabel = "לא זמינה כעת";
+          }
+
           return (
             <div className="card p-4">
               <div className="flex items-center justify-between mb-3">
@@ -620,26 +640,31 @@ export default function Home() {
                   )}
                 </div>
                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
-                  style={{ background: available ? "var(--hanoo-green-light)" : "var(--hanoo-red-light)", color: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }}>
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: available ? "var(--hanoo-green)" : "var(--hanoo-red)" }} />
-                  {available ? "זמינה כעת" : "לא זמינה כעת"}
+                  style={{ background: badgeBg, color: badgeColor }}>
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: badgeDot }} />
+                  {badgeLabel}
                 </div>
               </div>
-              {available && activeUntil && (
+              {bookedNow && (
+                <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>
+                  מוזמנת ע״י {bookedNow.renter_name} עד {format(parseISO(bookedNow.end_time), "HH:mm")}
+                </p>
+              )}
+              {!bookedNow && available && activeUntil && (
                 <p className="text-sm mb-3" style={{ color: "var(--text-secondary)" }}>זמין עד {activeUntil}</p>
               )}
-              {!available && nextText && (
+              {!bookedNow && !available && nextText && (
                 <p className="text-sm mb-3" style={{ color: "var(--text-tertiary)" }}>{nextText}</p>
               )}
               <button
-                onClick={() => { setBlockUntilHour(null); const opts = (() => { const now = new Date(); const cur = now.getHours() * 60 + now.getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
-                disabled={removingSlot}
+                onClick={() => { setBlockUntilHour(null); const opts = (() => { const cur = new Date().getHours() * 60 + new Date().getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
+                disabled={removingSlot || !!bookedNow}
                 className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
-                style={{ background: available ? "var(--hanoo-red-light)" : "var(--hanoo-blue-light)", color: available ? "var(--hanoo-red)" : "var(--hanoo-blue)", opacity: removingSlot ? 0.6 : 1 }}
+                style={{ background: available && !bookedNow ? "var(--hanoo-red-light)" : "var(--hanoo-blue-light)", color: available && !bookedNow ? "var(--hanoo-red)" : "var(--hanoo-blue)", opacity: removingSlot || bookedNow ? 0.4 : 1 }}
               >
                 {removingSlot
                   ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
-                  : available ? "השבת זמינות" : "הפוך את החניה לזמינה"}
+                  : available && !bookedNow ? "השבת זמינות" : bookedNow ? "מוזמנת כעת" : "הפוך את החניה לזמינה"}
               </button>
             </div>
           );
