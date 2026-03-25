@@ -99,11 +99,11 @@ export default function SideMenu({ onClose }) {
             target="_blank"
             rel="noopener noreferrer"
             className="w-full flex items-center justify-end gap-3 px-5 py-3 transition-colors text-right"
-            style={{ color: "#25D366" }}
+            style={{ color: "var(--text-primary)" }}
             onMouseEnter={e => e.currentTarget.style.background = "var(--btn-secondary-bg)"}
             onMouseLeave={e => e.currentTarget.style.background = "transparent"}
           >
-            <span className="font-bold text-sm">סוכן WhatsApp</span>
+            <span className="font-medium text-sm">סוכן WhatsApp</span>
             <WhatsAppIcon size={17} />
           </a>
         </div>
