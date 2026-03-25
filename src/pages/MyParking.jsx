@@ -531,8 +531,8 @@ export default function MyParking() {
               {Array.from({ length: HOURS + 1 }).map((_, i) => (
                 <div
                   key={i}
-                  className="absolute left-0 right-0 pointer-events-none" style={{ borderTop: "1px solid var(--surface-card-border)" }}
-                  style={{ top: `${(i / HOURS) * 100}%` }}
+                  className="absolute left-0 right-0 pointer-events-none"
+                  style={{ borderTop: "1px solid var(--surface-card-border)", top: `${(i / HOURS) * 100}%` }}
                 />
               ))}
 
