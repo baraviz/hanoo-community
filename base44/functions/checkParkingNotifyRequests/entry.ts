@@ -94,7 +94,7 @@ Deno.serve(async (req) => {
         body: `יש חניה זמינה בדיוק בשעות שביקשת: ${fromStr} עד ${toStr}. לחץ להזמנה מיידית!`,
         type: "booking_received",
         read: false,
-        action_url: appUrl,
+        action_url: `/FindParking?from=${encodeURIComponent(reqFrom.toISOString())}&to=${encodeURIComponent(reqTo.toISOString())}`,
       }).catch(e => console.error("notification error:", e));
 
       // SMS
