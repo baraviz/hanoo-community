@@ -4,6 +4,11 @@ async function sendSms(phone, message, apiKey) {
   const phoneClean = phone.replace(/\D/g, "");
   const phoneFormatted = phoneClean.startsWith("0") ? "972" + phoneClean.slice(1) : phoneClean;
 
+  // If apiKey contains ":" it's username:token — encode to Base64. Otherwise use as-is.
+  const credential = apiKey.includes(":") 
+    ? btoa(apiKey) 
+    : apiKey;
+
   const body = JSON.stringify({
     Data: {
       Message: message,
@@ -19,7 +24,7 @@ async function sendSms(phone, message, apiKey) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Basic ${apiKey}`,
+      "Authorization": `Basic ${credential}`,
     },
     body,
   });
