@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 
-const WHATSAPP_BOT_PHONE = "972XXXXXXXXX"; // יש להחליף במספר הבוט
+const WHATSAPP_BOT_PHONE = "16186212393";
 
 // 4 slides: intro, examples, contact, activate
 const SLIDES = ["intro", "examples", "contact", "activate"];
@@ -52,7 +52,7 @@ export default function AgentOnboarding({ onClose }) {
   }
 
   function saveContact() {
-    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hanoo Bot 🤖\nTEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}\nEND:VCARD`;
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hanoo Bot - עוזר חניה חכם\nTEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}\nEND:VCARD`;
     const blob = new Blob([vcard], { type: "text/vcard" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

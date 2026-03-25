@@ -13,7 +13,7 @@ function WhatsAppIcon({ size = 17 }) {
 import ThemeToggle from "@/components/ThemeToggle";
 import AgentOnboarding from "@/components/AgentOnboarding";
 
-const WHATSAPP_BOT_PHONE = "972XXXXXXXXX"; // אותו מספר כמו ב-AgentOnboarding
+const WHATSAPP_BOT_PHONE = "16186212393";
 
 export default function SideMenu({ onClose }) {
   const [closing, setClosing] = useState(false);
