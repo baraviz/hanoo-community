@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Search, Plus, Clock, Car, Gift, AlertTriangle, ParkingSquare, Menu, ChevronLeft } from "lucide-react";
+import { Search, Plus, Clock, Car, Gift, AlertTriangle, ParkingSquare, Menu, ChevronLeft, Phone } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
@@ -28,6 +28,7 @@ export default function Home() {
   const [blockUntilHour, setBlockUntilHour] = useState(null);
   const [activeBlocks, setActiveBlocks] = useState([]);
   const [activeOwnerBookings, setActiveOwnerBookings] = useState([]);
+  const [renterPhones, setRenterPhones] = useState({}); // email -> phone
   const [menuOpen, setMenuOpen] = useState(false);
   const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
   const [displayedCredits, setDisplayedCredits] = useState(0);
@@ -193,7 +194,18 @@ export default function Home() {
       }
       setRecurringSlots(recurring);
       setActiveBlocks(blocks.filter(b => new Date(b.end_at) > new Date()));
-      setActiveOwnerBookings(ownerBookings.filter(b => new Date(b.end_time) > new Date()));
+      const validOwnerBookings = ownerBookings.filter(b => new Date(b.end_time) > new Date());
+      setActiveOwnerBookings(validOwnerBookings);
+
+      // Fetch phones for renters with active bookings
+      const activeNow = validOwnerBookings.filter(b => new Date(b.start_time) <= new Date());
+      if (activeNow.length > 0) {
+        const renterEmails = [...new Set(activeNow.map(b => b.renter_email))];
+        const residents = await Promise.all(renterEmails.map(email => base44.entities.Resident.filter({ user_email: email })));
+        const phones = {};
+        renterEmails.forEach((email, i) => { if (residents[i]?.[0]?.phone) phones[email] = residents[i][0].phone; });
+        setRenterPhones(phones);
+      }
       // Show active temp slot (end_at in the future)
       const activeTemp = tempSlots.find(s => new Date(s.end_at) > new Date());
       if (activeTemp) setMyActiveSlot(activeTemp);
@@ -656,16 +668,32 @@ export default function Home() {
               {!bookedNow && !available && nextText && (
                 <p className="text-sm mb-3" style={{ color: "var(--text-tertiary)" }}>{nextText}</p>
               )}
-              <button
-                onClick={() => { setBlockUntilHour(null); const opts = (() => { const cur = new Date().getHours() * 60 + new Date().getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
-                disabled={removingSlot || !!bookedNow}
-                className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
-                style={{ background: available && !bookedNow ? "var(--hanoo-red-light)" : "var(--hanoo-blue-light)", color: available && !bookedNow ? "var(--hanoo-red)" : "var(--hanoo-blue)", opacity: removingSlot || bookedNow ? 0.4 : 1 }}
-              >
-                {removingSlot
-                  ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
-                  : available && !bookedNow ? "השבת זמינות" : bookedNow ? "מוזמנת כעת" : "הפוך את החניה לזמינה"}
-              </button>
+              {bookedNow ? (() => {
+                const phone = renterPhones[bookedNow.renter_email];
+                const firstName = (bookedNow.renter_name || "").split(" ")[0];
+                const phoneFormatted = phone ? phone.replace(/^0/, "+972") : null;
+                return (
+                  <a
+                    href={phoneFormatted ? `tel:${phoneFormatted}` : undefined}
+                    className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+                    style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)", opacity: phoneFormatted ? 1 : 0.5, pointerEvents: phoneFormatted ? "auto" : "none", textDecoration: "none" }}
+                  >
+                    <Phone size={16} />
+                    התקשר אל {firstName}
+                  </a>
+                );
+              })() : (
+                <button
+                  onClick={() => { setBlockUntilHour(null); const opts = (() => { const cur = new Date().getHours() * 60 + new Date().getMinutes(); const o = []; let t = Math.ceil((cur + 1) / 15) * 15; while (t <= 24 * 60) { o.push(t); t += 15; } return o; })(); setAvailUntilMinutes(opts[0] ?? null); setShowStatusDrawer(true); }}
+                  disabled={removingSlot}
+                  className="w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2"
+                  style={{ background: available ? "var(--hanoo-red-light)" : "var(--hanoo-blue-light)", color: available ? "var(--hanoo-red)" : "var(--hanoo-blue)", opacity: removingSlot ? 0.6 : 1 }}
+                >
+                  {removingSlot
+                    ? <><div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" />טוען...</>
+                    : available ? "השבת זמינות" : "הפוך את החניה לזמינה"}
+                </button>
+              )}
             </div>
           );
            })()}
