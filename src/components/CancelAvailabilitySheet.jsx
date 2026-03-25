@@ -77,11 +77,21 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
       read: false,
     }).catch(() => {});
 
-    // SMS to renter
+    // SMS to renter via sendSmsInforU
     if (phone) {
       const appUrl = `${window.location.origin}${findParkingUrl}`;
       const smsText = `הזמנת החניה שלך בוטלה ❌\n\n📅 ${dateFmt}\n⏰ בשעה ${startFmt}–${endFmt}\n\nלמציאת חניה חלופית:\n${appUrl}`;
       await base44.functions.invoke("sendSmsInforU", { phone, message: smsText }).catch(() => {});
+    }
+
+    // Award 5 points to owner for notifying via WhatsApp
+    const ownerRes = await base44.entities.Resident.filter({ user_email: ownerEmail });
+    if (ownerRes.length > 0) {
+      await base44.functions.invoke("awardPoints", {
+        resident_id: ownerRes[0].id,
+        reason: "booking_cancellation_notification",
+        points: 5,
+      }).catch(() => {});
     }
 
     // Award 5 points to owner for notifying

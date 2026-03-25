@@ -1,6 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 const INFORU_API_KEY = Deno.env.get("INFORU_API_KEY");
+const APP_ID = Deno.env.get("BASE44_APP_ID");
 
 async function sendSms(phone, message) {
   if (!phone || !INFORU_API_KEY) return;
@@ -45,7 +46,8 @@ Deno.serve(async (req) => {
     if (ownerPhone) {
       const startFmt = formatTime(booking.start_time);
       const endFmt = formatTimeOnly(booking.end_time);
-      const smsText = `הי! החניה שלך (#${booking.spot_number || "?"}) הוזמנה ע"י ${booking.renter_name || "שכן"}\n📅 ${startFmt}–${endFmt}\n\nHanoo 🅿️`;
+      const appUrl = `https://${APP_ID}.base44.app/BookingDetails/${booking.id}`;
+      const smsText = `החניה שלך הוזמנה! 🎉\n\n🅿️ חניה #${booking.spot_number || "?"}\n👤 ע"י ${booking.renter_name || "שכן"}\n📅 ${startFmt}–${endFmt}\n\nלפרטים:\n${appUrl}`;
       await sendSms(ownerPhone, smsText);
     }
 

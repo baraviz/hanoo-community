@@ -167,6 +167,13 @@ Deno.serve(async (req) => {
             read: false,
             action_url: `/BookingDetails/${booking.id}`,
           });
+
+          // SMS to owner
+          const ownerPhone = residentByEmail[booking.owner_email]?.phone;
+          if (ownerPhone && apiKey) {
+            const sms = `החניה שלך חוזרת בקרוב! 🅿️\n\n${booking.renter_name || "שכן"} מסיים את השימוש בחניה #${spotNumber}\n📅 ${dateLabel}\n⏰ ב-${endStr}\n\nלפרטים:\n${endUrl}`;
+            await sendSms(ownerPhone, sms, apiKey).catch(e => console.error("SMS owner end:", e));
+          }
         }
       }
     }
