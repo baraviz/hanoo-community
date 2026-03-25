@@ -11,7 +11,7 @@ function WhatsAppIcon({ size = 17 }) {
   );
 }
 import ThemeToggle from "@/components/ThemeToggle";
-import WhatsAppAgentSheet from "@/components/WhatsAppAgentSheet";
+import AgentOnboarding from "@/components/AgentOnboarding";
 
 export default function SideMenu({ onClose }) {
   const [closing, setClosing] = useState(false);
@@ -108,7 +108,7 @@ export default function SideMenu({ onClose }) {
           </button>
 
           {showAgentSheet && (
-            <WhatsAppAgentSheet onClose={() => setShowAgentSheet(false)} />
+            <AgentOnboarding onClose={() => setShowAgentSheet(false)} />
           )}
         </div>
 
