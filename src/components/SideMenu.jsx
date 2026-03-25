@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, LogOut, AlertTriangle, Shield, FileText, Accessibility, CalendarDays } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import ThemeToggle from "@/components/ThemeToggle";
+import AgentOnboarding from "@/components/AgentOnboarding";
 
 function WhatsAppIcon({ size = 17 }) {
   return (
@@ -10,8 +12,6 @@ function WhatsAppIcon({ size = 17 }) {
     </svg>
   );
 }
-import ThemeToggle from "@/components/ThemeToggle";
-import AgentOnboarding from "@/components/AgentOnboarding";
 
 const WHATSAPP_BOT_PHONE = "16186212393";
 
