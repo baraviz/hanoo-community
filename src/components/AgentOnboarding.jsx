@@ -74,7 +74,6 @@ function saveContact() {
   URL.revokeObjectURL(url);
   setContactSaved(true);
 }
-
   const anim = closing
     ? { backdrop: "fadeOut 0.23s ease-in forwards", sheet: "slideDown 0.23s ease-in forwards" }
     : { backdrop: "fadeIn 0.23s ease-out", sheet: "slideUp 0.23s ease-out" };
