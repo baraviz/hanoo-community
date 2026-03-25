@@ -181,9 +181,7 @@ export default function PublicBookingView() {
             Hanoo עוזרת לשכנים להשתף מקומות חניה בקלות. הרשמו היום!
           </p>
           <a
-            href="https://hanoo.co.il/register"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/Onboarding"
             className="block w-full py-2.5 rounded-2xl font-bold text-white text-center flex items-center justify-center gap-2"
             style={{ background: "var(--hanoo-blue)" }}
           >
