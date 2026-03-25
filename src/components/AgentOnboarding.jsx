@@ -43,6 +43,7 @@ export default function AgentOnboarding({ onClose }) {
   }
 
   function openWhatsApp() {
+    localStorage.setItem("hanoo_agent_activated", "1");
     setClosing(true);
     setTimeout(() => {
       onClose();

@@ -13,9 +13,12 @@ function WhatsAppIcon({ size = 17 }) {
 import ThemeToggle from "@/components/ThemeToggle";
 import AgentOnboarding from "@/components/AgentOnboarding";
 
+const WHATSAPP_BOT_PHONE = "972XXXXXXXXX"; // אותו מספר כמו ב-AgentOnboarding
+
 export default function SideMenu({ onClose }) {
   const [closing, setClosing] = useState(false);
   const [showAgentSheet, setShowAgentSheet] = useState(false);
+  const agentActivated = localStorage.getItem("hanoo_agent_activated") === "1";
   const navigate = useNavigate();
 
   function close() {
@@ -97,13 +100,29 @@ export default function SideMenu({ onClose }) {
             <div className="h-px" style={{ background: "var(--surface-card-border)" }} />
           </div>
           <button
-            onClick={() => setShowAgentSheet(true)}
+            onClick={() => {
+              if (agentActivated) {
+                window.open(`https://wa.me/${WHATSAPP_BOT_PHONE}`, "_blank");
+              } else {
+                setShowAgentSheet(true);
+              }
+            }}
             className="w-full flex items-center justify-end gap-3 px-5 py-3 transition-colors text-right"
             style={{ color: "var(--text-primary)", background: "transparent", border: "none" }}
             onMouseEnter={e => e.currentTarget.style.background = "var(--btn-secondary-bg)"}
             onMouseLeave={e => e.currentTarget.style.background = "transparent"}
           >
-            <span className="font-medium text-sm">סוכן WhatsApp</span>
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-sm">סוכן WhatsApp</span>
+              {agentActivated && (
+                <span
+                  className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+                  style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}
+                >
+                  הופעל
+                </span>
+              )}
+            </div>
             <WhatsAppIcon size={17} />
           </button>
 
