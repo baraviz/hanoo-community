@@ -29,8 +29,8 @@ export default function PublicBookingView() {
       const bookingId = atob(token);
       
       const [bookings, buildings] = await Promise.all([
-        base44.asServiceRole.entities.Booking.filter({ id: bookingId }),
-        base44.asServiceRole.entities.Building.list(),
+        base44.entities.Booking.filter({ id: bookingId }),
+        base44.entities.Building.list(),
       ]);
 
       if (bookings.length === 0) {
