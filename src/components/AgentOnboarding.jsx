@@ -52,8 +52,14 @@ export default function AgentOnboarding({ onClose }) {
   }
 
   function saveContact() {
-    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hanoo Bot - עוזר חניה חכם\nTEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}\nEND:VCARD`;
-    const blob = new Blob([vcard], { type: "text/vcard" });
+    const vcard = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      "FN:Hanoo Bot - עוזר חניה חכם",
+      `TEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}`,
+      "END:VCARD",
+    ].join("\r\n");
+    const blob = new Blob([vcard], { type: "text/x-vcard;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
