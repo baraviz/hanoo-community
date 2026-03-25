@@ -3,37 +3,8 @@ import { base44 } from "@/api/base44Client";
 
 const WHATSAPP_BOT_PHONE = "972XXXXXXXXX"; // יש להחליף במספר הבוט
 
-const slides = [
-  {
-    image: "https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/9132fa191_ChatGPTImageMar25202602_32_52PM1.png",
-    title: "היי, אני הבוט של Hanoo 👋",
-    subtitle: "עוזר החניה החכם שלך בוואטסאפ",
-    description: "אני זמין 24/7 ויכול לעזור לך לנהל את החניה שלך ישירות מהוואטסאפ — בלי לפתוח את האפליקציה.",
-    action: null,
-  },
-  {
-    image: null,
-    emoji: "💬",
-    title: "מה אני יכול לעשות?",
-    subtitle: null,
-    description: null,
-    examples: [
-      { emoji: "🔍", text: "מה הזמנות הפעילות שלי?" },
-      { emoji: "📅", text: "הזמן לי חניה מחר מ-9 עד 11" },
-      { emoji: "❌", text: "בטל לי את ההזמנה להיום" },
-      { emoji: "🅿️", text: "יש חניה פנויה ב-8 בבוקר?" },
-    ],
-    action: null,
-  },
-  {
-    image: null,
-    emoji: "📱",
-    title: "שמור אותי באנשי קשר",
-    subtitle: "כדי שתמיד תדע עם מי אתה מדבר",
-    description: 'שמור אותי בשם "Hanoo Bot 🤖" כדי שההודעות שלי יגיעו בצורה ברורה ומזוהה.',
-    action: "contact",
-  },
-];
+// 4 slides: intro, examples, contact, activate
+const SLIDES = ["intro", "examples", "contact", "activate"];
 
 function WhatsAppIcon({ size = 20 }) {
   return (
@@ -43,13 +14,20 @@ function WhatsAppIcon({ size = 20 }) {
   );
 }
 
+const examples = [
+  { emoji: "🔍", text: "מה הזמנות הפעילות שלי?" },
+  { emoji: "📅", text: "הזמן לי חניה מחר מ-9 עד 11" },
+  { emoji: "❌", text: "בטל לי את ההזמנה להיום" },
+  { emoji: "🅿️", text: "יש חניה פנויה ב-8 בבוקר?" },
+];
+
 export default function AgentOnboarding({ onClose }) {
   const [step, setStep] = useState(0);
   const [closing, setClosing] = useState(false);
   const [contactSaved, setContactSaved] = useState(false);
 
-  const isLast = step === slides.length - 1;
-  const slide = slides[step];
+  const slide = SLIDES[step];
+  const isLast = step === SLIDES.length - 1;
 
   function close() {
     setClosing(true);
@@ -58,19 +36,21 @@ export default function AgentOnboarding({ onClose }) {
 
   function next() {
     if (isLast) {
-      // open WhatsApp agent
-      setClosing(true);
-      setTimeout(() => {
-        onClose();
-        window.open(base44.agents.getWhatsAppConnectURL("parking_agent"), "_blank");
-      }, 230);
+      openWhatsApp();
     } else {
       setStep(s => s + 1);
     }
   }
 
+  function openWhatsApp() {
+    setClosing(true);
+    setTimeout(() => {
+      onClose();
+      window.open(base44.agents.getWhatsAppConnectURL("parking_agent"), "_blank");
+    }, 230);
+  }
+
   function saveContact() {
-    // vCard download
     const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:Hanoo Bot 🤖\nTEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}\nEND:VCARD`;
     const blob = new Blob([vcard], { type: "text/vcard" });
     const url = URL.createObjectURL(blob);
@@ -97,7 +77,7 @@ export default function AgentOnboarding({ onClose }) {
         @keyframes slideDown { from { transform: translateY(0); }   to { transform: translateY(100%); } }
         @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeOut   { from { opacity: 1; } to { opacity: 0; } }
-        @keyframes popIn     { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes popIn     { from { transform: scale(0.88); opacity: 0; } to { transform: scale(1); opacity: 1; } }
       `}</style>
 
       <div
@@ -115,8 +95,8 @@ export default function AgentOnboarding({ onClose }) {
         </div>
 
         {/* Dots */}
-        <div className="flex justify-center gap-2 mb-2">
-          {slides.map((_, i) => (
+        <div className="flex justify-center gap-2 mb-3">
+          {SLIDES.map((_, i) => (
             <div
               key={i}
               className="rounded-full transition-all duration-300"
@@ -130,110 +110,156 @@ export default function AgentOnboarding({ onClose }) {
         </div>
 
         {/* Slide content */}
-        <div className="px-6 pt-2 pb-4 text-center" key={step} style={{ animation: "popIn 0.3s ease-out" }}>
+        <div className="px-6 pb-4" key={step} style={{ animation: "popIn 0.3s ease-out" }}>
 
-          {/* Slide 0 — image */}
-          {slide.image && (
-            <img
-              src={slide.image}
-              alt="Hanoo Bot"
-              className="mx-auto mb-4 object-contain"
-              style={{ height: 200, width: "auto" }}
-            />
-          )}
-
-          {/* Slide 1 — examples */}
-          {slide.examples && (
-            <div className="space-y-2 mb-4 text-right">
-              {slide.examples.map((ex, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl"
-                  style={{ background: "var(--surface-page)", border: "1px solid var(--surface-card-border)" }}
-                >
-                  <span className="text-lg">{ex.emoji}</span>
-                  <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-                    "{ex.text}"
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Slide 2 — contact */}
-          {!slide.image && !slide.examples && (
-            <div
-              className="mx-auto mb-4 w-20 h-20 rounded-3xl flex items-center justify-center text-4xl"
-              style={{ background: "var(--hanoo-blue-light)" }}
-            >
-              {slide.emoji}
-            </div>
-          )}
-
-          {!slide.examples && (
-            <>
+          {/* ── Slide 0: Intro ── */}
+          {slide === "intro" && (
+            <div className="text-center">
+              <img
+                src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/9132fa191_ChatGPTImageMar25202602_32_52PM1.png"
+                alt="Hanoo Bot"
+                className="mx-auto mb-4 object-contain"
+                style={{ height: 200, width: "auto" }}
+              />
               <h2 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>
-                {slide.title}
+                היי, אני הבוט של Hanoo 👋
               </h2>
-              {slide.subtitle && (
-                <p className="text-sm font-medium mb-2" style={{ color: "var(--hanoo-blue)" }}>
-                  {slide.subtitle}
-                </p>
-              )}
-              {slide.description && (
-                <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-                  {slide.description}
-                </p>
-              )}
+              <p className="text-sm font-medium mb-2" style={{ color: "var(--hanoo-blue)" }}>
+                עוזר החניה החכם שלך בוואטסאפ
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                אני זמין 24/7 ויכול לעזור לך לנהל את החניה שלך ישירות מהוואטסאפ — בלי לפתוח את האפליקציה.
+              </p>
+            </div>
+          )}
+
+          {/* ── Slide 1: Examples ── */}
+          {slide === "examples" && (
+            <>
+              <h2 className="text-xl font-bold mb-3 text-center" style={{ color: "var(--text-primary)" }}>
+                מה אני יכול לעשות?
+              </h2>
+              <div className="space-y-2 text-right">
+                {examples.map((ex, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 px-4 py-3 rounded-2xl"
+                    style={{ background: "var(--surface-page)", border: "1px solid var(--surface-card-border)" }}
+                  >
+                    <span className="text-lg">{ex.emoji}</span>
+                    <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+                      "{ex.text}"
+                    </span>
+                  </div>
+                ))}
+              </div>
             </>
           )}
 
-          {slide.examples && (
-            <h2 className="text-xl font-bold mb-3" style={{ color: "var(--text-primary)" }}>
-              {slide.title}
-            </h2>
+          {/* ── Slide 2: Contact ── */}
+          {slide === "contact" && (
+            <div className="text-center">
+              <div
+                className="mx-auto mb-4 w-20 h-20 rounded-3xl flex items-center justify-center text-4xl"
+                style={{ background: "var(--hanoo-blue-light)" }}
+              >
+                📱
+              </div>
+              <h2 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>
+                שמור אותי באנשי קשר
+              </h2>
+              <p className="text-sm font-medium mb-2" style={{ color: "var(--hanoo-blue)" }}>
+                כדי שתמיד תדע עם מי אתה מדבר
+              </p>
+              <p className="text-sm leading-relaxed mb-5" style={{ color: "var(--text-secondary)" }}>
+                שמור אותי בשם "Hanoo Bot 🤖" כדי שההודעות שלי יגיעו בצורה ברורה ומזוהה.
+              </p>
+
+              {/* Primary action: add contact */}
+              {!contactSaved ? (
+                <button
+                  onClick={saveContact}
+                  className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
+                  style={{ background: "var(--hanoo-blue)" }}
+                >
+                  📲 הוסף לאנשי קשר
+                </button>
+              ) : (
+                <button
+                  onClick={openWhatsApp}
+                  className="w-full py-4 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2"
+                  style={{ background: "#25D366" }}
+                >
+                  <WhatsAppIcon size={20} />
+                  פתח שיחה בוואטסאפ
+                </button>
+              )}
+            </div>
           )}
 
-          {/* Contact action */}
-          {slide.action === "contact" && (
+          {/* ── Slide 3: Activate ── */}
+          {slide === "activate" && (
+            <div className="text-center">
+              <div
+                className="mx-auto mb-4 w-20 h-20 rounded-3xl flex items-center justify-center text-4xl"
+                style={{ background: "#E7F9EF" }}
+              >
+                🚀
+              </div>
+              <h2 className="text-xl font-bold mb-1" style={{ color: "var(--text-primary)" }}>
+                הכל מוכן!
+              </h2>
+              <p className="text-sm font-medium mb-2" style={{ color: "var(--hanoo-blue)" }}>
+                אתה מוכן להתחיל
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+                לחץ על הכפתור ופתח שיחה עם הבוט בוואטסאפ — הוא יענה לך מיד.
+              </p>
+            </div>
+          )}
+
+        </div>
+
+        {/* Footer — hidden on contact slide (it has its own primary button) */}
+        {slide !== "contact" && (
+          <div className="px-6 space-y-2">
             <button
-              onClick={saveContact}
-              className="mt-4 w-full py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all"
-              style={{
-                background: contactSaved ? "var(--hanoo-green-light)" : "var(--hanoo-blue-light)",
-                color: contactSaved ? "var(--hanoo-green)" : "var(--hanoo-blue)",
-              }}
+              onClick={next}
+              className="w-full py-4 rounded-2xl font-bold text-white flex items-center justify-center gap-2 text-base"
+              style={{ background: isLast ? "#25D366" : "var(--hanoo-blue)" }}
             >
-              {contactSaved ? "✅ נשמר בהצלחה!" : "📲 הוסף לאנשי קשר"}
+              {isLast ? (
+                <>
+                  <WhatsAppIcon size={20} />
+                  פתח שיחה בוואטסאפ
+                </>
+              ) : (
+                "הבא"
+              )}
             </button>
-          )}
-        </div>
 
-        {/* Footer buttons */}
-        <div className="px-6 space-y-2">
-          <button
-            onClick={next}
-            className="w-full py-4 rounded-2xl font-bold text-white flex items-center justify-center gap-2 text-base"
-            style={{ background: isLast ? "#25D366" : "var(--hanoo-blue)" }}
-          >
-            {isLast ? (
-              <>
-                <WhatsAppIcon size={20} />
-                פתח שיחה בוואטסאפ
-              </>
-            ) : (
-              "הבא ←"
-            )}
-          </button>
+            <button
+              onClick={close}
+              className="w-full py-2 text-sm font-medium"
+              style={{ color: "var(--text-tertiary)", background: "transparent" }}
+            >
+              דלג
+            </button>
+          </div>
+        )}
 
-          <button
-            onClick={close}
-            className="w-full py-2 text-sm font-medium"
-            style={{ color: "var(--text-tertiary)", background: "transparent" }}
-          >
-            {isLast ? "סגור" : "דלג"}
-          </button>
-        </div>
+        {/* On contact slide, show skip below */}
+        {slide === "contact" && (
+          <div className="px-6 mt-2">
+            <button
+              onClick={next}
+              className="w-full py-2 text-sm font-medium"
+              style={{ color: "var(--text-tertiary)", background: "transparent" }}
+            >
+              דלג
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
