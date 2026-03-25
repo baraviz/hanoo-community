@@ -209,9 +209,19 @@
     border-radius: 6px;
   }
 
+  /* Buttons & interactive elements */
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  a:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--hanoo-blue) !important;
+    outline-offset: 2px !important;
+  }
+
   /* Inputs get an inset ring so the outline doesn't push layout */
   input:focus-visible,
-  textarea:focus-visible {
+  textarea:focus-visible,
+  select:focus-visible {
     outline: none !important;
     box-shadow: 0 0 0 2px var(--hanoo-blue) !important;
     border-color: var(--hanoo-blue) !important;
@@ -221,6 +231,12 @@
   .dark :focus-visible,
   .dark [data-focus-visible-added] {
     outline-color: var(--hanoo-blue) !important;
+  }
+
+  .dark input:focus-visible,
+  .dark textarea:focus-visible,
+  .dark select:focus-visible {
+    box-shadow: 0 0 0 2px var(--hanoo-blue) !important;
   }
 
   /* Safe area utilities */

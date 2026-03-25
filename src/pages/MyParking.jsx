@@ -376,6 +376,7 @@ export default function MyParking() {
                       return bsDay === dayIndex && bsStart < b.end && bsEnd > b.start;
                     });
                     const blockEndTime = activeBlock ? fmt(new Date(activeBlock.end_at).getHours() * 60 + new Date(activeBlock.end_at).getMinutes()) : null;
+                    const blockStatus = activeBooking ? "תפוס" : blockEndTime ? "חסום" : "זמין";
                     // Find active booking overlapping this recurring slot (today or any future date matching day)
                     const activeBooking = activeBookings.find(bk => {
                       const bkDay = new Date(bk.start_time).getDay();
@@ -384,9 +385,9 @@ export default function MyParking() {
                       return bkDay === dayIndex && bkStartMins < b.end && bkEndMins > b.start;
                     });
                     return (
-                     <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "var(--hanoo-orange-light)" } : {}}>
+                     <div key={b.id} className="flex items-center justify-between px-4 py-3" style={activeBooking ? { background: "var(--hanoo-orange-light)" } : {}} role="listitem" aria-label={`זמינות ${fmt(b.start)}–${fmt(b.end)}, ${blockStatus}${activeBooking ? ` של ${activeBooking.renter_name}` : ""}`}>
                        <div className="flex items-center gap-2">
-                         <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeBooking ? "var(--hanoo-orange)" : blockEndTime ? "var(--hanoo-red)" : "var(--hanoo-blue)" }} />
+                         <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeBooking ? "var(--hanoo-orange)" : blockEndTime ? "var(--hanoo-red)" : "var(--hanoo-blue)" }} aria-hidden="true" />
                          <div className="flex flex-col">
                            <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{fmt(b.start)} עד {fmt(b.end)}</span>
                            {activeBooking && (
@@ -429,9 +430,9 @@ export default function MyParking() {
                       new Date(bk.start_time) < e && new Date(bk.end_time) > s
                     );
                     return (
-                      <div key={t.id} className="flex items-center justify-between px-4 py-3" style={activeTempBooking ? { background: "var(--hanoo-orange-light)" } : {}}>
+                      <div key={t.id} className="flex items-center justify-between px-4 py-3" style={activeTempBooking ? { background: "var(--hanoo-orange-light)" } : {}} role="listitem" aria-label={`זמינות חד-פעמית ${fmt(startMin)}–${fmt(endMin)}, ${activeTempBooking ? "תפוסה" : "זמינה"}${activeTempBooking ? ` של ${activeTempBooking.renter_name}` : ""}`}>
                         <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeTempBooking ? "var(--hanoo-orange)" : "var(--hanoo-green)" }} />
+                          <span className="w-2 h-2 rounded-full flex-none" style={{ background: activeTempBooking ? "var(--hanoo-orange)" : "var(--hanoo-green)" }} aria-hidden="true" />
                           <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{fmt(startMin)} עד {fmt(endMin)}</span>
                           <span className="text-xs px-2 py-0.5 rounded-full" style={{ color: "var(--hanoo-green)", background: "var(--hanoo-green-light)" }}>חד פעמי</span>
                           {activeTempBooking && <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" }}>תפוס</span>}
@@ -522,7 +523,7 @@ export default function MyParking() {
             <div
             ref={gridRef}
             role="grid"
-            aria-label="לוח זמינות שבועי — גרור לסימון שעות"
+            aria-label={`לוח זמינות שבועי — ${calendarEditMode ? "גרור לסימון שעות" : "הצג זמינויות"}, סה"כ ${totalHours.toFixed(1)} שעות`}
             className="flex-1 flex relative rounded-xl overflow-hidden"
             style={{ touchAction: "none", border: "1px solid var(--surface-card-border)", background: "var(--surface-card)" }}
             >

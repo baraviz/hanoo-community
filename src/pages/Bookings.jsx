@@ -28,12 +28,13 @@ function BookingCard({ booking, isOwner }) {
 const isPastBooking = isPast(new Date(booking.end_time));
 const hours = Math.round(differenceInMinutes(new Date(booking.end_time), new Date(booking.start_time)) / 60 * 10) / 10;
 const statusLabel = booking.status === "cancelled" ? "בוטל" : isPastBooking ? "הושלם" : "פעיל";
+const statusAriaLabel = booking.status === "cancelled" ? "הזמנה בוטלה" : isPastBooking ? "הזמנה הושלמה" : "הזמנה פעילה";
 
 return (
   <div
     className="card p-4"
     role="article"
-    aria-label={`הזמנה חניה ${booking.spot_number || ""}, ${statusLabel}, ${hours} שעות`}
+    aria-label={`הזמנה חניה ${booking.spot_number || ""}, ${statusAriaLabel}, ${hours} שעות, של ${isOwner ? booking.renter_name : booking.owner_name}`}
   >
     <div className="flex items-center gap-3">
       <div
@@ -165,7 +166,7 @@ export default function Bookings() {
       </div>
 
       {/* Content */}
-      <div id="bookings-panel" role="tabpanel" aria-live="polite" aria-label={tab === "mine" ? "אני הזמנתי" : "הזמינו ממני"} className="px-4 pt-4 pb-6 space-y-2">
+      <div id="bookings-panel" role="tabpanel" aria-live="polite" aria-label={tab === "mine" ? `אני הזמנתי - ${upcoming.length > 0 ? `${upcoming.length} עתידיות` : ""}` : `הזמינו ממני - ${upcoming.length > 0 ? `${upcoming.length} עתידיות` : ""}`} className="px-4 pt-4 pb-6 space-y-2">
         {tab === "mine" && (upcoming.length > 0 || past.length > 0) && (
           <div className="flex justify-center py-1">
             <button
