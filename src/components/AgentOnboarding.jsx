@@ -52,23 +52,26 @@ export default function AgentOnboarding({ onClose }) {
   }
 
   function saveContact() {
-    const vcard = [
-      "BEGIN:VCARD",
-      "VERSION:3.0",
-      "FN:Hanoo Bot - עוזר חניה חכם",
-      "N:Hanoo Bot - עוזר חניה חכם;;;;",
-      `TEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}`,
-      "END:VCARD",
-    ].join("\r\n");
-    const blob = new Blob([vcard], { type: "text/x-vcard;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Hanoo-Bot.vcf";
-    a.click();
-    URL.revokeObjectURL(url);
-    setContactSaved(true);
-  }
+  const vcard = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "FN;CHARSET=UTF-8:Hanoo Bot - עוזר חניה חכם",
+    "N;CHARSET=UTF-8:Bot;Hanoo;;;",
+    `TEL;TYPE=CELL:${WHATSAPP_BOT_PHONE}`,
+    "END:VCARD",
+  ].join("\r\n");
+
+  const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Hanoo-Bot.vcf";
+  a.click();
+
+  URL.revokeObjectURL(url);
+  setContactSaved(true);
+}
 
   const anim = closing
     ? { backdrop: "fadeOut 0.23s ease-in forwards", sheet: "slideDown 0.23s ease-in forwards" }
