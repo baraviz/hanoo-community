@@ -563,33 +563,65 @@ export default function Home() {
         {/* Upcoming bookings */}
         {activeBooking && (() => {
           const now = new Date();
-          const isActive = new Date(activeBooking.start_time) <= now && now < new Date(activeBooking.end_time);
+          const start = new Date(activeBooking.start_time);
+          const end = new Date(activeBooking.end_time);
+          const isActive = start <= now && now < end;
+          const msUntil = start - now;
+
+          let badge = null;
+          if (isActive) {
+            badge = { label: "זמין כעת", bg: "var(--hanoo-green-light)", color: "var(--hanoo-green)" };
+          } else if (msUntil > 0) {
+            const minsUntil = Math.round(msUntil / 60000);
+            const hoursUntil = Math.round(msUntil / 3600000);
+            const daysUntil = Math.round(msUntil / 86400000);
+            let label;
+            if (minsUntil < 60) label = `עוד ${minsUntil} דקות`;
+            else if (hoursUntil < 24) label = `עוד ${hoursUntil} שעות`;
+            else label = `עוד ${daysUntil} ימים`;
+            badge = { label, bg: "var(--hanoo-orange-light)", color: "var(--hanoo-orange)" };
+          }
+
+          // Day label
+          const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+          const afterTomorrow = new Date(); afterTomorrow.setDate(afterTomorrow.getDate() + 2);
+          const hebrewDays = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+          let dayLabel;
+          if (start.toDateString() === now.toDateString()) dayLabel = "היום";
+          else if (start.toDateString() === tomorrow.toDateString()) dayLabel = "מחר";
+          else if (start.toDateString() === afterTomorrow.toDateString()) dayLabel = "מחרתיים";
+          else {
+            const diffDays = Math.round((start - now) / 86400000);
+            dayLabel = diffDays <= 6 ? `יום ${hebrewDays[start.getDay()]}` : format(start, "d.M");
+          }
+
+          const resident = null; // spot_number from booking
+          const spotLabel = `חניה #${activeBooking.spot_number}${activeBooking.parking_floor ? `, קומה ${activeBooking.parking_floor}` : ""}`;
+
           return (
             <div>
-              <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>הזמנות קרובות</h3>
+              <h3 className="text-sm font-normal mb-3 px-1" style={{ color: "var(--text-primary)" }}>חניות שהזמנתי</h3>
               <button
                 onClick={() => push(`/BookingDetails/${activeBooking.id}`)}
-                className="card flex flex-col gap-3 active:opacity-75 transition-opacity w-full"
+                className="card active:opacity-75 transition-opacity w-full"
                 style={{ background: "var(--surface-card)", border: "1px solid var(--surface-card-border)", padding: "1rem" }}
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3 text-right flex-1">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
                       <Car size={18} style={{ color: "var(--hanoo-blue)" }} />
                     </div>
-                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                      חניה #{activeBooking.spot_number}
-                    </p>
+                    <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>{spotLabel}</p>
                   </div>
-                  {isActive && (
-                    <span className="text-xs px-2 py-0.5 rounded-full font-bold flex-none" style={{ background: "var(--hanoo-green-light)", color: "var(--hanoo-green)" }}>
-                      פעיל כעת
+                  {badge && (
+                    <span className="text-xs px-2 py-0.5 rounded-full font-bold flex-none" style={{ background: badge.bg, color: badge.color }}>
+                      {badge.label}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center justify-between">
                   <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
-                    של {activeBooking.owner_name} · {format(parseISO(activeBooking.start_time), "HH:mm")}–{format(parseISO(activeBooking.end_time), "HH:mm")}
+                    של {activeBooking.owner_name} · {dayLabel}, {format(start, "HH:mm")}–{format(end, "HH:mm")}
                   </p>
                   <ChevronLeft size={20} style={{ color: "var(--text-tertiary)" }} />
                 </div>

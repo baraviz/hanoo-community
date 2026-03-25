@@ -335,6 +335,30 @@ export default function BookingSuccessScreen({
         animate={phase >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
         transition={{ duration: 0.45, ease: "easeOut", delay: 0.25 }}
       >
+        {/* Thank you CTA — first */}
+        {hasSlots && (
+          <div className="app-card overflow-hidden">
+            <div className="px-4 pt-4 pb-3 text-center" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
+              <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+                שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
+                תרוויח 10 נקודות לדירוג הליגה
+              </p>
+            </div>
+            <div className="px-4 py-3">
+              <button
+                onClick={() => { setSheetIndex(0); setSheetOpen(true); }}
+                className="w-full py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
+                style={{ background: "#25D366" }}
+              >
+                <WhatsAppIcon size={20} />
+                שלח תודה בוואטסאפ
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Parking details card */}
         {hasSlots && (
           <div className="app-card p-4">
@@ -370,7 +394,7 @@ export default function BookingSuccessScreen({
           </div>
         )}
 
-        {/* Credits card */}
+        {/* Credits card — last */}
         <div className="app-card p-4">
           <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
           <div className="flex items-center justify-between">
@@ -385,30 +409,6 @@ export default function BookingSuccessScreen({
             </span>
           </div>
         </div>
-
-        {/* Thank you CTA */}
-        {hasSlots && (
-          <div className="app-card overflow-hidden">
-            <div className="px-4 pt-4 pb-3 text-center" style={{ borderBottom: "1px solid var(--surface-card-border)" }}>
-              <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
-                שלח תודה ל{firstSlot?.ownerName?.split(" ")[0]} בוואטסאפ
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>
-                תרוויח 10 נקודות לדירוג הליגה
-              </p>
-            </div>
-            <div className="px-4 py-3">
-              <button
-                onClick={() => { setSheetIndex(0); setSheetOpen(true); }}
-                className="w-full py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2"
-                style={{ background: "#25D366" }}
-              >
-                <WhatsAppIcon size={20} />
-                שלח תודה בוואטסאפ
-              </button>
-            </div>
-          </div>
-        )}
       </motion.div>
 
       {/* Thank-you sheet */}

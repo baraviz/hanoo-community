@@ -4,10 +4,12 @@ import { base44 } from "@/api/base44Client";
 import { Car, Clock, ArrowLeft, Search, Menu, Bell, ChevronRight } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
+import { useNavigate } from "react-router-dom";
 import { format, differenceInMinutes } from "date-fns";
 import BookingSuccessScreen from "@/components/BookingSuccessScreen";
 
 export default function FindParking() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
   const [fromTime, setFromTime] = useState("");
@@ -236,7 +238,7 @@ export default function FindParking() {
         creditsAfterBooking={resident?.credits ?? 0}
         renterApartment={resident?.apartment_number}
         renterName={user?.full_name}
-        onBack={() => { setBookingId(null); setSearched(false); setResults([]); setCombos([]); setCreditsBeforeBooking(null); }}
+        onBack={() => navigate("/")}
       />
     );
   }

@@ -1,4 +1,22 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.20';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
+
+const INFORU_API_KEY = Deno.env.get("INFORU_API_KEY");
+
+async function sendSms(phone, message) {
+  if (!phone || !INFORU_API_KEY) return;
+  const cleaned = phone.replace(/\D/g, "");
+  const formatted = cleaned.startsWith("0") ? "972" + cleaned.slice(1) : cleaned;
+  const payload = {
+    Data: { Message: message, Recipients: [{ Phone: formatted }] },
+    Settings: { Encoding: "Unicode" },
+    Authentication: { ApiKey: INFORU_API_KEY },
+  };
+  await fetch("https://api.inforu.co.il/SendMessageXml.ashx", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
 
 Deno.serve(async (req) => {
   try {
@@ -10,7 +28,7 @@ Deno.serve(async (req) => {
       return Response.json({ ok: true });
     }
 
-    // Create notification for the parking owner
+    // Create in-app notification for the parking owner
     await base44.asServiceRole.entities.Notification.create({
       user_email: booking.owner_email,
       title: "החניה שלך הוזמנה 🅿️",
@@ -20,6 +38,16 @@ Deno.serve(async (req) => {
       action_url: `/BookingDetails/${booking.id}`,
       read: false,
     });
+
+    // Send SMS to the owner
+    const owners = await base44.asServiceRole.entities.Resident.filter({ user_email: booking.owner_email });
+    const ownerPhone = owners[0]?.phone;
+    if (ownerPhone) {
+      const startFmt = formatTime(booking.start_time);
+      const endFmt = formatTimeOnly(booking.end_time);
+      const smsText = `הי! החניה שלך (#${booking.spot_number || "?"}) הוזמנה ע"י ${booking.renter_name || "שכן"}\n📅 ${startFmt}–${endFmt}\n\nHanoo 🅿️`;
+      await sendSms(ownerPhone, smsText);
+    }
 
     return Response.json({ ok: true });
   } catch (error) {
@@ -31,4 +59,10 @@ function formatTime(isoString) {
   if (!isoString) return "?";
   const d = new Date(isoString);
   return d.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+function formatTimeOnly(isoString) {
+  if (!isoString) return "?";
+  const d = new Date(isoString);
+  return d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" });
 }
