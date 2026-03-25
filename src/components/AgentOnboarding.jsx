@@ -51,29 +51,45 @@ export default function AgentOnboarding({ onClose }) {
     }, 230);
   }
 
-function saveContact() {
-  const vcard = [
-    "BEGIN:VCARD",
-    "VERSION:3.0",
-    "FN;CHARSET=UTF-8:חנו בוט – עוזר חניה חכם",
-    "N;CHARSET=UTF-8:בוט;חנו;;;",
-    "ORG;CHARSET=UTF-8:Hanoo",
-    `item1.TEL;TYPE=CELL:${WHATSAPP_BOT_PHONE}`,
-    "item1.X-ABLabel:mobile",
-    "END:VCARD",
-  ].join("\r\n");
+  function blobToBase64(blob) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      reader.readAsDataURL(blob);
+    });
+  }
 
-  const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
+  async function saveContact() {
+    let photoLine = "";
+    try {
+      const res = await fetch("https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/4337516ab_icon4.png");
+      const imgBlob = await res.blob();
+      const base64 = await blobToBase64(imgBlob);
+      photoLine = `PHOTO;ENCODING=b;TYPE=PNG:${base64}`;
+    } catch (_) {}
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "Hanoo-Bot.vcf";
-  a.click();
+    const lines = [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      "FN;CHARSET=UTF-8:חניה בבניין שלי",
+      "N;CHARSET=UTF-8:שלי;חניה;;;",
+      "ORG;CHARSET=UTF-8:HANOO",
+      `item1.TEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}`,
+      "item1.X-ABLabel:mobile",
+    ];
+    if (photoLine) lines.push(photoLine);
+    lines.push("END:VCARD");
 
-  URL.revokeObjectURL(url);
-  setContactSaved(true);
-}
+    const vcard = lines.join("\r\n");
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Hanoo.vcf";
+    a.click();
+    URL.revokeObjectURL(url);
+    setContactSaved(true);
+  }
   const anim = closing
     ? { backdrop: "fadeOut 0.23s ease-in forwards", sheet: "slideDown 0.23s ease-in forwards" }
     : { backdrop: "fadeIn 0.23s ease-out", sheet: "slideUp 0.23s ease-out" };
