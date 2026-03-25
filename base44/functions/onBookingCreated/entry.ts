@@ -17,6 +17,7 @@ Deno.serve(async (req) => {
       body: `${booking.renter_name || booking.renter_email} הזמין את החניה שלך (#${booking.spot_number || "?"}) מ-${formatTime(booking.start_time)} עד ${formatTime(booking.end_time)}`,
       type: "booking_received",
       booking_id: booking.id || "",
+      action_url: `/BookingDetails/${booking.id}`,
       read: false,
     });
 

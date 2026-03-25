@@ -59,17 +59,30 @@ export default function CancelAvailabilitySheet({ blockInfo, ownerEmail, onConfi
     const phone = renters[0]?.phone;
     const msg = buildWhatsAppMsg(booking);
 
-    // Send in-app notification to renter with deep link
-    const deepLink = `${window.location.origin}/FindParking?from=${encodeURIComponent(booking.start_time)}&to=${encodeURIComponent(booking.end_time)}`;
+    const startTime = new Date(booking.start_time);
+    const endTime = new Date(booking.end_time);
+    const dateFmt = format(startTime, "dd/MM");
+    const startFmt = format(startTime, "HH:mm");
+    const endFmt = format(endTime, "HH:mm");
+    const findParkingUrl = `/FindParking?from=${encodeURIComponent(booking.start_time)}&to=${encodeURIComponent(booking.end_time)}`;
+
+    // Send in-app notification to renter with deep link to FindParking
     await base44.entities.Notification.create({
       user_email: booking.renter_email,
-      title: "החניה שלך בוטלה ⚠️",
-      body: `בעל החניה ביטל את זמינותו ב-${format(new Date(booking.start_time), "dd/MM")} בין ${format(new Date(booking.start_time), "HH:mm")} ל-${format(new Date(booking.end_time), "HH:mm")}. לחץ כאן למציאת חניה חלופית.`,
+      title: `הזמנת החניה שלך להיום ב-${startFmt} בוטלה ❌`,
+      body: `לחץ למציאת חניה אחרת באותן השעות`,
       type: "parking_cancelled",
       booking_id: booking.id || "",
-      action_url: deepLink,
+      action_url: findParkingUrl,
       read: false,
     }).catch(() => {});
+
+    // SMS to renter
+    if (phone) {
+      const appUrl = `${window.location.origin}${findParkingUrl}`;
+      const smsText = `הזמנת החניה שלך בוטלה ❌\n\n📅 ${dateFmt}\n⏰ בשעה ${startFmt}–${endFmt}\n\nלמציאת חניה חלופית:\n${appUrl}`;
+      await base44.functions.invoke("sendSmsInforU", { phone, message: smsText }).catch(() => {});
+    }
 
     // Award 5 points to owner for notifying
     const owners = await base44.entities.Resident.filter({ user_email: ownerEmail });
