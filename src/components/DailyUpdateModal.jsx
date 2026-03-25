@@ -128,7 +128,7 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Bookings received today */}
           {data.receivedToday.length > 0 && (
-            <button onClick={() => goTo("/Bookings")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
+            <button onClick={() => goTo("/Bookings")} className="w-full flex items-center gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
               <span className="text-2xl mt-0.5">🎉</span>
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
@@ -156,7 +156,7 @@ export default function DailyUpdateModal({ user, resident }) {
 
           {/* Completed bookings */}
           {data.completedToday.length > 0 && (
-            <button onClick={() => goTo("/Bookings")} className="w-full flex items-start gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
+            <button onClick={() => goTo("/Bookings")} className="w-full flex items-center gap-3 p-3 rounded-2xl text-right" style={{ background: "var(--hanoo-blue-light)" }}>
               <Car size={20} className="flex-none" style={{ color: "var(--hanoo-blue)" }} />
               <div className="flex-1">
                 <p className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
