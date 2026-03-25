@@ -595,7 +595,6 @@ export default function Home() {
             dayLabel = diffDays <= 6 ? `יום ${hebrewDays[start.getDay()]}` : format(start, "d.M");
           }
 
-          const resident = null; // spot_number from booking
           const spotLabel = `חניה #${activeBooking.spot_number}${activeBooking.parking_floor ? `, קומה ${activeBooking.parking_floor}` : ""}`;
 
           return (
