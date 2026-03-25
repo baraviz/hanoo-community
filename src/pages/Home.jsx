@@ -728,11 +728,11 @@ export default function Home() {
               )}
             </div>
           );
-           })()}
-          </div>
-          )}
-          </div>
-          </PullToRefreshWrapper>
-          </div>
-          );
-          }
+        })()}
+        </div>
+      )}
+      </div>
+    </PullToRefreshWrapper>
+    </div>
+  );
+}
