@@ -10,6 +10,8 @@ Deno.serve(async (req) => {
     if (!phone || !message) return Response.json({ error: 'Missing phone or message' }, { status: 400 });
 
     const apiKey = Deno.env.get("INFORU_API_KEY");
+    const credential = apiKey.includes(":") ? btoa(apiKey) : apiKey;
+
     const phoneClean = phone.replace(/\D/g, "");
     const phoneFormatted = phoneClean.startsWith("0") ? "972" + phoneClean.slice(1) : phoneClean;
 
@@ -24,16 +26,17 @@ Deno.serve(async (req) => {
       },
     });
 
-    const res = await fetch("https://api.inforu.co.il/SendMessageXml.ashx", {
+    const res = await fetch("https://capi.inforu.co.il/api/v2/SMS/SendSms", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Basic ${credential}`,
       },
       body,
     });
 
     const text = await res.text();
+    console.log("InforU response:", text);
     return Response.json({ ok: true, response: text });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

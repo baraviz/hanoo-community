@@ -62,9 +62,18 @@ Deno.serve(async (req) => {
         const slotEnd = new Date(slot.end_at);
         covers = slotStart <= reqFrom && slotEnd >= reqTo;
       } else if (slot.slot_type === "recurring") {
-        const reqDay = reqFrom.getDay();
-        const reqFromMins = reqFrom.getHours() * 60 + reqFrom.getMinutes();
-        const reqToMins = reqTo.getHours() * 60 + reqTo.getMinutes();
+        // Convert UTC times to Israel local time (Asia/Jerusalem)
+        const toIsraelMins = (date) => {
+          const local = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+          return local.getHours() * 60 + local.getMinutes();
+        };
+        const toIsraelDay = (date) => {
+          const local = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+          return local.getDay();
+        };
+        const reqDay = toIsraelDay(reqFrom);
+        const reqFromMins = toIsraelMins(reqFrom);
+        const reqToMins = toIsraelMins(reqTo);
         covers = (slot.days_of_week || []).includes(reqDay) &&
           slot.time_start <= reqFromMins &&
           slot.time_end >= reqToMins;
