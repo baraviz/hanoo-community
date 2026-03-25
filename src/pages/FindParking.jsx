@@ -22,6 +22,7 @@ export default function FindParking() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [autoSearch, setAutoSearch] = useState(false);
   const [notifyRequested, setNotifyRequested] = useState(false);
+  const [savingNotify, setSavingNotify] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [nearbyResults, setNearbyResults] = useState([]); // alternatives when no exact match
 
@@ -339,11 +340,28 @@ export default function FindParking() {
 
               {!notifyRequested ? (
                 <button
-                  onClick={() => setNotifyRequested(true)}
+                  onClick={async () => {
+                    setSavingNotify(true);
+                    // Get resident phone
+                    const residents = await base44.entities.Resident.filter({ user_email: user.email });
+                    const phone = residents[0]?.phone || null;
+                    await base44.entities.ParkingNotifyRequest.create({
+                      user_email: user.email,
+                      user_name: user.full_name,
+                      phone,
+                      building_id: resident.building_id,
+                      from_time: new Date(fromTime).toISOString(),
+                      to_time: new Date(toTime).toISOString(),
+                      notified: false,
+                    });
+                    setSavingNotify(false);
+                    setNotifyRequested(true);
+                  }}
+                  disabled={savingNotify}
                   className="flex items-center gap-2 mx-auto px-5 py-3 rounded-2xl font-bold text-sm"
-                  style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)" }}
+                  style={{ background: "var(--hanoo-blue-light)", color: "var(--hanoo-blue)", opacity: savingNotify ? 0.6 : 1 }}
                 >
-                  <Bell size={16} />
+                  {savingNotify ? <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--hanoo-blue)" }} /> : <Bell size={16} />}
                   תודיעו לי כשיתפנה
                 </button>
               ) : (
