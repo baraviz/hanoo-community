@@ -73,7 +73,7 @@ export default function AgentOnboarding({ onClose }) {
       "VERSION:3.0",
       "FN;CHARSET=UTF-8:חניה בבניין שלי",
       "N;CHARSET=UTF-8:שלי;חניה;;;",
-      "ORG;CHARSET=UTF-8:HANOO",
+      "ORG;CHARSET=UTF-8:Hanoo Community",
       `item1.TEL;TYPE=CELL:+${WHATSAPP_BOT_PHONE}`,
       "item1.X-ABLabel:mobile",
     ];
