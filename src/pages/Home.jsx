@@ -27,6 +27,7 @@ export default function Home() {
   const [availUntilMinutes, setAvailUntilMinutes] = useState(null);
   const [blockUntilHour, setBlockUntilHour] = useState(null);
   const [activeBlocks, setActiveBlocks] = useState([]);
+  const [activeOwnerBookings, setActiveOwnerBookings] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
   const [displayedCredits, setDisplayedCredits] = useState(0);
@@ -41,6 +42,11 @@ export default function Home() {
     const now = new Date();
     const dayOfWeek = now.getDay();
     const minutes = now.getHours() * 60 + now.getMinutes();
+    // If someone has an active booking on this spot right now — not available
+    const hasActiveBooking = activeOwnerBookings.some(
+      b => new Date(b.start_time) <= now && new Date(b.end_time) > now
+    );
+    if (hasActiveBooking) return false;
     // Check temp slot
     if (myActiveSlot && new Date(myActiveSlot.start_at) <= now && new Date(myActiveSlot.end_at) > now) return true;
     // Check recurring (but not if blocked)
@@ -145,12 +151,13 @@ export default function Home() {
         return;
       }
 
-      const [buildings, bookings, tempSlots, recurring, blocks] = await Promise.all([
+      const [buildings, bookings, tempSlots, recurring, blocks, ownerBookings] = await Promise.all([
         base44.entities.Building.filter({ id: r.building_id }),
         base44.entities.Booking.filter({ renter_email: u.email, status: "active" }),
         base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "temp" }),
         base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "recurring" }),
         base44.entities.WeeklyAvailability.filter({ owner_email: u.email, slot_type: "block" }),
+        base44.entities.Booking.filter({ owner_email: u.email, status: "active" }),
       ]);
 
       if (buildings.length > 0) setBuilding(buildings[0]);
@@ -186,6 +193,7 @@ export default function Home() {
       }
       setRecurringSlots(recurring);
       setActiveBlocks(blocks.filter(b => new Date(b.end_at) > new Date()));
+      setActiveOwnerBookings(ownerBookings.filter(b => new Date(b.end_time) > new Date()));
       // Show active temp slot (end_at in the future)
       const activeTemp = tempSlots.find(s => new Date(s.end_at) > new Date());
       if (activeTemp) setMyActiveSlot(activeTemp);
