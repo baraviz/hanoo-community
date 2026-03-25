@@ -84,18 +84,22 @@ Deno.serve(async (req) => {
       const fromStr = reqFrom.toLocaleString("he-IL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
       const toStr = reqTo.toLocaleString("he-IL", { hour: "2-digit", minute: "2-digit" });
 
+      // Deep link to FindParking with pre-filled times
+      const appUrl = `https://${Deno.env.get("BASE44_APP_ID")}.base44.app/FindParking?from=${encodeURIComponent(reqFrom.toISOString())}&to=${encodeURIComponent(reqTo.toISOString())}`;
+
       // In-app notification
       await base44.asServiceRole.entities.Notification.create({
         user_email: notifyReq.user_email,
         title: "🅿️ התפנתה חניה!",
-        body: `יש חניה זמינה בדיוק בשעות שביקשת: ${fromStr} עד ${toStr}. היכנס לאפליקציה להזמנה.`,
+        body: `יש חניה זמינה בדיוק בשעות שביקשת: ${fromStr} עד ${toStr}. לחץ להזמנה מיידית!`,
         type: "booking_received",
         read: false,
+        action_url: appUrl,
       }).catch(e => console.error("notification error:", e));
 
       // SMS
       if (notifyReq.phone && apiKey) {
-        const smsText = `Hanoo: התפנתה חניה! ${fromStr}-${toStr}. היכנס לאפליקציה להזמנה 🅿️`;
+        const smsText = `Hanoo 🅿️ התפנתה חניה לשעות שביקשת (${fromStr}–${toStr})!\nהזמן עכשיו: ${appUrl}`;
         await sendSms(notifyReq.phone, smsText, apiKey).catch(e => console.error("SMS error:", e));
       }
 
