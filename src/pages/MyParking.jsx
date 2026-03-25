@@ -11,6 +11,8 @@ const HOURS = 24;
 
 const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 
+import { useState, useEffect, useRef } from "react";
+
 export default function MyParking() {
   const [user, setUser] = useState(null);
   const [resident, setResident] = useState(null);
