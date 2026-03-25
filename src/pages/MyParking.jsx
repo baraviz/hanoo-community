@@ -532,7 +532,7 @@ export default function MyParking() {
                 <div
                   key={i}
                   className="absolute left-0 right-0 pointer-events-none"
-                  style={{ borderTop: "1px solid var(--surface-card-border)", top: `${(i / HOURS) * 100}%` }}
+                  style={{ borderTop: "1px solid rgba(156,163,175,0.3)", top: `${(i / HOURS) * 100}%` }}
                 />
               ))}
 
