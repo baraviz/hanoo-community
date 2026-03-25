@@ -99,7 +99,10 @@ Deno.serve(async (req) => {
 
       // SMS
       if (notifyReq.phone && apiKey) {
-        const smsText = `Hanoo 🅿️ התפנתה חניה לשעות שביקשת (${fromStr}–${toStr})!\nהזמן עכשיו: ${appUrl}`;
+        const dateStr = reqFrom.toLocaleString("he-IL", { day: "2-digit", month: "2-digit" });
+        const timeFrom = reqFrom.toLocaleString("he-IL", { hour: "2-digit", minute: "2-digit" });
+        const timeTo = reqTo.toLocaleString("he-IL", { hour: "2-digit", minute: "2-digit" });
+        const smsText = `התפנתה חניה בבניין שלך לשעות שביקשת!\n\n📅 היום, ${dateStr}\n⏰ בשעה ${timeFrom}–${timeTo}\n\nלהזמנה:\n${appUrl}`;
         await sendSms(notifyReq.phone, smsText, apiKey).catch(e => console.error("SMS error:", e));
       }
 
