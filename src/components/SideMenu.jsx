@@ -11,9 +11,11 @@ function WhatsAppIcon({ size = 17 }) {
   );
 }
 import ThemeToggle from "@/components/ThemeToggle";
+import WhatsAppAgentSheet from "@/components/WhatsAppAgentSheet";
 
 export default function SideMenu({ onClose }) {
   const [closing, setClosing] = useState(false);
+  const [showAgentSheet, setShowAgentSheet] = useState(false);
   const navigate = useNavigate();
 
   function close() {
@@ -94,18 +96,20 @@ export default function SideMenu({ onClose }) {
           <div className="px-4 py-2 mt-1">
             <div className="h-px" style={{ background: "var(--surface-card-border)" }} />
           </div>
-          <a
-            href={base44.agents.getWhatsAppConnectURL("parking_agent")}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => setShowAgentSheet(true)}
             className="w-full flex items-center justify-end gap-3 px-5 py-3 transition-colors text-right"
-            style={{ color: "var(--text-primary)" }}
+            style={{ color: "var(--text-primary)", background: "transparent", border: "none" }}
             onMouseEnter={e => e.currentTarget.style.background = "var(--btn-secondary-bg)"}
             onMouseLeave={e => e.currentTarget.style.background = "transparent"}
           >
             <span className="font-medium text-sm">סוכן WhatsApp</span>
             <WhatsAppIcon size={17} />
-          </a>
+          </button>
+
+          {showAgentSheet && (
+            <WhatsAppAgentSheet onClose={() => setShowAgentSheet(false)} />
+          )}
         </div>
 
         {/* Logout */}
