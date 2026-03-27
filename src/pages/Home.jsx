@@ -32,7 +32,14 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cancelSheet, setCancelSheet] = useState(null); // { blockInfo, onConfirm }
   const [displayedCredits, setDisplayedCredits] = useState(0);
+  const [showCreditsSheet, setShowCreditsSheet] = useState(false);
+  const [closingCreditsSheet, setClosingCreditsSheet] = useState(false);
 
+
+  function closeCreditsSheet() {
+    setClosingCreditsSheet(true);
+    setTimeout(() => { setShowCreditsSheet(false); setClosingCreditsSheet(false); }, 280);
+  }
 
   function closeStatusDrawer() {
     setClosingDrawer(true);
@@ -481,19 +488,75 @@ export default function Home() {
       )}
 
 
+      <style>{`
+        @keyframes slideUp   { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes slideDown { from { transform: translateY(0); }   to { transform: translateY(100%); } }
+        @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut   { from { opacity: 1; } to { opacity: 0; } }
+      `}</style>
+
+      {/* Credits Sheet */}
+      {showCreditsSheet && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col justify-end"
+          style={{ background: "rgba(0,0,0,0.4)", animation: closingCreditsSheet ? "fadeOut 0.28s ease-in forwards" : "fadeIn 0.28s ease-out" }}
+          onClick={closeCreditsSheet}
+        >
+          <div
+            className="rounded-t-3xl p-6 space-y-5"
+            style={{ background: "var(--sheet-bg)", paddingBottom: "calc(64px + env(safe-area-inset-bottom) + 1.5rem)", animation: closingCreditsSheet ? "slideDown 0.28s ease-in forwards" : "slideUp 0.28s ease-out" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-10 h-1 rounded-full mx-auto" style={{ background: "var(--sheet-handle)" }} />
+            <div className="flex items-center gap-4">
+              <img src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/f90765a7c_HanooCoin1.png" alt="מטבע" className="w-16 h-16" />
+              <div>
+                <p className="text-3xl font-bold" style={{ color: "var(--text-primary)" }}>{resident?.credits || 0} <span className="text-xl font-medium" style={{ color: "var(--text-secondary)" }}>מטבעות</span></p>
+                <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>היתרה הנוכחית שלך</p>
+              </div>
+            </div>
+            <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--btn-secondary-bg)" }}>
+              <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>איך מרוויחים מטבעות?</p>
+              {[
+                { icon: "🅿️", text: "פרסום חניה זמינה — 5 מטבעות לכל שעה" },
+                { icon: "🎁", text: "100 מטבעות בונוס על פרסום ראשוני" },
+                { icon: "👥", text: "הפניית חבר — 50 מטבעות" },
+                { icon: "⭐", text: "עליית ליגה מעניקה הנחה על חניות" },
+              ].map(({ icon, text }) => (
+                <div key={text} className="flex items-center gap-3">
+                  <span className="text-lg">{icon}</span>
+                  <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{text}</p>
+                </div>
+              ))}
+            </div>
+            {(() => {
+              const league = resident?.league || "Bronze";
+              const discountMap = { Bronze: 0, Silver: 5, Gold: 10, Platinum: 15, Diamond: 20 };
+              const discount = discountMap[league] || 0;
+              return discount > 0 ? (
+                <div className="rounded-2xl p-3 flex items-center gap-3" style={{ background: "var(--hanoo-blue-light)" }}>
+                  <span className="text-lg">🎟️</span>
+                  <p className="text-sm font-medium" style={{ color: "var(--hanoo-blue)" }}>ליגת {league} — הנחה של {discount}% על כל חניה</p>
+                </div>
+              ) : null;
+            })()}
+          </div>
+        </div>
+      )}
+
       {/* Header */}
-      <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
-        <div className="flex items-center justify-between mb-4">
+      <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
+        <div className="flex items-center justify-between mb-5">
           <div className="text-right">
             <p className="text-blue-200 text-sm">שלום,</p>
-            <h1 className="text-white text-xl font-bold">{user?.full_name || "שכן יקר"}</h1>
+            <h1 className="text-white text-2xl font-bold">{user?.full_name?.split(" ")[0] || "שכן יקר"} 👋</h1>
           </div>
-          <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
+          <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
             <Menu size={18} className="text-white" aria-hidden="true" />
           </button>
         </div>
 
-        {/* Credits Card */}
+        {/* Credits Card — clickable */}
         {(() => {
           const credits = resident?.credits || 0;
           const league = resident?.league || "Bronze";
@@ -502,16 +565,28 @@ export default function Home() {
           const effectivePrice = pricePerHour * (discountMap[league] || 1);
           const hours = effectivePrice > 0 ? (credits / effectivePrice).toFixed(1) : 0;
           return (
-            <div className="bg-white bg-opacity-20 rounded-2xl p-4 flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-xs mb-1">יתרת קרדיטים</p>
-                <p className="text-white text-3xl font-bold">{displayedCredits}</p>
-                <p className="text-blue-200 text-xs">שווה ערך ל-{hours} שעות חניה</p>
+            <button
+              onClick={() => setShowCreditsSheet(true)}
+              className="w-full text-right active:scale-95 transition-transform"
+              style={{ background: "rgba(255,255,255,0.15)", borderRadius: 20, padding: "14px 16px", border: "1px solid rgba(255,255,255,0.2)" }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/f90765a7c_HanooCoin1.png" alt="מטבע" className="w-12 h-12" />
+                  <div className="text-right">
+                    <p className="text-blue-100 text-xs mb-0.5">יתרת מטבעות</p>
+                    <p className="text-white text-3xl font-bold leading-none">{displayedCredits}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-blue-200 text-xs">{hours} שעות חניה</p>
+                  {league !== "Bronze" && (
+                    <p className="text-xs font-bold mt-0.5" style={{ color: "var(--hanoo-yellow)" }}>ליגת {league} 🎟️</p>
+                  )}
+                  <p className="text-blue-300 text-xs mt-1 opacity-70">לחץ לפרטים ›</p>
+                </div>
               </div>
-              <div className="w-14 h-14 bg-white bg-opacity-25 rounded-full flex items-center justify-center">
-                <span className="text-white text-2xl">₪</span>
-              </div>
-            </div>
+            </button>
           );
         })()}
       </div>
@@ -547,9 +622,9 @@ export default function Home() {
           <div className="rounded-2xl p-4" style={{ background: "var(--hanoo-orange-light)", border: "1px solid var(--hanoo-yellow)" }}>
             <div className="flex items-center gap-2 mb-1">
               <Gift size={16} style={{ color: "var(--hanoo-orange)" }} />
-              <p className="font-bold" style={{ color: "var(--hanoo-orange)" }}>קבל 100 קרדיטים בונוס!</p>
+              <p className="font-bold" style={{ color: "var(--hanoo-orange)" }}>קבל 100 מטבעות בונוס!</p>
             </div>
-            <p className="text-sm" style={{ color: "var(--hanoo-orange)" }}>פרסם זמינות של לפחות שעתיים בפעם הראשונה וקבל 100 קרדיטים (כבר קיבלת 50 בהצטרפות)</p>
+            <p className="text-sm" style={{ color: "var(--hanoo-orange)" }}>פרסם זמינות של לפחות שעתיים בפעם הראשונה וקבל 100 מטבעות (כבר קיבלת 50 בהצטרפות)</p>
             <button
               onClick={() => navigate("/PublishParking")}
               className="mt-3 w-full py-2 rounded-xl text-sm font-semibold text-white"

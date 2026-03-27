@@ -396,16 +396,19 @@ export default function BookingSuccessScreen({
 
         {/* Credits card — last */}
         <div className="app-card p-4">
-          <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
+          <p className="text-xs font-bold mb-3" style={{ color: "var(--text-tertiary)" }}>מטבעות</p>
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-3xl font-bold" style={{ color: "var(--hanoo-blue)" }}>
-                <AnimatedCredits from={creditsBeforeBooking ?? creditsAfterBooking} to={creditsAfterBooking} startDelay={0.3} />
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>יתרה נוכחית</p>
+            <div className="flex items-center gap-3">
+              <img src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/f90765a7c_HanooCoin1.png" alt="מטבע" className="w-10 h-10" />
+              <div>
+                <p className="text-3xl font-bold" style={{ color: "var(--hanoo-blue)" }}>
+                  <AnimatedCredits from={creditsBeforeBooking ?? creditsAfterBooking} to={creditsAfterBooking} startDelay={0.3} />
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>יתרה נוכחית</p>
+              </div>
             </div>
             <span className="text-sm font-bold px-4 py-2 rounded-full" style={{ background: "var(--hanoo-red-light)", color: "var(--hanoo-red)" }}>
-              -{spent} קרדיטים
+              -{spent} מטבעות
             </span>
           </div>
         </div>

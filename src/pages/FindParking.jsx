@@ -147,7 +147,7 @@ export default function FindParking() {
     const cost = calcCost(fromMins, toMins, fromTime, toTime);
 
     if ((resident.credits || 0) < cost) {
-      alert(`אין מספיק קרדיטים. יש לך ${resident.credits}, נדרש ${cost}`);
+      alert(`אין מספיק מטבעות. יש לך ${resident.credits}, נדרש ${cost}`);
       return;
     }
 
@@ -180,7 +180,7 @@ export default function FindParking() {
     const totalCost = cost1 + cost2;
 
     if ((resident.credits || 0) < totalCost) {
-      alert(`אין מספיק קרדיטים. יש לך ${resident.credits}, נדרש ${totalCost}`);
+      alert(`אין מספיק מטבעות. יש לך ${resident.credits}, נדרש ${totalCost}`);
       return;
     }
 
@@ -320,7 +320,7 @@ export default function FindParking() {
                             <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{fmtDateLabel(opt.newFrom)} – {fmtDateLabel(opt.newTo)}</p>
                           </div>
                           <div className="flex flex-col items-end gap-1">
-                            <span className="text-xs font-bold" style={{ color: "var(--hanoo-blue)" }}>{altCost} קרדיטים</span>
+                            <span className="text-xs font-bold" style={{ color: "var(--hanoo-blue)" }}>{altCost} מטבעות</span>
                             <button
                               onClick={() => { setFromTime(opt.newFrom); setToTime(opt.newTo); setShowResults(false); setSearched(false); setResults([]); setCombos([]); setNearbyResults([]); }}
                               className="text-xs font-bold px-3 py-1.5 rounded-xl"
@@ -390,7 +390,7 @@ export default function FindParking() {
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{cost}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>קרדיטים</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>מטבעות</p>
                     {getDiscount() > 0 && (
                       <p className="text-xs font-bold" style={{ color: "var(--hanoo-green)" }}>{getDiscount() * 100}% הנחה 🎟️</p>
                     )}
@@ -416,7 +416,7 @@ export default function FindParking() {
                   <span className="text-xs font-bold" style={{ color: "var(--text-tertiary)" }}>שילוב חניות</span>
                   <div className="text-right">
                     <span className="font-bold text-lg" style={{ color: "var(--hanoo-blue)" }}>{totalCost}</span>
-                    <span className="text-xs" style={{ color: "var(--text-tertiary)" }}> קרדיטים</span>
+                    <span className="text-xs" style={{ color: "var(--text-tertiary)" }}> מטבעות</span>
                   </div>
                 </div>
                 <div className="px-4 py-3 flex items-center gap-3">
@@ -429,7 +429,7 @@ export default function FindParking() {
                   </div>
                   <div className="text-left flex-none">
                     <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(fromMinsR)} – {fmtMins(splitPoint)}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost1} קרדיטים</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost1} מטבעות</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-1">
@@ -447,7 +447,7 @@ export default function FindParking() {
                   </div>
                   <div className="text-left flex-none">
                     <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>{fmtMins(splitPoint)} – {fmtMins(toMinsR)}</p>
-                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost2} קרדיטים</p>
+                    <p className="text-xs" style={{ color: "var(--text-tertiary)" }}>{cost2} מטבעות</p>
                   </div>
                 </div>
                 <div className="px-4 pb-4">
@@ -472,7 +472,7 @@ export default function FindParking() {
         <div className="flex items-center justify-between">
           <div className="text-right">
             <h1 className="text-white text-xl font-bold">מצא חניה</h1>
-            <p className="text-blue-200 text-sm">יתרת קרדיטים: {resident?.credits || 0}</p>
+            <p className="text-blue-200 text-sm">יתרת מטבעות: {resident?.credits || 0}</p>
           </div>
           <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-11 h-11 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
             <Menu size={18} className="text-white" aria-hidden="true" />
@@ -534,7 +534,7 @@ export default function FindParking() {
             const cost = calcCost(0, 0, fromTime, toTime);
             return (
               <p className="text-center text-xs pt-1" style={{ color: "var(--text-tertiary)" }}>
-                סה״כ: {hoursLabel} · {cost} קרדיטים
+                סה״כ: {hoursLabel} · {cost} מטבעות
               </p>
             );
           })()}
