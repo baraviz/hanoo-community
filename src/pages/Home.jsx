@@ -512,19 +512,19 @@ export default function Home() {
               <img src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/f90765a7c_HanooCoin1.png" alt="מטבע" className="w-16 h-16" />
               <div>
                 <p className="text-3xl font-bold" style={{ color: "var(--text-primary)" }}>{resident?.credits || 0} <span className="text-xl font-medium" style={{ color: "var(--text-secondary)" }}>מטבעות</span></p>
-                <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>היתרה הנוכחית שלך</p>
+                <p className="text-sm mt-0.5" style={{ color: "var(--text-secondary)" }}>שווה ערך ל-{(() => { const league = resident?.league || "Bronze"; const discountMap = { Bronze: 1, Silver: 0.9, Gold: 0.8, Platinum: 0.7, Diamond: 0.6 }; const price = 10 * (discountMap[league] || 1); const h = price > 0 ? ((resident?.credits || 0) / price).toFixed(1) : 0; return h; })()} שעות חניה</p>
               </div>
             </div>
             <div className="rounded-2xl p-4 space-y-3" style={{ background: "var(--btn-secondary-bg)" }}>
               <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>איך מרוויחים מטבעות?</p>
               {[
-                { icon: "🅿️", text: "פרסום חניה זמינה — 5 מטבעות לכל שעה" },
-                { icon: "🎁", text: "100 מטבעות בונוס על פרסום ראשוני" },
-                { icon: "👥", text: "הפניית חבר — 50 מטבעות" },
-                { icon: "⭐", text: "עליית ליגה מעניקה הנחה על חניות" },
-              ].map(({ icon, text }) => (
+                { Icon: ParkingSquare, text: "חניה זמינה שפרסמת — 5 לשעה" },
+                { Icon: Car, text: "שכן השתמש בחניה שלך — 10 מטבעות" },
+              ].map(({ Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
-                  <span className="text-lg">{icon}</span>
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
+                    <Icon size={16} style={{ color: "var(--hanoo-blue)" }} />
+                  </div>
                   <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{text}</p>
                 </div>
               ))}
