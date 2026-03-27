@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Building2, Share2, Trash2 } from "lucide-react";
+import { LogOut, Copy, CheckCircle, Car, Phone, Pencil, Menu, User, Trophy, Building2, Share2, Trash2, Camera } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import LeagueCard from "@/components/profile/LeagueCard";
 import ActivityHistory from "@/components/profile/ActivityHistory";
@@ -37,6 +37,7 @@ export default function Profile() {
   const [deleteStep, setDeleteStep] = useState(1); // 1=confirm, 2=final, 3=done
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -131,6 +132,16 @@ export default function Profile() {
     setTimeout(() => base44.auth.logout("/"), 2000);
   }
 
+  async function handleAvatarUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingAvatar(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    await base44.auth.updateMe({ avatar_url: file_url });
+    setUser(prev => ({ ...prev, avatar_url: file_url }));
+    setUploadingAvatar(false);
+  }
+
   function copyCode() {
     if (building?.invite_code) {
       navigator.clipboard.writeText(building.invite_code);
@@ -143,43 +154,57 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} user={user} resident={resident} />}}
 
       {/* Header */}
       <div className="pt-safe pb-5 px-5" style={{ background: "var(--surface-header)" }}>
-        {/* Avatar + name + hamburger on same row */}
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-none">
-            <span className="text-white text-2xl font-bold">{(user?.full_name || "?")[0]}</span>
-          </div>
-          <div className="flex-1">
-            <h1 className="text-white text-xl font-bold">{user?.full_name}</h1>
-            <p className="text-blue-200 text-sm">{user?.email}</p>
-            {isOwner && <span className="text-xs bg-white bg-opacity-20 text-white px-2 py-0.5 rounded-full mt-1 inline-block">👑 בעל בניין</span>}
-          </div>
-          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl flex-none" style={{ background: "rgba(255,255,255,0.2)" }}>
+        {/* Top row: menu button */}
+        <div className="flex justify-end mb-4">
+          <button onClick={() => setMenuOpen(true)} className="w-9 h-9 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.2)" }}>
             <Menu size={18} className="text-white" />
           </button>
         </div>
 
+        {/* Avatar centered */}
+        <div className="flex flex-col items-center mb-4">
+          <div className="relative mb-3">
+            <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center flex-none" style={{ background: "rgba(255,255,255,0.25)" }}>
+              {user?.avatar_url ? (
+                <img src={user.avatar_url} alt="תמונת פרופיל" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-white text-3xl font-bold">{(user?.full_name || "?")[0]}</span>
+              )}
+            </div>
+            <label className="absolute bottom-0 left-0 w-7 h-7 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "var(--hanoo-blue)", border: "2px solid white" }}>
+              {uploadingAvatar
+                ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                : <Camera size={13} className="text-white" />}
+              <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
+            </label>
+          </div>
+          <h1 className="text-white text-xl font-bold">{user?.full_name}</h1>
+          <p className="text-blue-200 text-sm mt-0.5">{user?.email}</p>
+          {isOwner && <span className="text-xs bg-white bg-opacity-20 text-white px-2.5 py-0.5 rounded-full mt-2">👑 בעל בניין</span>}
+        </div>
+
         {/* Stats row */}
-        <div className="bg-white bg-opacity-20 rounded-2xl p-3 grid grid-cols-3 gap-2 text-center">
+        <div className="bg-white bg-opacity-15 rounded-2xl p-3 grid grid-cols-3 gap-2 text-center mb-4">
           <div>
-            <p className="text-blue-200 text-xs">דירה</p>
+            <p className="text-blue-200 text-xs mb-0.5">דירה</p>
             <p className="text-white text-xl font-bold">{resident?.apartment_number || "—"}</p>
           </div>
-          <div>
-            <p className="text-blue-200 text-xs">חניה</p>
+          <div style={{ borderRight: "1px solid rgba(255,255,255,0.2)", borderLeft: "1px solid rgba(255,255,255,0.2)" }}>
+            <p className="text-blue-200 text-xs mb-0.5">חניה</p>
             <p className="text-white text-xl font-bold">{resident?.parking_spot || "—"}</p>
           </div>
           <div>
-            <p className="text-blue-200 text-xs">קרדיטים</p>
+            <p className="text-blue-200 text-xs mb-0.5">מטבעות</p>
             <p className="text-white text-xl font-bold">{resident?.credits || 0}</p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mt-4 bg-white bg-opacity-15 rounded-2xl p-1" role="tablist" aria-label="ניווט פרופיל">
+        <div className="flex gap-1 bg-white bg-opacity-15 rounded-2xl p-1" role="tablist" aria-label="ניווט פרופיל">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}

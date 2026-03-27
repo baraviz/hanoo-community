@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Home, Search, User, ParkingSquare } from "lucide-react";
+import SideMenu from "@/components/SideMenu";
 import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAppNavigation } from "@/lib/NavigationContext";
@@ -14,11 +15,19 @@ if (typeof window !== "undefined") {
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
+  const [resident, setResident] = useState(null);
   const location = useLocation();
   const { switchTab } = useAppNavigation();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(u => {
+      setUser(u);
+      if (u?.email) {
+        base44.entities.Resident.filter({ user_email: u.email }).then(res => {
+          if (res.length > 0) setResident(res[0]);
+        }).catch(() => {});
+      }
+    }).catch(() => {});
   }, []);
 
   const noNavPages = ["Splash", "Onboarding"];
@@ -79,10 +88,16 @@ export default function Layout({ children, currentPageName }) {
                   className="flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all select-none"
                   style={{ minWidth: 44, minHeight: 44, background: "transparent", border: "none" }}
                 >
-                  <Icon
-                    size={22}
-                    style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
-                  />
+                  {name === "Profile" && user?.avatar_url ? (
+                    <div className="w-6 h-6 rounded-full overflow-hidden" style={{ border: isActive ? "2px solid var(--hanoo-blue)" : "2px solid var(--text-tertiary)" }}>
+                      <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <Icon
+                      size={22}
+                      style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}
+                    />
+                  )}
                   <span
                     className="text-xs font-medium select-none"
                     style={{ color: isActive ? "var(--hanoo-blue)" : "var(--text-tertiary)" }}

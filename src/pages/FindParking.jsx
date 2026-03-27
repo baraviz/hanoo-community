@@ -252,7 +252,7 @@ export default function FindParking() {
 
     return (
       <div className="flex flex-col" style={{ height: "calc(100vh - 64px)", background: "var(--surface-page)" }}>
-        {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+        {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} user={user} resident={resident} />}
         {/* Header */}
         <div className="flex-none pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
           <div className="relative flex items-center justify-center">
@@ -467,7 +467,7 @@ export default function FindParking() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} user={user} resident={resident} />}
       <div className="pt-safe pb-6 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between">
           <div className="text-right">

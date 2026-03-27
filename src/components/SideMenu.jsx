@@ -15,7 +15,7 @@ function WhatsAppIcon({ size = 17 }) {
 
 const WHATSAPP_BOT_PHONE = "16186212393";
 
-export default function SideMenu({ onClose }) {
+export default function SideMenu({ onClose, user, resident }) {
   const [closing, setClosing] = useState(false);
   const [showAgentSheet, setShowAgentSheet] = useState(false);
   const agentActivated = localStorage.getItem("hanoo_agent_activated") === "1";
@@ -56,20 +56,25 @@ export default function SideMenu({ onClose }) {
         }}
       >
         {/* Header */}
-        <div
-          className="flex items-center justify-between px-5 py-4 border-b"
-          style={{ borderColor: "var(--surface-card-border)" }}
-        >
-          <h2 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>תפריט</h2>
-          <div className="flex items-center gap-2">
-            <ThemeToggle className="!bg-transparent" />
-            <button
-              onClick={close}
-              className="w-8 h-8 flex items-center justify-center rounded-full"
-              style={{ background: "var(--btn-secondary-bg)" }}
-            >
-              <X size={16} style={{ color: "var(--text-secondary)" }} />
-            </button>
+        <div className="px-5 pt-safe pb-4 border-b" style={{ borderColor: "var(--surface-card-border)", background: "var(--surface-header)" }}>
+          <div className="flex justify-end mb-3">
+            <div className="flex items-center gap-2">
+              <ThemeToggle className="!bg-transparent" />
+              <button onClick={close} className="w-8 h-8 flex items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.2)" }}>
+                <X size={16} className="text-white" />
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center flex-none" style={{ background: "rgba(255,255,255,0.25)" }}>
+              {user?.avatar_url
+                ? <img src={user.avatar_url} alt="" className="w-full h-full object-cover" />
+                : <span className="text-white text-lg font-bold">{(user?.full_name || "?")[0]}</span>}
+            </div>
+            <div>
+              <p className="text-white font-bold text-sm">{user?.full_name || ""}</p>
+              <p className="text-blue-200 text-xs">{resident ? `דירה ${resident.apartment_number} · ${resident.credits || 0} מטבעות` : user?.email || ""}</p>
+            </div>
           </div>
         </div>
 

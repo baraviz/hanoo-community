@@ -253,7 +253,7 @@ export default function MyParking() {
       onTouchEnd={handleDragEnd}
     >
       {/* Header */}
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} user={user} resident={resident} />}
       <div className="flex-none pt-safe pb-4 px-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between">
           <div className="text-right">

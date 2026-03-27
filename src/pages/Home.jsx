@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Search, Plus, Clock, Car, Gift, AlertTriangle, ParkingSquare, Menu, ChevronLeft, Phone } from "lucide-react";
+import { Search, Plus, Clock, Car, Gift, AlertTriangle, ParkingSquare, Menu, ChevronLeft, Phone, BadgePercent } from "lucide-react";
 import SideMenu from "@/components/SideMenu";
 import { useAppNavigation } from "@/lib/NavigationContext";
 import TimeWheelPicker from "@/components/TimeWheelPicker";
@@ -328,7 +328,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--surface-page)" }}>
-      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} />}
+      {menuOpen && <SideMenu onClose={() => setMenuOpen(false)} user={user} resident={resident} />}
       <DailyUpdateModal user={user} resident={resident} />
       {cancelSheet && (
         <CancelAvailabilitySheet
@@ -522,9 +522,7 @@ export default function Home() {
                 { Icon: Car, text: "שכן השתמש בחניה שלך — 10 מטבעות" },
               ].map(({ Icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-none" style={{ background: "var(--hanoo-blue-light)" }}>
-                    <Icon size={16} style={{ color: "var(--hanoo-blue)" }} />
-                  </div>
+                  <Icon size={16} style={{ color: "var(--text-secondary)" }} className="flex-none" />
                   <p className="text-sm" style={{ color: "var(--text-secondary)" }}>{text}</p>
                 </div>
               ))}
@@ -533,12 +531,17 @@ export default function Home() {
               const league = resident?.league || "Bronze";
               const discountMap = { Bronze: 0, Silver: 5, Gold: 10, Platinum: 15, Diamond: 20 };
               const discount = discountMap[league] || 0;
-              return discount > 0 ? (
-                <div className="rounded-2xl p-3 flex items-center gap-3" style={{ background: "var(--hanoo-blue-light)" }}>
-                  <span className="text-lg">🎟️</span>
-                  <p className="text-sm font-medium" style={{ color: "var(--hanoo-blue)" }}>ליגת {league} — הנחה של {discount}% על כל חניה</p>
+              return (
+                <div className="rounded-2xl p-4 space-y-2" style={{ background: "var(--btn-secondary-bg)" }}>
+                  <p className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>הנחה לפי ליגה</p>
+                  <div className="flex items-center gap-3">
+                    <BadgePercent size={16} style={{ color: "var(--text-secondary)" }} className="flex-none" />
+                    <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                      {discount > 0 ? `ליגת ${league} — הנחה של ${discount}% על כל חניה` : "בליגת Bronze אין הנחה — עלה ליגה כדי לחסוך"}
+                    </p>
+                  </div>
                 </div>
-              ) : null;
+              );
             })()}
           </div>
         </div>
@@ -580,9 +583,6 @@ export default function Home() {
                 </div>
                 <div className="text-right">
                   <p className="text-blue-200 text-xs">{hours} שעות חניה</p>
-                  {league !== "Bronze" && (
-                    <p className="text-xs font-bold mt-0.5" style={{ color: "var(--hanoo-yellow)" }}>ליגת {league} 🎟️</p>
-                  )}
                   <p className="text-blue-300 text-xs mt-1 opacity-70">לחץ לפרטים ›</p>
                 </div>
               </div>
