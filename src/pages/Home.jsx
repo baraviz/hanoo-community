@@ -582,11 +582,11 @@ export default function Home() {
                   <div className="text-right">
                     <p className="text-blue-100 text-xs mb-0.5">יתרת מטבעות</p>
                     <p className="text-white text-3xl font-bold leading-none">{displayedCredits}</p>
+                    <p className="text-blue-200 text-xs mt-1">שווה ערך ל-{hours} שעות חניה</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-blue-200 text-xs">{hours} שעות חניה</p>
-                  <p className="text-blue-300 text-xs mt-1 opacity-70">לחץ לפרטים ›</p>
+                <div className="text-left self-end">
+                  <p className="text-blue-300 text-xs opacity-70">לחץ לפרטים ›</p>
                 </div>
               </div>
             </button>
