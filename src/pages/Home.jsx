@@ -586,7 +586,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col items-start justify-center gap-1">
                   <p className="text-blue-200 text-xs">שווה ערך ל-{hours} שעות חניה</p>
-                  <p className="text-blue-300 text-xs opacity-70">לחץ לפרטים ›</p>
+                  <p className="text-blue-300 text-xs opacity-70 items-start">לחץ לפרטים ›</p>
                 </div>
               </div>
             </button>
