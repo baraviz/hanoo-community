@@ -550,7 +550,7 @@ export default function Home() {
       {/* Header */}
       <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-white text-sm font-medium opacity-90">
+          <p className="text-white text-m font-medium opacity-90">
             {(() => {
               const hour = new Date().getHours();
               const greeting = hour < 12 ? "בוקר טוב" : hour < 17 ? "צהריים טובים" : "ערב טוב";
