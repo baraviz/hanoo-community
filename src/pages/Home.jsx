@@ -551,8 +551,13 @@ export default function Home() {
       <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-5">
           <div className="text-right">
-            <p className="text-blue-200 text-sm">שלום,</p>
-            <h1 className="text-white text-2xl font-bold">{user?.full_name?.split(" ")[0] || "שכן יקר"} 👋</h1>
+            <h1 className="text-white text-2xl font-bold">
+              {(() => {
+                const hour = new Date().getHours();
+                const greeting = hour < 12 ? "בוקר טוב" : hour < 17 ? "צהריים טובים" : "ערב טוב";
+                return `${greeting}, ${user?.full_name?.split(" ")[0] || "שכן יקר"} 👋`;
+              })()}
+            </h1>
           </div>
           <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
             <Menu size={18} className="text-white" aria-hidden="true" />
