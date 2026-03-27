@@ -21,6 +21,7 @@ const Accessibility  = lazy(() => import('./pages/Accessibility'));
 const ReportBug      = lazy(() => import('./pages/ReportBug'));
 const JoinViaLink    = lazy(() => import('./pages/JoinViaLink'));
 const PublicBookingView = lazy(() => import('./pages/PublicBookingView'));
+const Settings       = lazy(() => import('./pages/Settings'));
 
 // ── Shared page-load fallback ─────────────────────────────────────────────────
 const PageFallback = () => (
@@ -92,6 +93,7 @@ const AuthenticatedApp = () => {
       <Route path="/Accessibility"  element={<LayoutWrapper currentPageName="Accessibility"><Accessibility /></LayoutWrapper>} />
       <Route path="/ReportBug"      element={<LayoutWrapper currentPageName="ReportBug"><ReportBug /></LayoutWrapper>} />
       <Route path="/JoinViaLink"    element={<LayoutWrapper currentPageName="JoinViaLink"><JoinViaLink /></LayoutWrapper>} />
+      <Route path="/Settings"       element={<LayoutWrapper currentPageName="Settings"><Settings /></LayoutWrapper>} />
       <Route path="/booking/:token" element={<PublicBookingView />} />
       <Route path="*"               element={<PageNotFound />} />
     </Routes>
