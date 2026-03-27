@@ -585,7 +585,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-blue-200 text-xs">מספיק ל-{hours} שעות חניה</p>
+                  <p className="text-blue-200 text-xs">{hours} שעות חניה</p>
                   <p className="text-blue-300 text-xs mt-1 opacity-70">לחץ לפרטים ›</p>
                 </div>
               </div>
