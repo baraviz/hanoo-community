@@ -549,16 +549,7 @@ export default function Home() {
 
       {/* Header */}
       <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
-        <div className="flex items-center justify-between mb-5">
-          <div className="text-right">
-            <h1 className="text-white text-2xl font-bold">
-              {(() => {
-                const hour = new Date().getHours();
-                const greeting = hour < 12 ? "בוקר טוב" : hour < 17 ? "צהריים טובים" : "ערב טוב";
-                return `${greeting}, ${user?.full_name?.split(" ")[0] || "שכן יקר"} 👋`;
-              })()}
-            </h1>
-          </div>
+        <div className="flex items-center justify-end mb-3">
           <button aria-label="פתח תפריט" onClick={() => setMenuOpen(true)} className="w-10 h-10 flex items-center justify-center rounded-2xl" style={{ background: "rgba(255,255,255,0.18)" }}>
             <Menu size={18} className="text-white" aria-hidden="true" />
           </button>
@@ -582,6 +573,13 @@ export default function Home() {
                 <div className="flex items-center gap-3">
                   <img src="https://media.base44.com/images/public/69b1df337f72186a6fd4c0c7/f90765a7c_HanooCoin1.png" alt="מטבע" className="w-12 h-12" />
                   <div className="text-right">
+                    <p className="text-white text-sm font-medium mb-1 opacity-90">
+                      {(() => {
+                        const hour = new Date().getHours();
+                        const greeting = hour < 12 ? "בוקר טוב" : hour < 17 ? "צהריים טובים" : "ערב טוב";
+                        return `${greeting}, ${user?.full_name?.split(" ")[0] || "שכן יקר"} 👋`;
+                      })()}
+                    </p>
                     <p className="text-blue-100 text-xs mb-0.5">יתרת מטבעות</p>
                     <p className="text-white text-3xl font-bold leading-none">{displayedCredits}</p>
                   </div>
