@@ -548,7 +548,7 @@ export default function Home() {
       )}
 
       {/* Header */}
-      <div className="pt-safe px-5 pb-5" style={{ background: "var(--surface-header)" }}>
+      <div className="pt-safe px-10 pb-5" style={{ background: "var(--surface-header)" }}>
         <div className="flex items-center justify-between mb-3">
           <p className="text-white text-m font-medium opacity-90">
             {(() => {
