@@ -1,0 +1,37 @@
+{
+  "name": "Building",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "\u05e9\u05dd \u05d4\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "address": {
+      "type": "string",
+      "description": "\u05db\u05ea\u05d5\u05d1\u05ea \u05d4\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "city": {
+      "type": "string",
+      "description": "\u05e2\u05d9\u05e8"
+    },
+    "owner_email": {
+      "type": "string",
+      "description": "\u05d0\u05d9\u05de\u05d9\u05d9\u05dc \u05e9\u05dc \u05d1\u05e2\u05dc \u05d4\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "invite_code": {
+      "type": "string",
+      "description": "\u05e7\u05d5\u05d3 \u05d4\u05e6\u05d8\u05e8\u05e4\u05d5\u05ea \u05dc\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "underground_parking": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d4\u05d0\u05dd \u05d9\u05e9 \u05d7\u05e0\u05d9\u05d5\u05df \u05ea\u05ea \u05e7\u05e8\u05e7\u05e2\u05d9"
+    }
+  },
+  "required": [
+    "name",
+    "address",
+    "city",
+    "owner_email"
+  ]
+}

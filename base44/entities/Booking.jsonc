@@ -1,0 +1,53 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "parking_slot_id": {
+      "type": "string"
+    },
+    "building_id": {
+      "type": "string"
+    },
+    "renter_email": {
+      "type": "string"
+    },
+    "renter_name": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "spot_number": {
+      "type": "string"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total_credits": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "parking_slot_id",
+    "renter_email",
+    "start_time",
+    "end_time"
+  ]
+}

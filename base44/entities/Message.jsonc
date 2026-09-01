@@ -1,0 +1,38 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "building_id": {
+      "type": "string"
+    },
+    "sender_email": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "receiver_email": {
+      "type": "string"
+    },
+    "receiver_name": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "ID \u05e9\u05d9\u05d7\u05d4 (combo \u05e9\u05dc \u05e9\u05e0\u05d9 \u05d0\u05d9\u05de\u05d9\u05d9\u05dc\u05d9\u05dd \u05de\u05de\u05d5\u05d9\u05e0\u05d9\u05dd)"
+    }
+  },
+  "required": [
+    "sender_email",
+    "receiver_email",
+    "content",
+    "building_id"
+  ]
+}

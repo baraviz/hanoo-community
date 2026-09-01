@@ -1,0 +1,83 @@
+{
+  "name": "Resident",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "\u05d0\u05d9\u05de\u05d9\u05d9\u05dc \u05d4\u05de\u05e9\u05ea\u05de\u05e9"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "\u05e9\u05dd \u05d4\u05de\u05e9\u05ea\u05de\u05e9"
+    },
+    "building_id": {
+      "type": "string",
+      "description": "\u05de\u05d6\u05d4\u05d4 \u05d4\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "apartment_number": {
+      "type": "string",
+      "description": "\u05de\u05e1\u05e4\u05e8 \u05d3\u05d9\u05e8\u05d4"
+    },
+    "parking_spot": {
+      "type": "string",
+      "description": "\u05de\u05e1\u05e4\u05e8 \u05d7\u05e0\u05d9\u05d4"
+    },
+    "parking_floor": {
+      "type": "string",
+      "description": "\u05e7\u05d5\u05de\u05ea \u05d7\u05e0\u05d9\u05d4 (\u05dc\u05d7\u05e0\u05d9\u05d5\u05df \u05ea\u05ea \u05e7\u05e8\u05e7\u05e2\u05d9)"
+    },
+    "phone": {
+      "type": "string",
+      "description": "\u05de\u05e1\u05e4\u05e8 \u05d8\u05dc\u05e4\u05d5\u05df"
+    },
+    "credits": {
+      "type": "number",
+      "description": "\u05d9\u05ea\u05e8\u05ea \u05e7\u05e8\u05d3\u05d9\u05d8\u05d9\u05dd",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "initial_availability_published": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d4\u05d0\u05dd \u05e4\u05e8\u05e1\u05dd \u05d6\u05de\u05d9\u05e0\u05d5\u05ea \u05e8\u05d0\u05e9\u05d5\u05e0\u05d9\u05ea"
+    },
+    "bonus_credits_received": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d4\u05d0\u05dd \u05e7\u05d9\u05d1\u05dc 200 \u05e7\u05e8\u05d3\u05d9\u05d8\u05d9\u05dd \u05d1\u05d5\u05e0\u05d5\u05e1"
+    },
+    "points": {
+      "type": "number",
+      "default": 0,
+      "description": "\u05e0\u05e7\u05d5\u05d3\u05d5\u05ea \u05dc\u05d9\u05d2\u05d4 \u05e9\u05e0\u05e6\u05d1\u05e8\u05d5"
+    },
+    "league": {
+      "type": "string",
+      "enum": [
+        "Bronze",
+        "Silver",
+        "Gold",
+        "Platinum",
+        "Diamond"
+      ],
+      "default": "Bronze",
+      "description": "\u05d3\u05e8\u05d2\u05ea \u05dc\u05d9\u05d2\u05d4 \u05e0\u05d5\u05db\u05d7\u05d9\u05ea"
+    },
+    "referred_by": {
+      "type": "string",
+      "description": "\u05d0\u05d9\u05de\u05d9\u05d9\u05dc \u05d4\u05de\u05e9\u05ea\u05de\u05e9 \u05e9\u05d4\u05e4\u05e0\u05d4 \u05d0\u05d5\u05ea\u05e0\u05d5 (\u05d3\u05e8\u05da \u05e7\u05d9\u05e9\u05d5\u05e8 \u05e9\u05d9\u05ea\u05d5\u05e3)"
+    }
+  },
+  "required": [
+    "user_email",
+    "building_id"
+  ]
+}

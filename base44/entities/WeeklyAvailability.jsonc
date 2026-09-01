@@ -1,0 +1,56 @@
+{
+  "name": "WeeklyAvailability",
+  "type": "object",
+  "properties": {
+    "resident_id": {
+      "type": "string"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "building_id": {
+      "type": "string"
+    },
+    "slot_type": {
+      "type": "string",
+      "enum": [
+        "recurring",
+        "temp",
+        "block"
+      ],
+      "default": "recurring",
+      "description": "recurring=\u05e9\u05d1\u05d5\u05e2\u05d9 \u05e7\u05d1\u05d5\u05e2, temp=\u05d6\u05de\u05e0\u05d9 \u05d7\u05d3-\u05e4\u05e2\u05de\u05d9, block=\u05d7\u05e1\u05d9\u05de\u05d4"
+    },
+    "days_of_week": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "\u05e8\u05dc\u05d5\u05d5\u05e0\u05d8\u05d9 \u05dc-recurring \u05d1\u05dc\u05d1\u05d3: \u05de\u05e2\u05e8\u05da \u05e9\u05dc 0-6 (0=\u05e8\u05d0\u05e9\u05d5\u05df)"
+    },
+    "time_start": {
+      "type": "number",
+      "description": "\u05e8\u05dc\u05d5\u05d5\u05e0\u05d8\u05d9 \u05dc-recurring: \u05d3\u05e7\u05d5\u05ea \u05de\u05ea\u05d7\u05d9\u05dc\u05ea \u05d4\u05d9\u05d5\u05dd (0-1440)"
+    },
+    "time_end": {
+      "type": "number",
+      "description": "\u05e8\u05dc\u05d5\u05d5\u05e0\u05d8\u05d9 \u05dc-recurring: \u05d3\u05e7\u05d5\u05ea \u05de\u05ea\u05d7\u05d9\u05dc\u05ea \u05d4\u05d9\u05d5\u05dd (0-1440)"
+    },
+    "start_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "\u05e8\u05dc\u05d5\u05d5\u05e0\u05d8\u05d9 \u05dc-temp/block: \u05ea\u05d7\u05d9\u05dc\u05ea \u05d4\u05d8\u05d5\u05d5\u05d7 \u05d4\u05e1\u05e4\u05e6\u05d9\u05e4\u05d9"
+    },
+    "end_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "\u05e8\u05dc\u05d5\u05d5\u05e0\u05d8\u05d9 \u05dc-temp/block: \u05e1\u05d5\u05e3 \u05d4\u05d8\u05d5\u05d5\u05d7 \u05d4\u05e1\u05e4\u05e6\u05d9\u05e4\u05d9"
+    }
+  },
+  "required": [
+    "resident_id",
+    "owner_email",
+    "building_id",
+    "slot_type"
+  ]
+}

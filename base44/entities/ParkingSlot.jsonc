@@ -1,0 +1,65 @@
+{
+  "name": "ParkingSlot",
+  "type": "object",
+  "properties": {
+    "resident_id": {
+      "type": "string",
+      "description": "\u05de\u05d6\u05d4\u05d4 \u05d4\u05d3\u05d9\u05d9\u05e8"
+    },
+    "building_id": {
+      "type": "string",
+      "description": "\u05de\u05d6\u05d4\u05d4 \u05d4\u05d1\u05e0\u05d9\u05d9\u05df"
+    },
+    "owner_email": {
+      "type": "string"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "spot_number": {
+      "type": "string",
+      "description": "\u05de\u05e1\u05e4\u05e8 \u05d7\u05e0\u05d9\u05d4"
+    },
+    "parking_floor": {
+      "type": "string",
+      "description": "\u05e7\u05d5\u05de\u05ea \u05d7\u05e0\u05d9\u05d4 (\u05dc\u05d7\u05e0\u05d9\u05d5\u05df \u05ea\u05ea \u05e7\u05e8\u05e7\u05e2\u05d9)"
+    },
+    "available_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "available_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "price_per_hour": {
+      "type": "number",
+      "description": "\u05de\u05d7\u05d9\u05e8 \u05dc\u05e9\u05e2\u05d4 \u05d1\u05e7\u05e8\u05d3\u05d9\u05d8\u05d9\u05dd",
+      "default": 10
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "booked",
+        "completed",
+        "cancelled"
+      ],
+      "default": "available"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "points_awarded": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d4\u05d0\u05dd \u05e0\u05d9\u05ea\u05e0\u05d5 \u05e0\u05e7\u05d5\u05d3\u05d5\u05ea \u05e2\u05dc \u05e4\u05e8\u05e1\u05d5\u05dd \u05d6\u05d4"
+    }
+  },
+  "required": [
+    "resident_id",
+    "building_id",
+    "available_from",
+    "available_until"
+  ]
+}
